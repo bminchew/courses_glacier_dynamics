@@ -1,6 +1,17 @@
 # General Stresses in Glaciers
 
-Lecture notes covering the Cauchy stress tensor, principal stresses and invariants, deviatoric vs. isotropic decomposition, lithostatic and non-lithostatic stress, resistive stresses, and driving stress.
+This lecture develops the mathematical framework for describing stress in glacier ice. Starting from forces and tractions, it builds up to the Cauchy stress tensor, proves its symmetry, and introduces the decompositions (deviatoric vs. isotropic, lithostatic vs. non-lithostatic) that are essential for deriving the equations governing glacier flow.
+
+## Outline
+
+1. Introduction and sign convention (tension-positive)
+2. Review of forces, tractions, and the Cauchy stress tensor
+3. Symmetry of the stress tensor (proof from angular momentum conservation)
+4. Principal stresses and stress invariants
+5. Decompositions of the stress tensor
+   - Deviatoric and isotropic stress
+   - Lithostatic, non-lithostatic, and resistive stresses
+6. Summary
 
 ## Files
 
