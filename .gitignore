@@ -1,0 +1,29 @@
+# macOS
+.DS_Store
+
+PhysicsOfGlaciers4.pdf
+
+# Large files (>50MB)
+*.key
+*.pptx
+
+# Solution notebooks
+*solutions*.ipynb
+
+# LaTeX intermediate files
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
