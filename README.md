@@ -40,3 +40,7 @@ Cuffey and Paterson, *Physics of Glaciers*, 4th Ed. (2010). .
 | May 21 | Fundamentals of marine ice sheet dynamics, part 2 | Brent |
 | May 26 | Ice shelves and calving | Brent |
 | May 28 | Calving from grounded ice | Brent |
+
+## Slides for selected topics (most topics are in latex)
+| Intro | https://www.dropbox.com/scl/fi/xfggfuoxgf629c0iyf9ml/glacier_dynamics_day1.pptx?rlkey=uvmcctmw5z0yd84in8j3gxs9e&dl=0
+

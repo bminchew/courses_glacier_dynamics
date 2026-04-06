@@ -27,7 +27,7 @@
   \item Review of forces, tractions, and the Cauchy stress tensor
   \item Symmetry of the stress tensor
   \item Principal stresses, principal axes, and stress invariants
-  \item Decompositions of the stress tensor: deviatoric, isotropic, lithostatic, and non-lithostatic stress
+  \item Decompositions of the stress tensor: deviatoric, isotropic, glaciostatic, and non-glaciostatic stress
 \end{itemize}
 
 \bigskip
@@ -38,7 +38,7 @@
 %===================================================================
 \section{Introduction}
 
-Glacier dynamics is, at its core, a problem in continuum mechanics: ice is a continuous medium that deforms under stress.  To understand how glaciers flow, we need a precise language for describing the forces that act within and upon the ice.  That language is the stress tensor.  In this lecture, we develop the mathematical framework for describing stress in a continuous body, prove key properties of the stress tensor, and introduce decompositions---deviatoric vs.\ isotropic, lithostatic vs.\ non-lithostatic---that will be essential when we derive the equations governing glacier flow in subsequent lectures.
+Glacier dynamics is, at its core, a problem in continuum mechanics: ice is a continuous medium that deforms under stress.  To understand how glaciers flow, we need a precise language for describing the forces that act within and upon the ice.  That language is the stress tensor.  In this lecture, we develop the mathematical framework for describing stress in a continuous body, prove key properties of the stress tensor, and introduce decompositions---deviatoric vs.\ isotropic, glaciostatic vs.\ non-glaciostatic---that will be essential when we derive the equations governing glacier flow in subsequent lectures.
 
 \subsection*{Sign Convention}
 
@@ -47,7 +47,7 @@ A perennial source of confusion across mechanics: different communities use diff
   \item \textbf{Tension-positive} (used in fluid mechanics, most of glaciology, and these notes): tensile (pulling apart) stresses are positive, compressive stresses are negative.
   \item \textbf{Compression-positive} (used in geology, rock mechanics, and some geodynamics): the opposite.
 \end{itemize}
-In these notes, we adopt the \textbf{tension-positive} convention throughout.  This means the lithostatic stress carries a negative sign ($\sigma_{ij}^{(L)} = -\rho_i g(s-z)\,\delta_{ij}$), because overburden is compressive.  When reading the glaciological literature, always check which convention an author uses---sign errors propagate silently and can reverse the physics.
+In these notes, we adopt the \textbf{tension-positive} convention throughout.  This means the glaciostatic stress carries a negative sign ($\sigma_{ij}^{(L)} = -\rho_i g(s-z)\,\delta_{ij}$), because overburden is compressive.  When reading the glaciological literature, always check which convention an author uses---sign errors propagate silently and can reverse the physics.
 
 %===================================================================
 % SECTION 2 -- Review of Forces, Tractions, and Stress Tensors
@@ -287,7 +287,7 @@ We can also define invariants in terms of principal stresses:
 \subsection{Intuition for Invariants}
 
 \begin{itemize}
-  \item $\mathcal{I}_1 = \sigma_{kk}$ is proportional to the \textbf{mean normal stress} (i.e., pressure).  It captures the part of the stress state that tends to change the \emph{volume} of a material element without changing its shape.  Dividing by 3 gives the mean isotropic stress $p = \mathcal{I}_1/3$, which we will use to define the deviatoric stress tensor in Section~\ref{sec:decompositions}.
+  \item $\mathcal{I}_1 = \sigma_{kk}$ is proportional to the \textbf{mean normal stress} (i.e., pressure).  It captures the part of the stress state that tends to change the \emph{volume} of a material element without changing its shape.  Changing sign and dividing by 3 gives the pressure $p = -\mathcal{I}_1/3$, which we will use to define the deviatoric stress tensor in Section~\ref{sec:decompositions}.
 
   \item $\mathcal{I}_2$ captures the \textbf{magnitude of shearing} in the stress state.  To see why, note that $\sigma_{ij}\sigma_{ij}$ (the squared Frobenius norm) measures the total ``size'' of the stress tensor, while $(\sigma_{kk})^2$ measures the volumetric part.  Their difference, $\mathcal{I}_2 = \tfrac{1}{2}[(\sigma_{kk})^2 - \sigma_{ij}\sigma_{ij}]$, isolates the shape-changing (deviatoric) contribution.  When we later define the deviatoric stress tensor $\tau_{ij}$, its second invariant $\mathcal{I}_2(\tau_{ij}) = \tau_{ij}\tau_{ij}/2$ becomes the basis for the \textbf{effective stress}---a single scalar that characterizes how intensely a material is being sheared.  This is the quantity that enters the flow law for ice.
 
@@ -302,21 +302,21 @@ We can also define invariants in terms of principal stresses:
 
 Recall that the Cauchy stress tensor is the complete representation of \textbf{total} stress at a point.
 
-It is often desirable and useful to decompose the Cauchy stress tensor.  Two decompositions are particularly important in glacier dynamics: (1) deviatoric and isotropic stress, and (2) lithostatic and non-lithostatic stress.
+It is often desirable and useful to decompose the Cauchy stress tensor.  Two decompositions are particularly important in glacier dynamics: (1) deviatoric and isotropic stress, and (2) glaciostatic and non-glaciostatic stress.
 
 \subsection{Deviatoric and Isotropic Stress}
 
 The total stress at a point combines two physically distinct effects: stresses that change the \emph{volume} of a material element and stresses that change its \emph{shape}.  Separating these two contributions is useful in any material, but it is especially powerful in glaciology because the flow law for ice depends only on the shape-changing part.
 
-We define the \textbf{mean isotropic stress} (often called ``pressure''):
+We define the \textbf{pressure} (or mean compressive stress) as
 \begin{equation}
-  p = \frac{\mathcal{I}_1}{3} = \frac{\sigma_{kk}}{3}
+  p = -\frac{\sigma_{kk}}{3}.
 \end{equation}
-
-The \textbf{deviatoric stress tensor} is then defined as
+The minus sign ensures that $p > 0$ under compression, consistent with everyday usage: ice under overburden has positive pressure.  With this definition, the Cauchy stress decomposes as
 \begin{equation}
-  \boxed{\tau_{ij} = \sigma_{ij} - p\,\delta_{ij}}
+  \boxed{\sigma_{ij} = -p\,\delta_{ij} + \tau_{ij}}
 \end{equation}
+where $\tau_{ij}$ is the \textbf{deviatoric stress tensor}, which is trace-free ($\tau_{kk} = 0$).
 
 (You will also see the deviatoric stress tensor denoted $\sigma'_{ij}$, $\sigma_{ij}^{\text{dev}}$, or $s_{ij}$ in the literature.)
 
@@ -342,7 +342,7 @@ The \textbf{deviatoric stress tensor} is then defined as
   \item \textbf{Separates the ``interesting'' dynamics from the background pressure.}  Deep in a glacier, the total stress is dominated by the overburden pressure ($\sim \rho g h$), which can be tens of MPa.  The deviatoric stresses that actually drive flow are typically only $\sim$0.01--0.3~MPa---orders of magnitude smaller.  The decomposition isolates this small but dynamically important signal.
 \end{itemize}
 
-\textbf{Important:} $p = \sigma_{kk}/3$ is the mean of the normal stresses, not necessarily the hydrostatic or lithostatic pressure $\rho g h$.  The two coincide only when deviatoric normal stresses are negligible.
+\textbf{Important:} $p = -\sigma_{kk}/3$ is the mean compressive stress, not necessarily the glaciostatic pressure $\rho_i g (s-z)$.  The two coincide only when deviatoric normal stresses are negligible.
 
 \subsubsection*{Properties of the Deviatoric Stress Tensor}
 
@@ -378,7 +378,7 @@ In a glacier, the dominant stress at any point is the weight of the overlying ic
 
 \subsubsection*{Lithostatic (Cryostatic) Stress}
 
-The \textbf{lithostatic stress} (called \textbf{cryostatic} in glaciology, or \textbf{hydrostatic} in fluid mechanics) is the isotropic stress due to the overburden:
+The \textbf{glaciostatic stress} (called \textbf{cryostatic} in glaciology, or \textbf{hydrostatic} in fluid mechanics) is the isotropic stress due to the overburden:
 \begin{equation}
   \sigma_{ij}^{(L)} = -\rho_i g (s - z)\,\delta_{ij}
 \end{equation}
@@ -388,7 +388,7 @@ In a real glacier, the total stress differs from the cryostatic stress because o
 
 \subsubsection*{Non-Lithostatic Stress}
 
-The \textbf{non-lithostatic stress} removes the cryostatic contribution:
+The \textbf{non-glaciostatic stress} removes the cryostatic contribution:
 \begin{equation}
   \sigma_{ij}^{(nl)} = \sigma_{ij} - \sigma_{ij}^{(L)} = \sigma_{ij} + \rho_i g (s-z)\,\delta_{ij}
 \end{equation}
@@ -403,7 +403,7 @@ In much of the glaciological literature, particularly following van der Veen \& 
 \begin{equation}
   \boxed{R_{ij} = \tau_{ij} + \delta_{ij}\,\rho_i g (s - z)}
 \end{equation}
-or equivalently $R_{ij} = \sigma_{ij} - \sigma_{ij}^{(L)} - (p + \rho_i g(s-z))\delta_{ij}$... but it is much clearer to think of it as: the full Cauchy stress with the cryostatic pressure removed, then further decomposed so that $R_{ij}$ inherits the deviatoric shear stresses but carries modified normal stresses.
+or equivalently $R_{ij} = \sigma_{ij} - \sigma_{ij}^{(L)} + (p - \rho_i g(s-z))\delta_{ij}$... but it is much clearer to think of it as: the full Cauchy stress with the cryostatic pressure removed, then further decomposed so that $R_{ij}$ inherits the deviatoric shear stresses but carries modified normal stresses.
 
 In component form, the key resistive stresses are:
 \begin{itemize}
@@ -427,15 +427,15 @@ where $h$ is the ice thickness.  In equilibrium, the driving stress is balanced 
 One of the most common conceptual errors in glaciology is conflating these three quantities.  To summarize:
 
 \begin{itemize}
-  \item \textbf{Deviatoric stress} $\tau_{ij} = \sigma_{ij} - p\,\delta_{ij}$, where $p = \sigma_{kk}/3$.  Physically separates shape-changing from volume-changing stresses.  Appears in the flow law.
+  \item \textbf{Deviatoric stress} $\tau_{ij} = \sigma_{ij} + p\,\delta_{ij}$, where $p = -\sigma_{kk}/3$.  Equivalently, $\sigma_{ij} = -p\,\delta_{ij} + \tau_{ij}$.  Physically separates shape-changing from volume-changing stresses.  Appears in the flow law.
 
-  \item \textbf{Non-lithostatic stress} $\sigma_{ij}^{(nl)} = \sigma_{ij} + \rho_i g(s-z)\,\delta_{ij}$.  Removes the cryostatic pressure.  Easy to compute from geometry but mixes deviatoric and isotropic parts.
+  \item \textbf{Non-glaciostatic stress} $\sigma_{ij}^{(nl)} = \sigma_{ij} + \rho_i g(s-z)\,\delta_{ij}$.  Removes the cryostatic pressure.  Easy to compute from geometry but mixes deviatoric and isotropic parts.
 
   \item \textbf{Resistive stress} $R_{ij}$: a hybrid that combines the deviatoric stress with the cryostatic correction.  Designed to make the depth-integrated force balance transparent.  Equals the deviatoric stress for shear components ($R_{xy} = \tau_{xy}$, $R_{xz} = \tau_{xz}$) but differs for normal components.
 \end{itemize}
 
 \medskip
-\noindent\textbf{Key point:} $p = \sigma_{kk}/3$ is the mean of the normal stresses and is \emph{not} in general equal to $\rho_i g(s-z)$.  Referring to $p$ as ``hydrostatic pressure'' is a common error in the literature---avoid it.  The two coincide only when all deviatoric normal stresses vanish.
+\noindent\textbf{Key point:} $p = -\sigma_{kk}/3$ is the mean compressive stress and is \emph{not} in general equal to $\rho_i g(s-z)$.  Referring to $p$ as ``hydrostatic pressure'' is a common error in the literature---avoid it.  The two coincide only when all deviatoric normal stresses vanish.
 
 %===================================================================
 % SECTION 6 -- Summary
@@ -447,11 +447,11 @@ One of the most common conceptual errors in glaciology is conflating these three
 
   \item \textbf{Principal stresses} are the eigenvalues of $\sigma_{ij}$.  They are invariant under coordinate transformations, as are the stress invariants $\mathcal{I}_1$, $\mathcal{I}_2$, $\mathcal{I}_3$.
 
-  \item The \textbf{deviatoric stress tensor} $\tau_{ij} = \sigma_{ij} - p\,\delta_{ij}$ separates shape-changing stresses from volume-changing stresses.  It is traceless and will appear throughout this course, particularly in the flow law for ice.
+  \item The \textbf{deviatoric stress tensor} $\tau_{ij} = \sigma_{ij} + p\,\delta_{ij}$ (equivalently, $\sigma_{ij} = -p\,\delta_{ij} + \tau_{ij}$) separates shape-changing stresses from volume-changing stresses.  It is traceless and will appear throughout this course, particularly in the flow law for ice.
 
   \item Alternative decompositions sometimes appear in glaciology---do not confuse them:
   \begin{itemize}
-    \item \textbf{Non-lithostatic stress} $\sigma_{ij}^{(nl)}$: total stress minus cryostatic pressure.
+    \item \textbf{Non-glaciostatic stress} $\sigma_{ij}^{(nl)}$: total stress minus cryostatic pressure.
     \item \textbf{Resistive stress} $R_{ij}$: combines deviatoric stress with the cryostatic correction; makes the depth-integrated force balance transparent.
     \item Neither is the same as the deviatoric stress $\tau_{ij}$
    \end{itemize}

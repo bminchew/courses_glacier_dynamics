@@ -1,0 +1,1173 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\title{Ice Dynamics~II: Force Balance and Models of Glacier Flow}
+\author{Brent Minchew \\Caltech Ge 193, Spring 2026}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%===================================================================
+% Topics Covered
+%===================================================================
+\section*{Topics Covered}
+
+\begin{itemize}
+  \item Conservation of linear momentum and Cauchy's equation of motion
+  \item The Stokes equations for glacier flow
+  \item Glen's flow law as a nonlinear viscosity
+  \item Scaling analysis, the aspect ratio, and the model hierarchy
+  \item The SIA revisited: formal derivation from the scaled equations
+  \item The Shallow Shelf Approximation (SSA): conceptual derivation
+  \item Worked examples: ice shelf spreading and confined ice streams
+\end{itemize}
+
+\noindent\textbf{Primary reference:} Cuffey \& Paterson, \textit{Physics of Glaciers}, 4th ed., Sections 8.4--8.5 and~10.4.
+
+%===================================================================
+% SECTION 1 -- Introduction and Motivation
+%===================================================================
+\section{Introduction and Motivation}
+
+In the previous lecture, we derived the velocity profile for a parallel slab of ice from a simple force balance, then used it to build the shallow-ice approximation (SIA) and the Vialov ice-sheet profile.  The SIA captures the interior of large ice sheets remarkably well, but it fails systematically near margins, ice streams, divides, and ice shelves.  The comparison with East Antarctic flowline profiles (Figure~6 in the previous lecture) made this concrete: the SIA overpredicts thickness near the margins because it neglects the physics that dominates there.
+
+\medskip
+\noindent The goal of this lecture is to start from the general equations of motion and show how different simplifications produce a hierarchy of glacier flow models:
+\begin{center}
+  Full Stokes $\supset$ Blatter--Pattyn $\supset$ SSA/SIA
+\end{center}
+Each model retains a different subset of the stress components.  The key question is: \textit{which physics does each approximation retain, which does it discard, and when is each appropriate?}
+
+\medskip
+\noindent\textbf{Prerequisites.}  We will draw on concepts from the earlier lectures:
+\begin{itemize}[nosep]
+  \item The Cauchy stress tensor, deviatoric stress, and stress decompositions (Lecture: Stresses)
+  \item The continuity equation for ice thickness (Lecture: Mass Balance)
+  \item Glen's flow law, the parallel-slab velocity profile, and the SIA (Lecture: Ice Dynamics~I)
+\end{itemize}
+
+%===================================================================
+% SECTION 2 -- Conservation of Linear Momentum
+%===================================================================
+\section{Conservation of Linear Momentum}
+
+We begin with the most general statement of force balance for a continuous medium.
+
+\subsection{Cauchy's Equation of Motion (aka Navier-Stokes)}
+
+Consider a material element of ice with density $\rho$.  Newton's second law, applied to a continuous medium, gives \textbf{Cauchy's first law of motion}:
+\begin{equation}
+  \rho\,\frac{D\bm{v}}{Dt} = \nabla\cdot\bm{\sigma} + \rho\,\bm{g},
+  \label{eq:cauchy}
+\end{equation}
+where $\bm{v}$ is the velocity, $\bm{\sigma}$ is the Cauchy stress tensor, $\bm{g}$ is the gravitational acceleration, and $D/Dt$ is the material derivative.
+
+\medskip
+\noindent Written in component form (with the summation convention):
+\begin{equation}
+  \rho\,\frac{Dv_i}{Dt} = \frac{\partial \sigma_{ij}}{\partial x_j} + \rho\,g_i.
+  \label{eq:cauchy_component}
+\end{equation}
+The three terms represent:
+\begin{enumerate}[nosep]
+  \item \textbf{Inertia} (left-hand side): the acceleration of the material element.
+  \item \textbf{Stress divergence}: the net force per unit volume due to contact forces (pressure gradients, viscous stresses).
+  \item \textbf{Body force}: gravity.
+\end{enumerate}
+This equation is the starting point for \emph{all} glacier flow models.  Every model we will encounter is a simplification of~\eqref{eq:cauchy}.
+
+\medskip
+\noindent The Cauchy stress tensor $\sigma_{ij}$ contains both pressure and deviatoric stress.  Recall from the stress lecture that we can decompose it as
+\begin{equation}
+  \sigma_{ij} = -p\,\delta_{ij} + \tau_{ij},
+  \label{eq:stress_decomp}
+\end{equation}
+where $p = -\sigma_{kk}/3$ is the mean compressive stress (pressure) and $\tau_{ij}$ is the deviatoric stress tensor, which is trace-free ($\tau_{kk} = 0$).  Substituting into~\eqref{eq:cauchy_component}:
+\begin{equation}
+  \rho\,\frac{Dv_i}{Dt} = -\frac{\partial p}{\partial x_i} + \frac{\partial \tau_{ij}}{\partial x_j} + \rho\,g_i.
+  \label{eq:cauchy_deviatoric}
+\end{equation}
+This form separates the stress divergence into a pressure gradient and the divergence of the deviatoric stress.  The pressure gradient drives flow from high to low pressure (as in any fluid), while $\partial\tau_{ij}/\partial x_j$ represents the net viscous force.  For glacier flow, the constitutive law (Glen's flow law) relates $\tau_{ij}$ to the strain rates, so this decomposition is the natural bridge between the momentum equation and the rheology.
+
+\subsection{The Low Reynolds Number Limit}
+\label{sec:stokes_limit}
+
+Cauchy's equation~\eqref{eq:cauchy} contains three kinds of terms.  To determine which ones matter for glacier flow, we need to estimate their relative magnitudes.  We do this by introducing characteristic scales for velocity ($U$), length ($H$), and the stress divergence, then comparing the size of each term.
+
+\medskip
+\noindent The stress divergence $\nabla\cdot\bm{\sigma}$ contains both pressure gradients and viscous stresses.  For a viscous fluid, the viscous part scales as
+\[
+  \left[\nabla\cdot\bm{\tau}\right] \sim \frac{\eta\,U}{H^2},
+\]
+where $\eta$ is the effective viscosity.  Meanwhile, the inertial term on the left-hand side scales as
+\[
+  \left[\rho\,\frac{D\bm{v}}{Dt}\right] \sim \rho\,\frac{[v]}{[t]}
+  \sim \rho\,\frac{U}{H/U} = \frac{\rho\,U^2}{H},
+\]
+where we have estimated the time scale as $[t] \sim H/U$, the time for ice to traverse one thickness.
+The ratio of the inertial term to the viscous term is the \textbf{Reynolds number}:
+\begin{equation}
+  \mathrm{Re} = \frac{\rho\,U\,H}{\eta}.
+\end{equation}
+When $\mathrm{Re} \ll 1$, the inertial term is negligible compared to the viscous term, and the flow is dominated by the balance between viscous stresses and body forces.  When $\mathrm{Re} \gg 1$, inertia dominates and we enter the world of turbulence.
+
+\medskip
+\noindent For a typical glacier ($\rho \approx 917~\text{kg/m}^3$, $U \sim 100~\text{m/yr} \approx 3\times10^{-6}~\text{m/s}$, $H \sim 1000~\text{m}$, $\eta \sim 10^{13}~\text{Pa\,s}$):
+\begin{equation}
+  \mathrm{Re} \sim \frac{917 \times 3\times10^{-6} \times 10^3}{10^{13}} \sim 10^{-13}.
+\end{equation}
+This is extraordinarily small---inertial forces are negligible compared to viscous forces by 13~orders of magnitude.  For context, even the most ``fast'' ice streams ($U \sim 1~\text{km/yr}$) give $\mathrm{Re} \sim 10^{-10}$.  Glacier flow is as far from turbulent as any natural flow on Earth.
+
+\medskip
+\noindent Since $\mathrm{Re} \approx 0$, we can safely drop the left-hand side of~\eqref{eq:cauchy}.  What remains is:
+\begin{equation}
+  \boxed{0 = \frac{\partial \sigma_{ij}}{\partial x_j} + \rho\,g_i.}
+  \label{eq:stokes_momentum}
+\end{equation}
+This is the \textbf{Stokes equation}: the stress divergence and gravity are in instantaneous equilibrium at every point.  There is no acceleration---the ice has no inertia in the dynamical sense.  Glacier flow is \textbf{quasi-static}: the velocity field adjusts instantaneously to changes in geometry and boundary conditions.
+
+\medskip
+\noindent Applying the deviatoric stress decomposition~\eqref{eq:stress_decomp}:
+\begin{equation}
+  \boxed{0 = -\frac{\partial p}{\partial x_i} + \frac{\partial \tau_{ij}}{\partial x_j} + \rho\,g_i.}
+  \label{eq:stokes_deviatoric}
+\end{equation}
+This is the form we will use most often.  The three terms have a clean physical interpretation: the pressure gradient, the viscous force (divergence of deviatoric stress), and gravity must sum to zero everywhere.  When we later substitute Glen's flow law for $\tau_{ij}$, this equation becomes a PDE for the velocity and pressure.
+
+\medskip
+\noindent Notice that this is no longer an evolution equation for the velocity.  In Cauchy's equation, the left-hand side ($\rho\,D\bm{v}/Dt$) contains a time derivative, making it a dynamical equation.  In the Stokes limit, the time derivative is gone: the velocity at any instant is determined entirely by the current geometry and boundary conditions.  Time evolution enters the problem only through the continuity equation, which updates the ice thickness.
+
+% CHALKBOARD DRAWING 1:
+% Draw a small element of ice with stress vectors on each face and a
+% gravity arrow pointing down.  Show that the net force is zero.
+
+\subsection{Boundary Conditions}
+
+The momentum equation~\eqref{eq:stokes_momentum} is a partial differential equation that requires boundary conditions on all boundaries of the ice domain.
+
+\medskip
+\noindent\textbf{Free surface ($z = s$):}  The ice surface is stress-free (we neglect atmospheric pressure):
+\begin{equation}
+  \sigma_{ij}\,n_j\big|_{z=s} = 0,
+  \label{eq:bc_surface}
+\end{equation}
+where $\bm{n}$ is the outward unit normal to the surface.  For a nearly flat surface ($|\nabla s| \ll 1$), this simplifies to $\sigma_{iz}\big|_{z=s} \approx 0$.
+
+\medskip
+\noindent\textbf{Bed ($z = b$):}  The bed boundary condition specifies the relationship between velocity and stress at the ice--bed interface.  Three common choices:
+\begin{itemize}[nosep]
+  \item \textbf{No-slip:} $\bm{v}\big|_{z=b} = 0$.  Appropriate for a frozen bed.
+  \item \textbf{Sliding law:} $\bm{u}_b = f(\bm{\tau}_b,\,N,\,\ldots)$, where $\bm{\tau}_b$ is the basal shear traction, $N$ is the effective pressure, and $f$ is a constitutive relation for sliding.  Examples include Weertman-type ($u_b \propto \tau_b^p$) and regularized Coulomb laws.  These will be the subject of a dedicated lecture.
+  \item \textbf{Free-slip:} $\bm{\tau}_b = 0$.  The limiting case for ice shelves (no contact with a bed).
+\end{itemize}
+
+\medskip
+\noindent\textbf{Calving front:}  At a marine-terminating margin, the ice stress must balance the hydrostatic ocean pressure:
+\begin{equation}
+  \sigma_{ij}\,n_j\big|_{\text{front}} =
+  \begin{cases}
+    -\rho_w\,g\,(z_{\text{sl}} - z) & \text{below sea level}, \\
+    0 & \text{above sea level},
+  \end{cases}
+  \label{eq:bc_calving}
+\end{equation}
+where $\rho_w$ is the ocean water density and $z_{\text{sl}}$ is sea level.
+
+%===================================================================
+% SECTION 3 -- The Stokes Equations for Glacier Flow
+%===================================================================
+\section{The Stokes Equations for Glacier Flow}
+
+We now combine the momentum balance with the constitutive law and incompressibility to form a closed system.
+
+\subsection{Glen's Flow Law as a Nonlinear Viscosity}
+
+In Lecture~I, we stated Glen's flow law as a relationship between strain rates and deviatoric stresses:
+\begin{equation}
+  \dot{\varepsilon}_{ij} = A\,\tau_e^{n-1}\,\tau_{ij},
+  \label{eq:glen_forward}
+\end{equation}
+where $\tau_{ij}$ is the deviatoric stress, $\tau_e = \sqrt{\frac{1}{2}\tau_{ij}\tau_{ij}}$ is the effective stress, and $A$ is the rate factor.
+
+\medskip
+\noindent It is often more convenient to invert this relationship and write the deviatoric stress in terms of the strain rate:
+\begin{equation}
+  \tau_{ij} = 2\,\eta\,\dot{\varepsilon}_{ij},
+  \label{eq:glen_viscosity}
+\end{equation}
+where the \textbf{effective viscosity} is
+\begin{equation}
+  \boxed{\eta = \frac{1}{2}\,A^{-1/n}\,\dot{\varepsilon}_e^{\,(1-n)/n},}
+  \label{eq:viscosity}
+\end{equation}
+and $\dot{\varepsilon}_e = \sqrt{\frac{1}{2}\dot{\varepsilon}_{ij}\dot{\varepsilon}_{ij}}$ is the effective strain rate.
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{Key point: shear thinning}}
+]
+For $n > 1$, the viscosity $\eta$ \emph{decreases} with increasing strain rate.  Ice under high stress deforms more easily than ice under low stress.  This is \textbf{shear thinning} (or pseudoplastic) behavior.  For the standard value $n = 3$:
+\[
+  \eta \propto \dot{\varepsilon}_e^{-2/3}.
+\]
+The viscosity varies by orders of magnitude across a glacier---from $\sim 10^{15}$~Pa\,s near a divide to $\sim 10^{12}$~Pa\,s in a fast-flowing ice stream margin.
+\end{tcolorbox}
+
+\noindent Note that $\eta$ depends on the strain rate, which itself depends on the velocity, which is the unknown we are solving for.  This makes the Stokes equations \emph{nonlinear}: the ``coefficient'' in front of the strain rate is itself a function of the solution.
+
+\subsection{The Full Stokes System}
+\label{sec:full_stokes}
+
+Substituting the constitutive law into the stress tensor $\sigma_{ij} = -p\,\delta_{ij} + \tau_{ij} = -p\,\delta_{ij} + 2\eta\,\dot{\varepsilon}_{ij}$ and combining with the momentum equation~\eqref{eq:stokes_momentum} and the incompressibility constraint, we obtain the \textbf{full Stokes system} for glacier flow:
+
+\begin{tcolorbox}[
+  colback=green!5,
+  colframe=green!50!black,
+  title={\textbf{The Full Stokes System}},
+  breakable
+]
+\textbf{Momentum balance} (3 equations):
+\begin{equation}
+  \frac{\partial}{\partial x_j}\left(-p\,\delta_{ij} + 2\eta\,\dot{\varepsilon}_{ij}\right) + \rho\,g_i = 0.
+  \label{eq:stokes_full}
+\end{equation}
+
+\textbf{Incompressibility} (1 equation):
+\begin{equation}
+  \frac{\partial v_i}{\partial x_i} = 0.
+  \label{eq:incompressibility}
+\end{equation}
+
+\textbf{Constitutive law} (defines $\eta$):
+\begin{equation}
+  \eta = \frac{1}{2}\,A^{-1/n}\,\dot{\varepsilon}_e^{\,(1-n)/n}, \qquad
+  \dot{\varepsilon}_{ij} = \frac{1}{2}\left(\frac{\partial v_i}{\partial x_j} + \frac{\partial v_j}{\partial x_i}\right).
+\end{equation}
+
+\textbf{Unknowns:} $u$, $v$, $w$, $p$ (4 scalar fields in 3D).
+
+\textbf{Boundary conditions:} Eqs.~\eqref{eq:bc_surface}--\eqref{eq:bc_calving} and a basal velocity/stress condition.
+\end{tcolorbox}
+
+\noindent This is the most complete description of glacier flow within the assumptions of an incompressible, nonlinear viscous fluid.  All other models we discuss are simplifications of this system.
+
+\medskip
+\noindent\textbf{Why is this system difficult to solve?}
+\begin{enumerate}[nosep]
+  \item \textbf{Nonlinearity.}  The viscosity $\eta$ depends on the strain rate, requiring iterative solution methods.
+  \item \textbf{Three-dimensional.}  The domain has complex geometry (bedrock topography, free surface, grounding lines).
+  \item \textbf{Free surface.}  The ice surface $z = s(x,y,t)$ evolves in time, coupling the momentum equations to the mass continuity equation.
+  \item \textbf{Basal boundary.}  The sliding law couples the stress and velocity at the bed in a potentially nonlinear way.
+  \item \textbf{Computational cost.}  A 3D ice sheet with $\sim$\,km resolution involves millions of degrees of freedom.
+\end{enumerate}
+
+\subsection{Properties of the Stokes System}
+
+Several important properties follow directly from the structure of the equations:
+
+\medskip
+\noindent\textbf{No time derivative of velocity.}  Equation~\eqref{eq:stokes_full} contains no $\partial \bm{v}/\partial t$.  The velocity field at any instant is determined entirely by the current geometry ($s$, $b$), the rheology ($A$, $n$), and the boundary conditions.  Time evolution enters only through the ice thickness, which changes according to the continuity equation:
+\begin{equation}
+  \frac{\partial H}{\partial t} = \dot{b} - \nabla\cdot(H\,\bar{\bm{u}}),
+\end{equation}
+where $\dot{b}$ is the surface mass balance and $\bar{\bm{u}}$ is the depth-averaged velocity.
+
+\medskip
+\noindent\textbf{Instantaneous stress transmission.}  Because there is no inertia, a perturbation at one location (e.g., a change in basal drag) is felt everywhere in the ice \emph{instantaneously} through the elliptic stress balance.  This is a consequence of the quasi-static approximation and is crucial for understanding how changes at the grounding line propagate upstream.
+
+\medskip
+\noindent\textbf{The pressure is a Lagrange multiplier.}  The pressure $p$ in~\eqref{eq:stokes_full} is not a thermodynamic variable---it is the field that enforces the incompressibility constraint~\eqref{eq:incompressibility}.  It adjusts to whatever value is needed to keep $\nabla\cdot\bm{v} = 0$.
+
+\medskip
+\noindent\emph{What is a Lagrange multiplier?}  In constrained optimization, a Lagrange multiplier is a new variable introduced to enforce a constraint.  Its value is not set by a separate equation---it is determined implicitly by the requirement that the constraint be satisfied.  The classic example: to find the lowest point on a hillside while staying on a trail, the Lagrange multiplier is the ``force'' that keeps you on the trail.  Here, the constraint is incompressibility ($\nabla\cdot\bm{v} = 0$), and $p$ is the field that enforces it.  Glen's flow law tells us nothing about $p$---it relates only the deviatoric stress $\tau_{ij}$ to the strain rate.  The pressure is entirely determined by the requirement that the resulting velocity field have zero divergence everywhere.
+
+%===================================================================
+% SECTION 4 -- Scaling Analysis and the Aspect Ratio
+%===================================================================
+\section{Scaling Analysis and the Aspect Ratio}
+
+The full Stokes system is expensive to solve and, for many glaciological problems, unnecessary.  A scaling analysis reveals which terms are large and which are small, guiding us to simpler approximations.
+
+\subsection{Characteristic Scales}
+
+We define characteristic scales for the independent and dependent variables:
+\begin{center}
+\begin{tabular}{llll}
+  \toprule
+  Quantity & Scale & Symbol & Typical value \\
+  \midrule
+  Horizontal distance & $[x] = [y]$ & $L$ & $100$--$1000$~km \\
+  Vertical distance & $[z]$ & $H$ & $1$--$3$~km \\
+  Horizontal velocity & $[u] = [v]$ & $U$ & $10$--$100$~m/yr \\
+  Vertical velocity & $[w]$ & $W$ & --- \\
+  Pressure & $[p]$ & $P$ & --- \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The \textbf{aspect ratio} is the fundamental small parameter:
+\begin{equation}
+  \varepsilon \equiv \frac{H}{L} \sim 10^{-2}\text{--}10^{-3}.
+  \label{eq:aspect_ratio}
+\end{equation}
+
+\noindent From the incompressibility equation $\partial u/\partial x + \partial w/\partial z = 0$ (in 2D for simplicity), we can determine the vertical velocity scale:
+\begin{equation}
+  \frac{U}{L} \sim \frac{W}{H} \quad\Longrightarrow\quad W = \frac{U\,H}{L} = \varepsilon\,U.
+  \label{eq:W_scale}
+\end{equation}
+The vertical velocity is $O(\varepsilon)$ smaller than the horizontal velocity.
+
+\subsection{Scaling the Stress Components}
+\label{sec:stress_scaling}
+
+The strain-rate components scale as:
+\begin{alignat}{3}
+  \dot{\varepsilon}_{xz} &= \frac{1}{2}\left(\frac{\partial u}{\partial z} + \frac{\partial w}{\partial x}\right) &&\sim \frac{U}{H}, \label{eq:scale_exz} \\[6pt]
+  \dot{\varepsilon}_{xx} &= \frac{\partial u}{\partial x} &&\sim \frac{U}{L} = \varepsilon\,\frac{U}{H}. \label{eq:scale_exx}
+\end{alignat}
+The vertical shear strain rate $\dot{\varepsilon}_{xz}$ is larger than the longitudinal strain rate $\dot{\varepsilon}_{xx}$ by a factor of $1/\varepsilon$.
+
+\medskip
+\noindent Because the deviatoric stresses are proportional to the strain rates (through the viscosity), the same scaling applies to the stresses:
+\begin{equation}
+  \frac{\tau_{xx}}{\tau_{xz}} \sim \frac{\dot{\varepsilon}_{xx}}{\dot{\varepsilon}_{xz}} \sim \varepsilon.
+  \label{eq:stress_ratio}
+\end{equation}
+The longitudinal deviatoric stress $\tau_{xx}$ is $O(\varepsilon)$ smaller than the shear stress $\tau_{xz}$.  We call $\tau_{xz}$ the \textbf{shear stress} and $\tau_{xx}$, $\tau_{xy}$ the \textbf{membrane stresses} (or longitudinal/lateral stresses).
+
+\medskip
+\noindent The pressure scales with the glaciostatic overburden:
+\begin{equation}
+  P \sim \rho\,g\,H.
+\end{equation}
+
+\subsection{The Scaled Momentum Equations}
+\label{sec:scaled_momentum}
+
+We now introduce dimensionless variables (denoted with hats) and write the momentum equations in scaled form.  Let
+\[
+  x = L\,\hat{x}, \quad z = H\,\hat{z}, \quad u = U\,\hat{u}, \quad w = W\,\hat{w}, \quad p = \rho g H\,\hat{p}.
+\]
+We define a stress scale $[\tau] = \eta_0\,U/H$, where $\eta_0$ is a reference viscosity.
+
+\medskip
+\noindent The $x$-momentum equation becomes (dropping hats for readability):
+\begin{equation}
+  \underbrace{\frac{\partial \tau_{xz}}{\partial z}}_{\displaystyle O(1)}
+  + \underbrace{\varepsilon^2\left(\frac{\partial}{\partial x}\left(2\tau_{xx}\right) + \frac{\partial \tau_{xy}}{\partial y}\right)}_{\displaystyle O(\varepsilon^2)}
+  = \rho\,g\,\frac{\partial s}{\partial x}.
+  \label{eq:x_momentum_scaled}
+\end{equation}
+
+\noindent The $z$-momentum equation becomes:
+\begin{equation}
+  \underbrace{\frac{\partial p}{\partial z}}_{\displaystyle O(1)}
+  = -\rho\,g + \underbrace{O(\varepsilon^2)}_{\text{deviatoric terms}}.
+  \label{eq:z_momentum_scaled}
+\end{equation}
+
+% CHALKBOARD DERIVATION 2:
+% Write out all terms in the x-momentum equation with their scalings.
+% Show how each term is classified as O(1), O(eps), or O(eps^2).
+
+\medskip
+\noindent\textbf{Key observations:}
+\begin{enumerate}
+  \item At leading order ($O(1)$), the $z$-equation gives $\partial p/\partial z = -\rho g$, i.e., the pressure is glaciostatic.
+  \item At leading order ($O(1)$), the $x$-equation gives
+  \begin{equation}
+    \frac{\partial \tau_{xz}}{\partial z} = \rho\,g\,\frac{\partial s}{\partial x},
+    \label{eq:sia_balance}
+  \end{equation}
+  which is exactly the force balance we derived from the parallel-slab free-body diagram in Lecture~I.  The membrane stresses $\tau_{xx}$ and $\tau_{xy}$ are negligible at this order.
+  \item The membrane stress terms enter at $O(\varepsilon^2)$---they are \emph{two orders of magnitude} smaller than the leading balance.
+\end{enumerate}
+
+\begin{tcolorbox}[
+  colback=orange!5,
+  colframe=orange!60!black,
+  title={\textbf{When does the scaling break down?}}
+]
+The scaling argument assumes that $\tau_{xx}/\tau_{xz} \sim \varepsilon$.  This holds when basal drag is comparable to the driving stress.  But when basal drag is \emph{small} (ice shelves, fast-sliding ice streams), the velocity becomes nearly depth-independent and $\dot{\varepsilon}_{xz} \to 0$.  In this limit, the membrane stresses $\tau_{xx}$ and $\tau_{xy}$ are no longer small---they become the dominant resistive stresses.  The SIA fails and we need the SSA or a higher-order model.
+\end{tcolorbox}
+
+\subsection{The Model Hierarchy from Scaling}
+
+The scaling analysis reveals a natural hierarchy of approximations, determined by which terms are retained in the momentum equations:
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{The Glacier Flow Model Hierarchy}},
+  breakable
+]
+Each model retains a different subset of stress components from the full Stokes equations.  DIVA (depth-integrated viscosity approximation) vertically integrates the Blatter--Pattyn equations, retaining all stress components but solving a 2D system \cite{SchoofHindmarsh2010}.  See Appendix~B for details on higher-order and hybrid formulations.
+
+\medskip
+\centering
+\begin{tabular}{lllll}
+  \toprule
+  Model & Stresses retained & Equation type & Basal drag & Unknowns \\
+  \midrule
+  SIA & $\tau_{xz}$ only & Local (algebraic) & $\tau_b \approx \tau_d$ & $u(z)$ per column \\[3pt]
+  SSA & $\tau_{xx}$, $\tau_{xy}$ & 2D elliptic PDE & $\tau_b \ll \tau_d$ & $u(x,y)$ \\[3pt]
+  SIA+SSA & All (split) & SSA + local SIA & Any & $u(x,y) + u(z)$ \\[3pt]
+  DIVA & All (depth-integrated) & 2D elliptic PDE & Any & $\bar{u}(x,y)$ \\[3pt]
+  Blatter--Pattyn & All except $\partial R_{zz}/\partial x$ & 3D elliptic PDE & Any & $u(x,y,z)$ \\[3pt]
+  Full Stokes & All & 3D elliptic PDE & Any & $u,v,w,p$ \\
+  \bottomrule
+\end{tabular}
+\label{tab:hierarchy}
+\end{tcolorbox}
+
+\noindent The essential insight is that the choice of model is governed by the \textbf{ratio of basal drag to driving stress}:
+\begin{itemize}[nosep]
+  \item When $\tau_b \approx \tau_d$ (frozen bed, high friction): the SIA is appropriate.  Vertical shear dominates and the velocity varies strongly with depth.
+  \item When $\tau_b \ll \tau_d$ (ice shelves, fast-sliding ice streams): the SSA is appropriate.  Membrane stresses carry the driving stress and the velocity is nearly depth-independent.
+  \item In transitional regions (grounding lines, onset of streaming): higher-order or full-Stokes models are needed.
+\end{itemize}
+
+% CHALKBOARD DRAWING 3:
+% Sketch the model hierarchy as a spectrum from SIA (simple, cheap, local)
+% to full Stokes (complete, expensive, global).  Annotate with examples
+% of where each is appropriate (interior, ice stream, shelf, grounding line).
+
+\noindent In the following sections we examine the SIA and SSA in more detail, then illustrate the SSA with two worked examples.  A detailed discussion of the Blatter--Pattyn approximation and hybrid models is provided in Appendix~B.
+
+%===================================================================
+% SECTION 5 -- The SIA Revisited
+%===================================================================
+\section{The SIA Revisited}
+
+In Lecture~I, we derived the SIA velocity profile from a free-body diagram on a parallel slab.  We can now see that this was the leading-order solution of the scaled Stokes equations.
+
+\subsection{Formal Derivation from the Scaled Equations}
+
+Retaining only the $O(1)$ terms in the scaled momentum equations~\eqref{eq:x_momentum_scaled}--\eqref{eq:z_momentum_scaled}:
+
+\medskip
+\noindent\textbf{$z$-equation (leading order):}
+\begin{equation}
+  \frac{\partial p}{\partial z} = -\rho\,g \quad\Longrightarrow\quad p(z) = \rho\,g\,(s - z),
+\end{equation}
+i.e., the pressure is glaciostatic.
+
+\medskip
+\noindent\textbf{$x$-equation (leading order):}
+\begin{equation}
+  \frac{\partial \tau_{xz}}{\partial z} = \rho\,g\,\frac{\partial s}{\partial x}.
+\end{equation}
+Integrating from the stress-free surface ($z = s$, where $\tau_{xz} = 0$) down to height $z$:
+\begin{equation}
+  \tau_{xz}(z) = \rho\,g\,(s - z)\,\frac{\partial s}{\partial x}.
+  \label{eq:sia_stress}
+\end{equation}
+For small surface slopes, $\partial s/\partial x \approx -\sin\alpha$, recovering the parallel-slab result from Lecture~I.  The key advance is that this now applies to \emph{non-uniform} geometry: the local shear stress at any point depends only on the local surface slope and the depth below the surface.
+
+\medskip
+\noindent Substituting~\eqref{eq:sia_stress} into Glen's flow law and integrating gives the SIA velocity profile and the depth-integrated flux:
+\begin{equation}
+  q = -\frac{2A}{n+2}\,(\rho\,g)^n\,\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,H^{n+2},
+  \label{eq:sia_flux}
+\end{equation}
+exactly as derived in Lecture~I.  The SIA is a \emph{local} model: the flux at each point depends only on the local thickness and surface slope, with no coupling to neighboring points.
+
+\subsection{When the SIA Fails}
+
+The SIA is the leading-order approximation when $\varepsilon \ll 1$ and when the shear stress $\tau_{xz}$ dominates the stress balance.  It fails when these conditions are violated:
+
+\begin{enumerate}
+  \item \textbf{Ice divides.}  At the divide, $\partial s/\partial x = 0$, so the SIA predicts $\tau_{xz} = 0$ and zero deformation.  In reality, longitudinal stress gradients drive a slow outward flow.  The divide is a singular point for the SIA.
+
+  \item \textbf{Ice streams.}  Fast-flowing ice streams have very low basal drag (often $\tau_b \ll \tau_d$).  The velocity is nearly depth-independent (plug flow), and the dominant resistance comes from lateral drag and longitudinal stress gradients---membrane stresses that the SIA discards.
+
+  \item \textbf{Ice shelves.}  With no bed contact, $\tau_{xz} = 0$ everywhere.  The SIA predicts no deformation at all, yet ice shelves flow and thin at rates of hundreds of meters per year.
+
+  \item \textbf{Steep margins.}  The SIA assumes $|\nabla s| \ll 1$ (small surface slopes).  Near ice sheet margins, surface slopes can exceed 0.1, violating this assumption.
+
+  \item \textbf{Grounding lines.}  The transition from grounded to floating ice involves a rapid change in the stress regime (from shear-dominated to membrane-dominated).  The SIA cannot capture this transition because it does not transmit stress horizontally.
+\end{enumerate}
+
+\noindent In all of these cases, we need a model that retains membrane stresses.  The simplest such model is the SSA.
+
+%===================================================================
+% SECTION 6 -- The SSA
+%===================================================================
+\section{The Shallow Shelf Approximation (SSA)}
+
+\subsection{Physical Setting}
+
+The SSA applies in the opposite limit from the SIA: when basal drag is small compared to the driving stress, so that the velocity is approximately depth-independent.  The two canonical settings are:
+\begin{itemize}[nosep]
+  \item \textbf{Ice shelves:} floating ice with no bed contact ($\tau_b = 0$).  All resistance comes from longitudinal stress gradients and lateral drag at embayment walls.
+  \item \textbf{Ice streams:} fast-flowing grounded ice where the bed is weak ($\tau_b \ll \tau_d$).  The velocity profile is nearly uniform with depth (plug flow), and shear is concentrated at the lateral margins.
+\end{itemize}
+
+\noindent In both cases, the dominant stresses are the \textbf{membrane stresses} $\tau_{xx}$, $\tau_{yy}$, and $\tau_{xy}$---not the vertical shear stress $\tau_{xz}$ that controls the SIA.
+
+\subsection{Conceptual Derivation: Depth-Averaging}
+
+Since the velocity is approximately independent of $z$, we can integrate the momentum equations over depth to obtain a 2D system.  The idea is simple:
+\begin{enumerate}[nosep]
+  \item Start with the Stokes equation~\eqref{eq:stokes_deviatoric}.
+  \item Assume $u$ and $v$ are independent of $z$ (plug flow).
+  \item Integrate the $x$- and $y$-momentum equations from the bed ($z = b$) to the surface ($z = s$).
+  \item Apply the stress-free surface condition and identify the basal traction $\tau_{b}$.
+\end{enumerate}
+
+\noindent The result is a depth-integrated force balance.  Conceptually, for the $x$-direction:
+\begin{equation}
+  \underbrace{\frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\,(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})\right)}_{\text{longitudinal stress gradient}}
+  + \underbrace{\frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\,\dot{\varepsilon}_{xy}\right)}_{\text{lateral drag}}
+  - \underbrace{\tau_{bx}}_{\text{basal drag}}
+  = \underbrace{\rho_i\,g\,H\,\frac{\partial s}{\partial x}}_{\text{driving stress}},
+  \label{eq:ssa_conceptual}
+\end{equation}
+where $\bar{\eta}$ is the depth-averaged effective viscosity and the strain rates are computed from the depth-averaged velocities.  A full derivation is given in Appendix~A.
+
+\subsection{The SSA Equations}
+
+The complete SSA system, stated without derivation (see Appendix~A), is:
+
+\begin{tcolorbox}[
+  colback=green!5,
+  colframe=green!50!black,
+  title={\textbf{The Shallow Shelf Approximation (SSA)}},
+  breakable
+]
+\textbf{$x$-momentum:}
+\begin{equation}
+  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right)
+  + \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  - \tau_{bx}
+  = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+  \label{eq:ssa_x}
+\end{equation}
+
+\textbf{$y$-momentum:}
+\begin{equation}
+  \frac{\partial}{\partial y}\!\left(2\bar{\eta}\,H\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right)
+  + \frac{\partial}{\partial x}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  - \tau_{by}
+  = \rho_i\,g\,H\,\frac{\partial s}{\partial y}.
+  \label{eq:ssa_y}
+\end{equation}
+
+\textbf{Depth-averaged viscosity:}
+\begin{equation}
+  \bar{\eta} = \frac{1}{2}\,A^{-1/n}\,\dot{\varepsilon}_e^{\,(1/n)-1}, \qquad
+  \dot{\varepsilon}_e^2 = \dot{\varepsilon}_{xx}^2 + \dot{\varepsilon}_{yy}^2 + \dot{\varepsilon}_{xx}\dot{\varepsilon}_{yy} + \dot{\varepsilon}_{xy}^2.
+\end{equation}
+
+\textbf{Unknowns:} $u(x,y)$, $v(x,y)$ (2 fields in 2D).
+
+\textbf{Calving front BC:}
+\begin{equation}
+  2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,H^2\left(1 - \frac{\rho_i}{\rho_w}\right).
+  \label{eq:calving_front_ssa}
+\end{equation}
+\end{tcolorbox}
+
+\noindent Each term in~\eqref{eq:ssa_x} represents a physically distinct force per unit area:
+\begin{itemize}[nosep]
+  \item The first term on the left is the \textbf{longitudinal stress gradient}: the horizontal gradient of the depth-integrated longitudinal deviatoric stress.  It transmits pushes and pulls along the flow.
+  \item The second term is the \textbf{lateral shear stress gradient}: resistance from shearing at the margins or between adjacent flow units.
+  \item $\tau_{bx}$ is the \textbf{basal drag}: the resistive traction from the bed.  For an ice shelf, $\tau_b = 0$.
+  \item The right-hand side is the \textbf{driving stress}: the gravitational force per unit area.
+\end{itemize}
+
+\subsection{When the SSA Applies}
+
+\begin{itemize}[nosep]
+  \item \textbf{Ice shelves:} $\tau_b = 0$, pure membrane flow.  The SSA is essentially exact.
+  \item \textbf{Ice streams:} $\tau_b$ is small but nonzero, specified by a sliding law.
+  \item \textbf{NOT} appropriate for frozen-bed interior ice sheets, where vertical shear dominates and the velocity varies strongly with depth.  Use the SIA there.
+\end{itemize}
+
+\noindent\textbf{How small must $\tau_b/\tau_d$ be?}  The SSA assumes plug flow ($\partial u/\partial z \approx 0$), which requires the deformational velocity to be small compared to the sliding velocity.  We can quantify this with the \textbf{slip ratio}
+\begin{equation}
+  \lambda \equiv \frac{u_b}{u_b + u_{\text{def}}},
+\end{equation}
+where $u_b$ is the sliding velocity and $u_{\text{def}}$ is the deformational (depth-varying) surface velocity from the SIA:
+\[
+  u_{\text{def}} = \frac{2A}{n+1}\,\tau_b^n\,H.
+\]
+The SSA is appropriate when $\lambda \to 1$ (sliding dominates) and breaks down when $\lambda \to 0$ (deformation dominates, SIA regime).
+
+\medskip
+\noindent To see when $\lambda$ is large, we need to relate $u_b$ and $u_{\text{def}}$.  The sliding velocity comes from a sliding law; for a Weertman-type law, $u_b = C\,\tau_b^m$ where $C$ is a sliding parameter and $m$ is a sliding exponent.  The slip ratio is then
+\[
+  \lambda = \frac{1}{1 + u_{\text{def}}/u_b} = \frac{1}{1 + \dfrac{2A\,\tau_b^n\,H}{(n+1)\,C\,\tau_b^m}} = \frac{1}{1 + \dfrac{2A\,H}{(n+1)\,C}\,\tau_b^{n-m}}.
+\]
+For $n > m$ (the common case: $n = 3$, $m = 1$--$3$), the slip ratio decreases as $\tau_b$ increases---higher basal drag means more deformation relative to sliding, as expected.
+
+\medskip
+\noindent The key point is that whether the SSA is appropriate depends not just on $\tau_b/\tau_d$ but on the combination of basal drag, ice thickness, temperature (through $A$), and the sliding law.  A warm, thick glacier with a slippery bed ($C$ large) can have $\lambda$ near~1 even at moderate $\tau_b/\tau_d$, while a cold, thin glacier on a sticky bed may need very low $\tau_b/\tau_d$ before the SSA applies.
+
+\medskip
+\noindent We can use $\lambda$ to estimate how the SSA error grows.  The SSA computes the depth-averaged velocity $\bar{u} \approx u_b$ but misses the depth-varying part $u_{\text{def}}$.  The fractional error in the depth-averaged velocity is
+\[
+  \frac{\delta \bar{u}}{\bar{u}} \sim \frac{u_{\text{def}}}{u_b + u_{\text{def}}} = 1 - \lambda.
+\]
+But the more important error is in the \emph{flux} $q = \bar{u}\,H$.  Because the SSA assumes a uniform velocity profile while the true profile concentrates flow near the surface, the SSA overestimates the depth-averaged velocity (and hence the flux) by a factor related to the shape of the profile.  Recall from Lecture~I that the ratio of depth-averaged to surface velocity for the SIA is $(n+1)/(n+2)$.  The fractional flux error scales roughly as
+\[
+  \frac{\delta q}{q} \sim \frac{1 - \lambda}{n + 2},
+\]
+which is moderated by the profile shape factor but grows linearly with $1 - \lambda$. The trivial case is for $\lambda \to 0$, where SSA is qualitatively wrong. More interestingly: For $\lambda = 0.9$ is a $\sim$2\% flux error and for $\lambda = 0.5$, it is $\sim$10\% error. While a 10\% is something to keep in mind, it is far from being largest source of uncertainties in projections. \textbf{Does that mean we're okay to use SSA everywhere?}
+
+
+\medskip
+\noindent One final note: Unlike the SIA, the SSA is an \textbf{elliptic PDE}. This means it couples all points in the domain through the membrane stresses.  A change in basal drag at one location affects velocities everywhere.  This is essential for capturing buttressing (how downstream resistance affects upstream flow) and grounding-line dynamics.
+
+\subsection{Diagnosing the Stress Regime from Surface Profiles}
+
+Even without computing $\lambda$, the \emph{curvature} of the ice surface profile along a flowline provides a qualitative diagnostic of the dominant stress regime.
+
+\medskip
+\noindent Consider the surface slope $\alpha = |dh/dx|$ and how it varies from the divide to the margin:
+
+\begin{itemize}
+  \item \textbf{Convex profile ($d^2h/dx^2 < 0$): surface slope increases toward the margin.}  This is the hallmark of deformation-dominated flow (SIA regime).  As ice flows toward the margin, the flux $q = \dot{b}\,x$ must increase, but the ice is thinning.  To push more ice through a thinner column by internal shear alone, the surface slope must steepen---the driving stress $\tau_d = \rho_i g H\,\alpha$ can only grow if $\alpha$ increases faster than $H$ decreases.  Both the Vialov and perfectly plastic profiles are convex everywhere.
+
+  \item \textbf{Concave profile ($d^2h/dx^2 > 0$): surface slope decreases toward the margin (or the profile ``scoops out'').}  This occurs when the ice moves more efficiently than local deformation can explain---either through rapid basal sliding or through membrane stresses transmitting force from upstream.  The ice is being \emph{pulled} toward the margin rather than \emph{pushed} by steepening slopes.  This signature is observed over ice streams and outlet glaciers, where the surface draws down into the fast-flowing channel.
+\end{itemize}
+
+\noindent A useful rule of thumb: for any steady-state flowline, the transition from convex to concave surface curvature marks the approximate boundary where the SIA ceases to be adequate and membrane stresses or sliding become dynamically important.
+
+\medskip
+\noindent This connects directly to the East Antarctic profiles from Lecture~I (Figure~6).  In the interior ($x/L \lesssim 0.7$), the observed profiles are convex and match the Vialov prediction well---the SIA applies.  Near the margins, many profiles thin more rapidly than the Vialov profile predicts, and some develop concave curvature.  This is precisely the transition to sliding-dominated and membrane-stress-dominated flow that we have been building toward throughout this lecture.
+
+\medskip
+\noindent A more detailed analysis of thickness profile shapes---including the sliding-modified SIA profile and why the full SSA does not yield a simple analytical profile---is given in Appendix~\ref{app:profiles}.
+
+%===================================================================
+% SECTION 7 -- Ice Shelf Spreading
+%===================================================================
+\section{Worked Example: Unconfined Ice Shelf Spreading}
+
+We now apply the SSA to the simplest possible ice shelf: a one-dimensional, unconfined slab spreading freely into the ocean.  This is the \textit{Weertman problem}.
+
+\subsection{Setup}
+
+Consider an ice shelf of thickness $H$, flowing in the $x$-direction.  There is:
+\begin{itemize}[nosep]
+  \item no lateral confinement ($\partial/\partial y = 0$, no lateral drag),
+  \item no basal drag ($\tau_b = 0$, floating ice),
+  \item a calving front at some location where the ice meets the ocean.
+\end{itemize}
+
+\noindent The SSA $x$-equation~\eqref{eq:ssa_x} reduces to:
+\begin{equation}
+  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\,\frac{\partial u}{\partial x}\right) = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+  \label{eq:shelf_1d}
+\end{equation}
+
+% CHALKBOARD DRAWING 4:
+% Sketch a 1D ice shelf: flat on top, draft below sea level, calving front
+% on the right with ocean pressure arrows, flow arrows pointing right.
+
+\subsection{The Calving Front Boundary Condition}
+
+At the calving front, the depth-integrated ice stress must balance the depth-integrated ocean water pressure.  The net horizontal force per unit width is:
+\begin{align}
+  F_{\text{ice}} &= \int_b^s \sigma_{xx}\,dz, \\[4pt]
+  F_{\text{ocean}} &= -\int_{z_{\text{sl}}-D}^{z_{\text{sl}}} \rho_w\,g\,(z_{\text{sl}} - z)\,dz = -\frac{1}{2}\,\rho_w\,g\,D^2,
+\end{align}
+where $D$ is the draft (submerged thickness).  For a freely floating shelf in isostatic equilibrium, $D = (\rho_i/\rho_w)\,H$.
+
+\medskip
+\noindent Decomposing $\sigma_{xx} = -p + \tau_{xx}$, using the glaciostatic pressure $p = \rho_i g(s-z)$, and evaluating the integral gives the depth-integrated deviatoric stress at the calving front:
+\begin{equation}
+  2\bar{\eta}\,H\,\frac{\partial u}{\partial x}\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
+  \label{eq:calving_bc}
+\end{equation}
+The right-hand side is always positive (since $\rho_i < \rho_w$): the ice overburden exceeds the ocean back-pressure, so there is always a net extensional force at the calving front.
+
+\subsection{Solution: The Weertman Spreading Rate}
+
+For a shelf of uniform thickness, the driving stress on the right-hand side of~\eqref{eq:shelf_1d} can be rewritten.  For a floating shelf, $s = (1 - \rho_i/\rho_w)\,H$, so $\partial s/\partial x = (1 - \rho_i/\rho_w)\,\partial H/\partial x$.  If $H$ is uniform, the driving stress vanishes and~\eqref{eq:shelf_1d} implies $\partial/\partial x(2\bar{\eta}\,H\,\partial u/\partial x) = 0$.  Combined with the calving front condition~\eqref{eq:calving_bc}, the longitudinal stress is uniform throughout the shelf:
+\begin{equation}
+  2\bar{\eta}\,H\,\frac{\partial u}{\partial x} = \frac{1}{2}\,\rho_i\,g\,H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right) \quad \text{everywhere.}
+\end{equation}
+
+\noindent Since $\bar{\eta} = \frac{1}{2}A^{-1/n}|\partial u/\partial x|^{(1/n)-1}$ for this 1D geometry (where $\dot{\varepsilon}_e = |\partial u/\partial x|$), we can solve for the strain rate:
+\begin{equation}
+  \boxed{\frac{\partial u}{\partial x} = A\!\left(\frac{\rho_i\,g\,H}{4}\left(1 - \frac{\rho_i}{\rho_w}\right)\right)^n.}
+  \label{eq:weertman}
+\end{equation}
+
+\begin{tcolorbox}[
+  colback=orange!5,
+  colframe=orange!60!black,
+  title={\textbf{Key result: the Weertman spreading rate}}
+]
+The strain rate in an unconfined ice shelf is:
+\begin{itemize}[nosep]
+  \item \textbf{uniform} in space (independent of $x$),
+  \item set entirely by the \textbf{local thickness} $H$,
+  \item proportional to $H^n$ ($H^3$ for $n = 3$): thicker shelves spread much faster.
+\end{itemize}
+For $H = 500$~m, $A = 2.4\times10^{-24}$~Pa$^{-3}$\,s$^{-1}$, $n = 3$:
+\[
+  \frac{\partial u}{\partial x} \approx 3 \times 10^{-10}~\text{s}^{-1} \approx 0.01~\text{yr}^{-1},
+\]
+corresponding to $\sim$10~m/yr of stretching per km of shelf---a realistic order of magnitude.
+\end{tcolorbox}
+
+\subsection{Discussion}
+
+The Weertman solution illustrates several important concepts:
+\begin{enumerate}
+  \item \textbf{Buttressing.}  This solution assumes no lateral confinement.  In reality, most ice shelves are confined in embayments, and lateral drag reduces the spreading rate.  The ratio of the actual spreading rate to the unconfined Weertman rate is a measure of the \textbf{buttressing} provided by the embayment.  We will return to this in later lectures.
+
+  \item \textbf{Thinning.}  As the shelf spreads, mass conservation requires it to thin: $\partial H/\partial t = \dot{b} - \partial(uH)/\partial x$.  If $\dot{b} = 0$ and $\partial u/\partial x > 0$, the shelf thins over time.  But since the spreading rate scales as $H^n$, thinning reduces the spreading rate---a stabilizing feedback.
+
+  \item \textbf{No SIA counterpart.}  The SIA gives $\tau_{xz} = 0$ everywhere in a floating shelf (no bed to generate shear), predicting zero deformation.  The Weertman solution is entirely a membrane-stress phenomenon that the SIA cannot capture.
+\end{enumerate}
+
+%===================================================================
+% SECTION 9 -- Confined Ice Stream
+%===================================================================
+\section{Worked Example: Laterally Confined Ice Stream}
+
+We now consider the complementary problem: an ice stream where resistance is provided not by the bed (which is weak) but by lateral shearing at the margins.
+
+\subsection{Setup}
+
+Consider an ice stream of width $2W$, thickness $H$, flowing in the $x$-direction, with:
+\begin{itemize}[nosep]
+  \item $u = u(y)$ only (no longitudinal gradients: $\partial/\partial x = 0$),
+  \item weak basal drag $\tau_b$ (prescribed, constant),
+  \item no-slip at the lateral margins: $u(\pm W) = 0$.
+\end{itemize}
+
+\noindent The SSA $x$-equation~\eqref{eq:ssa_x} reduces to:
+\begin{equation}
+  \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\,\frac{\partial u}{\partial y}\right) = \rho_i\,g\,H\,\frac{\partial s}{\partial x} + \tau_b.
+  \label{eq:stream_balance}
+\end{equation}
+The right-hand side is the net driving force: the gravitational driving stress (negative, since $\partial s/\partial x < 0$) partially offset by basal drag.  Define the \textbf{lateral driving stress} as the stress that must be supported by lateral drag:
+\begin{equation}
+  \tau_{\text{lat}} \equiv \tau_d - \tau_b = -\rho_i\,g\,H\,\frac{\partial s}{\partial x} - \tau_b.
+\end{equation}
+
+% CHALKBOARD DRAWING 5:
+% Plan view: ice stream of width 2W flowing in x, shear margins at y = +/- W.
+% Cross-section: u(y) profile, fast in center, zero at margins.
+
+\subsection{Solution for $n = 1$ (Newtonian)}
+
+For a Newtonian fluid ($n = 1$, constant viscosity $\eta$), equation~\eqref{eq:stream_balance} becomes:
+\begin{equation}
+  \eta\,H\,\frac{\partial^2 u}{\partial y^2} = -\tau_{\text{lat}}.
+\end{equation}
+With the boundary conditions $u(\pm W) = 0$ and symmetry ($\partial u/\partial y|_{y=0} = 0$), the solution is:
+\begin{equation}
+  u(y) = \frac{\tau_{\text{lat}}}{2\,\eta\,H}\left(W^2 - y^2\right).
+  \label{eq:stream_newtonian}
+\end{equation}
+This is a parabolic profile---the same form as plane Poiseuille flow between two parallel plates.  The centerline velocity is:
+\begin{equation}
+  u_c = u(0) = \frac{\tau_{\text{lat}}\,W^2}{2\,\eta\,H}.
+\end{equation}
+
+\subsection{Solution for General $n$}
+
+For general $n$, Glen's law gives $\bar{\eta}\,\partial u/\partial y = \frac{1}{2}A^{-1/n}\,|\partial u/\partial y|^{(1/n)-1}\,\partial u/\partial y$.  The force balance~\eqref{eq:stream_balance}, with $\tau_{\text{lat}}$ uniform across the stream, integrates to give the lateral shear stress:
+\begin{equation}
+  \tau_{xy}(y) = \frac{\tau_{\text{lat}}}{H}\,y.
+\end{equation}
+Substituting into Glen's flow law ($\partial u/\partial y = 2A\,|\tau_{xy}|^{n-1}\tau_{xy}$) and integrating from the margin ($y = W$, $u = 0$):
+\begin{equation}
+  \boxed{u(y) = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{H}\right)^n\!\left(W^{n+1} - |y|^{n+1}\right).}
+  \label{eq:stream_glen}
+\end{equation}
+The centerline velocity is:
+\begin{equation}
+  u_c = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{H}\right)^n W^{n+1}.
+  \label{eq:stream_centerline}
+\end{equation}
+
+\subsection{Comparison of Velocity Profiles}
+
+The normalized velocity profile is:
+\begin{equation}
+  \frac{u(y)}{u_c} = 1 - \left|\frac{y}{W}\right|^{n+1}.
+\end{equation}
+This has the same mathematical form as the vertical velocity profile from Lecture~I, but with $n+1$ replacing $n+1$ in the exponent (and $y/W$ replacing $(h-z)/h$):
+\begin{itemize}[nosep]
+  \item For $n = 1$: parabolic profile, deformation distributed across the stream.
+  \item For $n = 3$: flatter in the center with sharper shear margins.
+  \item For $n \to \infty$: plug flow with all deformation concentrated in infinitesimally thin shear margins.
+\end{itemize}
+
+\noindent The analogy with the vertical profile is exact: in both cases, the nonlinearity of Glen's law concentrates deformation where stress is highest (near the bed in the vertical profile, at the margins in the lateral profile).
+
+% CHALKBOARD DRAWING 6:
+% Plot u(y)/u_c vs y/W for n = 1, 3, 5.  Same style as the vertical
+% velocity profiles from Lecture I.
+
+\subsection{Discussion}
+
+\begin{enumerate}
+  \item \textbf{Width dependence.}  The centerline velocity~\eqref{eq:stream_centerline} scales as $W^{n+1}$: for $n = 3$, doubling the stream width increases the velocity by a factor of $2^4 = 16$.  This extreme sensitivity explains why ice streams are so much faster than the surrounding ice.
+
+  \item \textbf{Shear heating.}  The intense shear at the margins dissipates energy, warming and softening the ice (increasing $A$).  This positive feedback can further concentrate deformation at the margins and may play a role in ice stream widening.  We will explore this in later lectures.
+
+  \item \textbf{The SIA is blind to this.}  The SIA computes velocity from the local surface slope and thickness.  If the surface slope is uniform across the stream (which it approximately is), the SIA predicts uniform velocity---it cannot produce the lateral velocity structure that defines an ice stream.  This is a fundamental limitation of any model that neglects membrane stresses.
+
+  \item \textbf{Force balance partition.}  From~\eqref{eq:stream_balance}, the total driving stress is partitioned between basal drag and lateral drag: $\tau_d = \tau_b + \tau_{\text{lat}}$.  In the Siple Coast ice streams of West Antarctica, observations suggest $\tau_b \lesssim 5$~kPa and $\tau_d \sim 10$--15~kPa, so lateral drag carries roughly half to all of the driving stress.
+\end{enumerate}
+
+%===================================================================
+% SECTION 9 -- Summary
+%===================================================================
+\section{Summary}
+
+\begin{enumerate}
+  \item \textbf{The full Stokes equations} are the complete description of glacier flow (given the constitutive law): $0 = \nabla\cdot\bm{\sigma} + \rho\bm{g}$, combined with incompressibility and Glen's flow law.
+
+  \item \textbf{The aspect ratio} $\varepsilon = H/L \sim 10^{-2}$--$10^{-3}$ is the fundamental small parameter.  It controls the relative magnitude of shear vs.\ membrane stresses.
+
+  \item \textbf{The SIA} retains only vertical shear stress $\tau_{xz}$.  It is local (algebraic), cheap, and valid for slow-flowing ice with high basal drag and gentle surface slopes.
+
+  \item \textbf{The SSA} retains membrane stresses $\tau_{xx}$, $\tau_{xy}$ and is depth-averaged.  It is an elliptic PDE (global coupling), valid for ice shelves and fast-sliding ice streams.
+
+  \item \textbf{The choice of model} depends on the ratio $\tau_b/\tau_d$: SIA when $\tau_b \approx \tau_d$, SSA when $\tau_b \ll \tau_d$, higher-order models in between.
+
+  \item \textbf{Ice shelf spreading} (the Weertman problem) shows that the spreading rate is uniform, set by thickness, and proportional to $H^n$.  The concept of buttressing arises from comparing the actual spreading rate to this unconfined solution.
+
+  \item \textbf{Confined ice streams} produce velocity profiles analogous to the vertical profiles from Lecture~I, with deformation concentrated at the shear margins.  The centerline velocity scales as $W^{n+1}$.
+
+  \item \textbf{Next lecture:} basal processes and sliding laws---the boundary condition that connects the momentum equations to the bed.
+\end{enumerate}
+
+%===================================================================
+% SECTION 10 -- Reading
+%===================================================================
+\section*{Reading}
+
+Cuffey \& Paterson, \textit{Physics of Glaciers}, 4th ed.:
+\begin{itemize}
+  \item Section 8.4: Force balance (Cauchy's equation of motion)
+  \item Sections 8.5.1--8.5.3: Glen's flow law as effective viscosity, Stokes equations
+  \item Sections 8.5.5--8.5.6: Scaling analysis, shallow ice approximation
+  \item Section 8.5.7: Shallow shelf approximation
+  \item Section 8.5.8: Higher-order and full Stokes models
+  \item Section 10.4: Ice shelf flow and the Weertman spreading solution
+  \item Section 10.7: Ice streams and lateral drag
+\end{itemize}
+
+%===================================================================
+% APPENDIX A -- Full SSA Derivation
+%===================================================================
+\appendix
+\section{Full Derivation of the Shallow Shelf Approximation}
+\label{app:ssa}
+
+This appendix provides the complete derivation of the SSA equations stated in Section~6.
+
+\subsection{Starting Point}
+
+We begin with the Stokes equation in deviatoric form~\eqref{eq:stokes_deviatoric}, with the constitutive law $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$.  In component form, the $x$-momentum equation is:
+\begin{equation}
+  -\frac{\partial p}{\partial x} + \frac{\partial}{\partial x}(2\eta\,\dot{\varepsilon}_{xx}) + \frac{\partial}{\partial y}(2\eta\,\dot{\varepsilon}_{xy}) + \frac{\partial}{\partial z}(2\eta\,\dot{\varepsilon}_{xz}) + \rho_i\,g_x = 0.
+  \label{eq:app_x_full}
+\end{equation}
+The $z$-momentum equation gives the glaciostatic pressure: $p \approx \rho_i g(s - z)$.
+
+\subsection{Depth-Independent Velocity}
+
+When basal drag is small, the vertical shear stress $\tau_{xz}$ is small compared to the membrane stresses.  From Glen's law, small $\tau_{xz}$ means small $\dot{\varepsilon}_{xz} = \frac{1}{2}\partial u/\partial z$, so the velocity is approximately independent of depth:
+\begin{equation}
+  u \approx u(x,y), \qquad v \approx v(x,y).
+\end{equation}
+This is the key assumption of the SSA.  The vertical velocity $w$ is then determined by incompressibility:
+\begin{equation}
+  w = -\int_b^z \left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right) dz' = -\left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)(z - b).
+\end{equation}
+
+\subsection{Vertical Integration}
+
+We integrate~\eqref{eq:app_x_full} from $z = b$ to $z = s$.  Consider each term:
+
+\medskip
+\noindent\textbf{Pressure gradient:}
+\begin{equation}
+  -\int_b^s \frac{\partial p}{\partial x}\,dz = -\frac{\partial}{\partial x}\int_b^s p\,dz + p(s)\frac{\partial s}{\partial x} - p(b)\frac{\partial b}{\partial x}.
+\end{equation}
+Using $p = \rho_i g(s-z)$:
+\begin{equation}
+  \int_b^s p\,dz = \frac{1}{2}\rho_i g H^2, \qquad p(s) = 0, \qquad p(b) = \rho_i g H.
+\end{equation}
+So the depth-integrated pressure gradient becomes:
+\begin{equation}
+  -\int_b^s \frac{\partial p}{\partial x}\,dz = -\frac{1}{2}\rho_i g \frac{\partial H^2}{\partial x} - \rho_i g H \frac{\partial b}{\partial x} = -\rho_i g H \frac{\partial s}{\partial x}.
+  \label{eq:app_pressure_integrated}
+\end{equation}
+This is the driving stress (with appropriate sign).
+
+\medskip
+\noindent\textbf{Membrane stress terms:}  Since $u$ and $v$ are independent of $z$, the strain rates $\dot{\varepsilon}_{xx}$, $\dot{\varepsilon}_{xy}$, $\dot{\varepsilon}_{yy}$ are also independent of $z$.  Therefore:
+\begin{equation}
+  \int_b^s \frac{\partial}{\partial x}(2\eta\,\dot{\varepsilon}_{xx})\,dz = \frac{\partial}{\partial x}\!\left(2\bar{\eta}H\,\dot{\varepsilon}_{xx}\right),
+\end{equation}
+where we define the depth-averaged viscosity:
+\begin{equation}
+  \bar{\eta} = \frac{1}{H}\int_b^s \eta\,dz.
+\end{equation}
+If $\eta$ is depth-independent (which follows from $u$, $v$ being depth-independent), then $\bar{\eta} = \eta$.
+
+\medskip
+\noindent\textbf{Vertical shear term:}
+\begin{equation}
+  \int_b^s \frac{\partial}{\partial z}(2\eta\,\dot{\varepsilon}_{xz})\,dz = \bigl[2\eta\,\dot{\varepsilon}_{xz}\bigr]_b^s = \underbrace{2\eta\,\dot{\varepsilon}_{xz}\big|_s}_{= 0\text{ (free surface)}} - \underbrace{2\eta\,\dot{\varepsilon}_{xz}\big|_b}_{= \tau_{bx}}.
+\end{equation}
+The surface term vanishes by the stress-free boundary condition.  The bed term is the basal shear traction $\tau_{bx}$.
+
+\medskip
+\noindent\textbf{Gravity:}  With $g_x = 0$ (gravity acts only in $z$), this term vanishes.
+
+\subsection{The Depth-Integrated Equations}
+
+Combining all terms and using incompressibility ($\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy} = 0$, so $\dot{\varepsilon}_{yy} = -\dot{\varepsilon}_{xx}$) to write $\tau_{xx} = 2\eta(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})$:
+
+\medskip
+\noindent\textbf{$x$-equation:}
+\begin{equation}
+  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right)
+  + \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  - \tau_{bx}
+  = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+\end{equation}
+
+\noindent\textbf{$y$-equation} (derived identically):
+\begin{equation}
+  \frac{\partial}{\partial y}\!\left(2\bar{\eta}\,H\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right)
+  + \frac{\partial}{\partial x}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  - \tau_{by}
+  = \rho_i\,g\,H\,\frac{\partial s}{\partial y}.
+\end{equation}
+
+\noindent These are exactly the SSA equations~\eqref{eq:ssa_x}--\eqref{eq:ssa_y}.
+
+\subsection{Calving Front Boundary Condition}
+
+At the calving front (a vertical face with outward normal $\hat{x}$), the depth-integrated ice stress must balance the ocean back-pressure.  The depth-integrated $x$-traction on the ice side is:
+\begin{equation}
+  \int_b^s \sigma_{xx}\,dz = \int_b^s (-p + 2\eta\,\dot{\varepsilon}_{xx})\,dz = -\frac{1}{2}\rho_i g H^2 + 2\bar{\eta}\,H\,\dot{\varepsilon}_{xx}.
+\end{equation}
+The ocean side provides:
+\begin{equation}
+  -\int_b^{z_{\text{sl}}} \rho_w g(z_{\text{sl}} - z)\,dz = -\frac{1}{2}\rho_w g D^2,
+\end{equation}
+where $D = (\rho_i/\rho_w)H$ is the draft.  Equating and using incompressibility ($\dot{\varepsilon}_{xx} = \frac{1}{2}(2\partial u/\partial x + \partial v/\partial y)$ in the depth-integrated sense, accounting for $\dot{\varepsilon}_{yy}$):
+\begin{equation}
+  2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right) = \frac{1}{2}\rho_i g H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
+\end{equation}
+
+\subsection{Properties of the SSA}
+
+\begin{itemize}
+  \item \textbf{Elliptic PDE:} couples all points in the domain through the membrane stresses.  Unlike the SIA (which is local), a change at one location affects velocities everywhere.
+  \item \textbf{Nonlinear:} $\bar{\eta}$ depends on the strain rate, requiring iterative solution (e.g., Picard iteration or Newton's method).
+  \item \textbf{2D:} only two unknowns ($u$, $v$) in the horizontal plane, much cheaper than the 3D full Stokes system.
+  \item \textbf{Captures:} longitudinal stress transmission, lateral drag, buttressing, calving front dynamics.
+  \item \textbf{Does NOT capture:} vertical shear, bridging effects, the full 3D stress state.
+\end{itemize}
+
+\subsection{Comparison with the SIA}
+
+\begin{center}
+\begin{tabular}{lll}
+  \toprule
+  Property & SIA & SSA \\
+  \midrule
+  Dominant stress & $\tau_{xz}$ & $\tau_{xx}$, $\tau_{xy}$ \\
+  Velocity & $u(x,y,z)$ & $u(x,y)$ \\
+  Equation type & Local (algebraic) & Elliptic PDE \\
+  Basal drag & $\tau_b \approx \tau_d$ & $\tau_b \ll \tau_d$ \\
+  Applicable to & Ice sheet interior & Ice shelves, ice streams \\
+  Stress coupling & None (local) & Global (membrane) \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+%===================================================================
+% APPENDIX B -- Higher-Order and Hybrid Models
+%===================================================================
+\section{Higher-Order and Hybrid Models}
+\label{app:hybrid}
+
+The SIA and SSA are complementary approximations valid in opposite limits of the basal drag ratio $\tau_b/\tau_d$.  Many real glaciers have regions where neither limit applies: grounding lines, transitions from slow to fast flow, and ice divides.  This appendix describes models that bridge the two limits.
+
+\subsection{The Blatter--Pattyn (First-Order) Approximation}
+
+The Blatter--Pattyn model \cite{Blatter1995,Pattyn2003} starts from the full Stokes equations and makes one simplification: the vertical momentum equation is replaced by the glaciostatic pressure assumption ($p = \rho_i g(s-z)$), eliminating $w$ and $p$ as independent unknowns.  Equivalently, horizontal gradients of the vertical resistive stress ($\partial R_{zz}/\partial x$, called ``bridging effects'') are neglected.
+
+\medskip
+\noindent The resulting equations are:
+\begin{align}
+  \frac{\partial}{\partial x}\!\left(2\eta\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right) + \frac{\partial}{\partial y}\!\left(\eta\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right) + \frac{\partial}{\partial z}\!\left(\eta\frac{\partial u}{\partial z}\right) &= \rho_i g\frac{\partial s}{\partial x}, \label{eq:bp_x} \\[6pt]
+  \frac{\partial}{\partial y}\!\left(2\eta\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right) + \frac{\partial}{\partial x}\!\left(\eta\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right) + \frac{\partial}{\partial z}\!\left(\eta\frac{\partial v}{\partial z}\right) &= \rho_i g\frac{\partial s}{\partial y}. \label{eq:bp_y}
+\end{align}
+
+\noindent Key features:
+\begin{itemize}[nosep]
+  \item This is a \textbf{3D elliptic PDE} for $u(x,y,z)$ and $v(x,y,z)$---two unknowns instead of four.
+  \item $w$ is recovered from incompressibility; $p$ is glaciostatic.
+  \item It retains \textbf{both} vertical shear ($\partial/\partial z(\eta\,\partial u/\partial z)$) and membrane stresses.
+  \item It reduces to the SIA in the high-drag limit and to the SSA in the low-drag limit (after depth-averaging).
+  \item The error relative to full Stokes is $O(\varepsilon^2)$---negligible for most glaciological applications.
+\end{itemize}
+
+\subsection{Hybrid Models: SIA + SSA}
+
+A pragmatic alternative to solving the Blatter--Pattyn equations is to \emph{superpose} the SIA and SSA velocities:
+\begin{equation}
+  u(x,y,z) = \underbrace{u_{\text{SSA}}(x,y)}_{\text{depth-averaged (sliding + membrane)}} + \underbrace{u_{\text{SIA}}(x,y,z)}_{\text{depth-varying (shear deformation)}},
+  \label{eq:hybrid}
+\end{equation}
+where $u_{\text{SIA}}$ is defined to be zero at the bed (it represents only the deformational component).
+
+\medskip
+\noindent This is \emph{not} a formal asymptotic result---it is an approximation motivated by the observation that the SIA and SSA capture complementary physics:
+\begin{itemize}[nosep]
+  \item In the interior (high basal drag): $u_{\text{SSA}} \approx u_b \approx 0$, and $u_{\text{SIA}}$ dominates.  Recovers the SIA.
+  \item On ice shelves (no basal drag): $u_{\text{SIA}} = 0$ (no vertical shear), and $u_{\text{SSA}}$ dominates.  Recovers the SSA.
+  \item In transitional regions: both contribute.
+\end{itemize}
+
+\noindent The hybrid approach solves the SSA globally (a 2D elliptic PDE), then adds the SIA correction column-by-column (a local calculation).  This is much cheaper than solving the 3D Blatter--Pattyn equations and is used in several large-scale ice sheet models.
+
+\subsection{The DIVA Approach}
+
+The Depth-Integrated Viscosity Approximation (DIVA) of \cite{SchoofHindmarsh2010} provides a more rigorous alternative to the ad hoc SIA+SSA hybrid.  It vertically integrates the Blatter--Pattyn equations~\eqref{eq:bp_x}--\eqref{eq:bp_y}, retaining the effect of vertical shear on the depth-averaged viscosity.  The result is a 2D elliptic PDE (like the SSA) but with a modified viscosity that accounts for depth-varying deformation.  DIVA reduces to the SSA in the low-drag limit and to the SIA in the high-drag limit, with a smooth transition between them.
+
+\subsection{When to Use What}
+
+\begin{itemize}
+  \item \textbf{Long time-scale ice sheet evolution} ($>10^4$~yr): SIA or hybrid models, where computational cost matters.
+  \item \textbf{Century-scale projections:} DIVA or hybrid models.
+  \item \textbf{Grounding line dynamics:} At least Blatter--Pattyn; full Stokes is preferable for detailed process studies.
+  \item \textbf{Single-glacier studies:} Full Stokes is computationally feasible and captures all dynamics.
+  \item \textbf{The trend in the field} is toward DIVA-type models that combine the efficiency of 2D solvers with the accuracy of higher-order physics \cite{SchoofHindmarsh2010}.
+\end{itemize}
+
+%===================================================================
+% APPENDIX C -- Thickness Profiles and the SSA
+%===================================================================
+\section{Thickness Profiles: The Sliding-Modified SIA and the SSA}
+\label{app:profiles}
+
+This appendix examines ice sheet thickness profiles in the sliding regime, complementing the Vialov profile from Lecture~I.
+
+\subsection{Why the SSA Does Not Give a Simple Profile}
+
+In Lecture~I, we derived the Vialov profile by combining the SIA flux with steady-state continuity.  The key step was that the SIA gives a \emph{local} relationship between flux, thickness, and surface slope:
+\begin{equation}
+  q_{\text{SIA}} = \frac{2A}{n+2}\,(\rho_i g)^n\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,H^{n+2}.
+\end{equation}
+Substituting into $\partial q/\partial x = \dot{b}$ gives a single first-order ODE for $H(x)$.
+
+\medskip
+\noindent The SSA does not permit this.  For a 1D, sliding-dominated ice sheet on a flat bed with $\tau_b = C\,u^m$, the 1D SSA momentum equation is:
+\begin{equation}
+  \underbrace{\frac{d}{dx}\!\left(4\bar{\eta}\,H\,\frac{du}{dx}\right)}_{\text{membrane stress gradient}} - \underbrace{C\,u^m}_{\tau_b} = \underbrace{\rho_i\,g\,H\,\frac{dH}{dx}}_{\text{driving stress}},
+  \label{eq:ssa_1d_grounded_app}
+\end{equation}
+where $\bar{\eta} = \frac{1}{2}A^{-1/n}|du/dx|^{(1/n)-1}$.  Combined with steady-state continuity $u\,H = \dot{b}\,x$, this is a coupled system for $u(x)$ and $H(x)$.  The membrane stress gradient involves the second derivative of $u$, coupling the solution at each point to its neighbors.  We cannot eliminate $u$ to obtain a single ODE for $H(x)$.
+
+\medskip
+\noindent This is not a technical inconvenience---it reflects the physics.  Membrane stresses transmit forces horizontally through the ice.  A change in thickness or basal drag at one location alters the longitudinal stress, which changes the velocity field everywhere.  A local flux formula cannot capture this coupling.  The true SSA profile requires numerical solution and is generally smoother than the SIA profile because membrane stresses redistribute the driving stress along the flow.
+
+\subsection{The Sliding-Modified SIA Profile}
+
+If the membrane stress gradient is small compared to the driving stress and basal drag---i.e., if the first term in~\eqref{eq:ssa_1d_grounded_app} is negligible---the force balance reduces to the SIA force balance with a sliding law:
+\begin{equation}
+  \tau_b \approx \tau_d \quad\Longrightarrow\quad C\,u^m \approx \rho_i\,g\,H\left|\frac{dH}{dx}\right|.
+\end{equation}
+The flux becomes a local function of $H$ and $dH/dx$:
+\begin{equation}
+  q = u\,H = C^{-1/m}\,(\rho_i g)^{1/m}\,H^{(m+1)/m}\left|\frac{dH}{dx}\right|^{1/m},
+\end{equation}
+and steady-state continuity gives an ODE that integrates to:
+\begin{equation}
+  \boxed{h(x) = h_0\left[1 - \left(\frac{x}{L}\right)^{m+1}\right]^{1/(m+2)},}
+  \label{eq:sliding_sia_profile_app}
+\end{equation}
+with divide thickness:
+\begin{equation}
+  h_0 = \left[\frac{(m+2)\,\dot{b}^m\,C}{(m+1)\,\rho_i\,g}\right]^{1/(m+2)}\!L^{(m+1)/(m+2)}.
+\end{equation}
+Here the sliding law is $\tau_b = C\,u^m$, so $m \to 0$ is a perfectly plastic bed ($\tau_b = C$, recovering the parabolic profile $h = h_0\sqrt{1 - x/L}$ from Lecture~I) and $m = 1$ is a linearly viscous bed.
+
+\medskip
+\noindent\textbf{Caveat:} This is \emph{not} the SSA profile.  It is the SIA force balance ($\tau_b = \tau_d$) with a sliding law, valid only when membrane stress gradients are negligible---precisely the regime where the SSA is not needed.
+
+\subsection{Comparison of Profile Shapes}
+
+Both the Vialov and sliding-modified profiles have the form $h/h_0 = [1 - (x/L)^p]^q$:
+
+\begin{center}
+\begin{tabular}{lccc}
+  \toprule
+  & Inner exponent $p$ & Outer exponent $q$ & Controlling parameter \\
+  \midrule
+  Vialov (SIA, no sliding) & $(n+1)/n$ & $n/[2(n+1)]$ & Flow-law exponent $n$ \\[3pt]
+  Sliding-modified SIA & $m + 1$ & $1/(m+2)$ & Sliding exponent $m$ \\
+  \bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The Vialov profile shape encodes the flow-law exponent $n$ (internal deformation); the sliding-modified profile encodes the sliding-law exponent $m$ (basal mechanics).  The divide thickness $h_0$ is also more sensitive to accumulation in the sliding case: $h_0 \propto \dot{b}^{1/(2n+2)}$ for the SIA (exponent $1/8$ for $n = 3$) versus $h_0 \propto \dot{b}^{m/(m+2)}$ for sliding (exponent $1/3$ for $m = 1$).
+
+% FIGURE: Plot normalized Vialov (n=3) and sliding-modified SIA (m=0, 1/3, 1)
+% profiles on the same axes.
+
+%===================================================================
+% Bibliography
+%===================================================================
+\begin{thebibliography}{99}
+
+\bibitem{Blatter1995}
+Blatter, H.\ (1995).
+Velocity and stress fields in grounded glaciers: a simple algorithm for including deviatoric stress gradients.
+\textit{Journal of Glaciology}, 41(138), 333--344.
+\texttt{doi:10.3189/S002214300001621X}
+
+\bibitem{Pattyn2003}
+Pattyn, F.\ (2003).
+A new three-dimensional higher-order thermomechanical ice sheet model: basic sensitivity, ice stream development, and ice flow across subglacial lakes.
+\textit{Journal of Geophysical Research}, 108(B8), 2382.
+\texttt{doi:10.1029/2002JB002329}
+
+\bibitem{SchoofHindmarsh2010}
+Schoof, C.\ \& Hindmarsh, R.~C.~A.\ (2010).
+Thin-film flows with wall slip: an asymptotic analysis of higher order glacier flow models.
+\textit{Quarterly Journal of Mechanics and Applied Mathematics}, 63(1), 73--114.
+\texttt{doi:10.1093/qjmam/hbp025}
+
+\bibitem{Weertman1957}
+Weertman, J.\ (1957).
+Deformation of floating ice shelves.
+\textit{Journal of Glaciology}, 3(21), 38--42.
+\texttt{doi:10.3189/S0022143000024710}
+
+\end{thebibliography}
+
+\end{document}

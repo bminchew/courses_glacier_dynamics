@@ -51,7 +51,7 @@ In the preceding lectures we established:
   \begin{equation}
     \tau_d = -\rho_i g\, h\,\frac{\partial s}{\partial x},
   \end{equation}
-  quantifies the gravitational force per unit area that propels the ice forward, and the \emph{deviatoric stress tensor} $\tau_{ij} = \sigma_{ij} - p\,\delta_{ij}$ isolates the stress components that cause ice to deform.
+  quantifies the gravitational force per unit area that propels the ice forward, and the \emph{deviatoric stress tensor} $\tau_{ij}$, defined through $\sigma_{ij} = -p\,\delta_{ij} + \tau_{ij}$, isolates the stress components that cause ice to deform.
 \end{enumerate}
 
 \noindent What is still missing is a way to compute the velocity field.  For that we need two additional ingredients:
@@ -246,18 +246,18 @@ Consider a block of ice extending from the free surface ($z = s$) down to some l
   \item \textbf{Tractions on the surface:} zero (free surface).
 \end{itemize}
 
-\noindent Balancing forces in the downslope direction:
+\noindent Balancing forces in the downslope ($+x$) direction.  The gravity component is $\rho_i g\,d\,\sin\alpha$ (downslope).  The shear traction on the base of the block, exerted by the ice below on the face with outward normal $-\hat{z}$, is $-\tau_{xz}$ (the minus sign from the outward normal).  Setting the net force to zero:
 \begin{equation}
-  |\tau_{xz}(z)| = \rho_i g\,(s - z)\,\sin\alpha.
+  \rho_i g\,(s - z)\,\sin\alpha - \tau_{xz}(z) = 0,
 \end{equation}
-With the tension-positive sign convention and noting that this is a resistive stress (opposing the downslope gravitational pull), we write:
+so:
 \begin{equation}
-  \boxed{\tau_{xz}(z) = -\rho_i g\,(s - z)\,\sin\alpha.}
+  \boxed{\tau_{xz}(z) = \rho_i g\,(s - z)\,\sin\alpha.}
   \label{eq:slab_stress}
 \end{equation}
-The shear stress increases linearly from zero at the surface to a maximum at the bed:
+The shear stress is positive: ice above height $z$ is driven downslope by gravity, and the resulting viscous coupling means faster-moving ice above drags slower-moving ice below.  The stress increases linearly from zero at the surface to a maximum at the bed:
 \begin{equation}
-  \tau_b \equiv |\tau_{xz}(b)| = \rho_i g\,h\,\sin\alpha.
+  \tau_b \equiv \tau_{xz}(b) = \rho_i g\,h\,\sin\alpha.
   \label{eq:basal_shear}
 \end{equation}
 For small slopes ($\sin\alpha \approx \tan\alpha = -\partial s/\partial x$), the basal shear stress equals the driving stress:
@@ -278,9 +278,9 @@ recovering the expression from the stress lecture.
   title={\textbf{Derivation: Velocity Profile for Simple Shear}},
   breakable
 ]
-With only $\tau_{xz}$ nonzero, the effective stress simplifies to $\tau_e = |\tau_{xz}|$.  Glen's flow law~\eqref{eq:glen} gives:
+With only $\tau_{xz}$ nonzero, the effective stress simplifies to $\tau_e = \tau_{xz}$ (which is positive).  Glen's flow law~\eqref{eq:glen} gives:
 \begin{equation}
-  \dot{\varepsilon}_{xz} = A\,|\tau_{xz}|^{n-1}\,\tau_{xz}.
+  \dot{\varepsilon}_{xz} = A\,\tau_{xz}^{n-1}\,\tau_{xz} = A\,\tau_{xz}^n.
 \end{equation}
 Since $\partial w/\partial x = 0$ for the parallel slab, the shear strain rate is $\dot{\varepsilon}_{xz} = \frac{1}{2}\partial u/\partial z$, so:
 \begin{equation}
@@ -380,7 +380,7 @@ When $\varepsilon \ll 1$, a scaling analysis of the full stress-balance equation
 \begin{itemize}
   \item The dominant stress is the vertical shear stress $\tau_{xz}$.
   \item Longitudinal deviatoric stresses ($\tau_{xx}$) are smaller by a factor of $O(\varepsilon^2)$.
-  \item The pressure is approximately lithostatic.
+  \item The pressure is approximately glaciostatic.
 \end{itemize}
 Under these conditions, the ice at each location deforms as though it were part of a parallel slab with the local thickness and surface slope.  This is the \textbf{shallow-ice approximation} (SIA).
 
