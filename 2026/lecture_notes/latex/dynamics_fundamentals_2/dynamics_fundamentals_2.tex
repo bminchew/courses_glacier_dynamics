@@ -228,6 +228,13 @@ The viscosity varies by orders of magnitude across a glacier---from $\sim 10^{15
 
 \noindent Note that $\eta$ depends on the strain rate, which itself depends on the velocity, which is the unknown we are solving for.  This makes the Stokes equations \emph{nonlinear}: the ``coefficient'' in front of the strain rate is itself a function of the solution.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig01_effective_viscosity.pdf}
+  \caption{Effective viscosity of ice as a function of effective strain rate for different values of the flow-law exponent $n$.  For $n > 1$, ice is shear thinning: the viscosity decreases by orders of magnitude as the strain rate increases.}
+  \label{fig:effective_viscosity}
+\end{figure}
+
 \subsection{The Full Stokes System}
 \label{sec:full_stokes}
 
@@ -654,6 +661,13 @@ Even without computing $\lambda$, the \emph{curvature} of the ice surface profil
 \medskip
 \noindent A more detailed analysis of thickness profile shapes---including the sliding-modified SIA profile and why the full SSA does not yield a simple analytical profile---is given in Appendix~\ref{app:profiles}.
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig06_grounded_vs_shelf_profiles.pdf}
+  \caption{Normalized thickness profiles for East Antarctic grounded ice (black, median) compared with the Ross and Ronne--Filchner ice shelves (colored, median).  The grounded profiles are convex (SIA regime), while the ice shelf profiles are concave, thinning from the grounding line to the calving front.  The contrast in profile curvature reflects the fundamentally different stress regimes: shear-dominated (SIA) on grounded ice versus membrane-stress-dominated (SSA) on the shelves.}
+  \label{fig:grounded_vs_shelf_profiles}
+\end{figure}
+
 %===================================================================
 % SECTION 7 -- Ice Shelf Spreading
 %===================================================================
@@ -739,6 +753,13 @@ The Weertman solution illustrates several important concepts:
   \item \textbf{No SIA counterpart.}  The SIA gives $\tau_{xz} = 0$ everywhere in a floating shelf (no bed to generate shear), predicting zero deformation.  The Weertman solution is entirely a membrane-stress phenomenon that the SIA cannot capture.
 \end{enumerate}
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig02_weertman_spreading.pdf}
+  \caption{Weertman spreading rate for an unconfined ice shelf as a function of ice thickness ($n = 3$).  The spreading rate scales as $H^n$, so thicker shelves spread much faster.}
+  \label{fig:weertman_spreading}
+\end{figure}
+
 %===================================================================
 % SECTION 9 -- Confined Ice Stream
 %===================================================================
@@ -817,14 +838,17 @@ This has the same mathematical form as the vertical velocity profile from Lectur
 
 \noindent The analogy with the vertical profile is exact: in both cases, the nonlinearity of Glen's law concentrates deformation where stress is highest (near the bed in the vertical profile, at the margins in the lateral profile).
 
-% CHALKBOARD DRAWING 6:
-% Plot u(y)/u_c vs y/W for n = 1, 3, 5.  Same style as the vertical
-% velocity profiles from Lecture I.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.6\textwidth]{figures/fig03_ice_stream_profiles.pdf}
+  \caption{Normalized lateral velocity profiles for an isothermal ice stream.  Higher values of $n$ concentrate deformation at the shear margins, producing increasingly plug-like flow in the interior.}
+  \label{fig:ice_stream_profiles}
+\end{figure}
 
 \subsection{Discussion}
 
 \begin{enumerate}
-  \item \textbf{Width dependence.}  The centerline velocity~\eqref{eq:stream_centerline} scales as $W^{n+1}$: for $n = 3$, doubling the stream width increases the velocity by a factor of $2^4 = 16$.  This extreme sensitivity explains why ice streams are so much faster than the surrounding ice.
+  \item \textbf{Width dependence.}  The centerline velocity~\eqref{eq:stream_centerline} scales as $W^{n+1}$: for $n = 3$, doubling the stream width increases the velocity by a factor of $2^4 = 16$.  This extreme sensitivity explains why ice streams are so much faster than the surrounding ice (Figure~\ref{fig:width_sensitivity}).
 
   \item \textbf{Shear heating.}  The intense shear at the margins dissipates energy, warming and softening the ice (increasing $A$).  This positive feedback can further concentrate deformation at the margins and may play a role in ice stream widening.  We will explore this in later lectures.
 
@@ -832,6 +856,13 @@ This has the same mathematical form as the vertical velocity profile from Lectur
 
   \item \textbf{Force balance partition.}  From~\eqref{eq:stream_balance}, the total driving stress is partitioned between basal drag and lateral drag: $\tau_d = \tau_b + \tau_{\text{lat}}$.  In the Siple Coast ice streams of West Antarctica, observations suggest $\tau_b \lesssim 5$~kPa and $\tau_d \sim 10$--15~kPa, so lateral drag carries roughly half to all of the driving stress.
 \end{enumerate}
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig05_width_sensitivity.pdf}
+  \caption{Normalized centerline velocity as a function of normalized ice stream width.  The velocity scales as $(W/W_0)^{n+1}$, so even modest changes in width produce large changes in speed for $n > 1$.}
+  \label{fig:width_sensitivity}
+\end{figure}
 
 %===================================================================
 % SECTION 9 -- Summary
@@ -1136,8 +1167,12 @@ Both the Vialov and sliding-modified profiles have the form $h/h_0 = [1 - (x/L)^
 
 \noindent The Vialov profile shape encodes the flow-law exponent $n$ (internal deformation); the sliding-modified profile encodes the sliding-law exponent $m$ (basal mechanics).  The divide thickness $h_0$ is also more sensitive to accumulation in the sliding case: $h_0 \propto \dot{b}^{1/(2n+2)}$ for the SIA (exponent $1/8$ for $n = 3$) versus $h_0 \propto \dot{b}^{m/(m+2)}$ for sliding (exponent $1/3$ for $m = 1$).
 
-% FIGURE: Plot normalized Vialov (n=3) and sliding-modified SIA (m=0, 1/3, 1)
-% profiles on the same axes.
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig04_sia_vs_sliding_profiles.pdf}
+  \caption{Normalized thickness profiles for the Vialov (SIA) and sliding-modified SIA solutions.  The Vialov profile shape is controlled by the flow-law exponent $n$; the sliding-modified profile is controlled by the sliding exponent $m$.  As $n \to \infty$ or $m \to 0$, the profiles approach the perfectly plastic (parabolic) limit.}
+  \label{fig:sia_vs_sliding_profiles}
+\end{figure}
 
 %===================================================================
 % Bibliography
