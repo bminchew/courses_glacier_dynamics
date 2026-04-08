@@ -288,7 +288,7 @@ Several important properties follow directly from the structure of the equations
 \medskip
 \noindent\textbf{No time derivative of velocity.}  Equation~\eqref{eq:stokes_full} contains no $\partial \bm{v}/\partial t$.  The velocity field at any instant is determined entirely by the current geometry ($s$, $b$), the rheology ($A$, $n$), and the boundary conditions.  Time evolution enters only through the ice thickness, which changes according to the continuity equation:
 \begin{equation}
-  \frac{\partial H}{\partial t} = \dot{b} - \nabla\cdot(H\,\bar{\bm{u}}),
+  \frac{\partial h}{\partial t} = \dot{b} - \nabla\cdot(h\,\bar{\bm{u}}),
 \end{equation}
 where $\dot{b}$ is the surface mass balance and $\bar{\bm{u}}$ is the depth-averaged velocity.
 
@@ -488,7 +488,7 @@ For small surface slopes, $\partial s/\partial x \approx -\sin\alpha$, recoverin
 \medskip
 \noindent Substituting~\eqref{eq:sia_stress} into Glen's flow law and integrating gives the SIA velocity profile and the depth-integrated flux:
 \begin{equation}
-  q = -\frac{2A}{n+2}\,(\rho\,g)^n\,\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,H^{n+2},
+  q = -\frac{2A}{n+2}\,(\rho\,g)^n\,\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,h^{n+2},
   \label{eq:sia_flux}
 \end{equation}
 exactly as derived in Lecture~I.  The SIA is a \emph{local} model: the flux at each point depends only on the local thickness and surface slope, with no coupling to neighboring points.
@@ -538,10 +538,10 @@ Since the velocity is approximately independent of $z$, we can integrate the mom
 
 \noindent The result is a depth-integrated force balance.  Conceptually, for the $x$-direction:
 \begin{equation}
-  \underbrace{\frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\,(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})\right)}_{\text{longitudinal stress gradient}}
-  + \underbrace{\frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\,\dot{\varepsilon}_{xy}\right)}_{\text{lateral drag}}
+  \underbrace{\frac{\partial}{\partial x}\!\left(2\bar{\eta}\,h\,(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})\right)}_{\text{longitudinal stress gradient}}
+  + \underbrace{\frac{\partial}{\partial y}\!\left(\bar{\eta}\,h\,\dot{\varepsilon}_{xy}\right)}_{\text{lateral drag}}
   - \underbrace{\tau_{bx}}_{\text{basal drag}}
-  = \underbrace{\rho_i\,g\,H\,\frac{\partial s}{\partial x}}_{\text{driving stress}},
+  = \underbrace{\rho_i\,g\,h\,\frac{\partial s}{\partial x}}_{\text{driving stress}},
   \label{eq:ssa_conceptual}
 \end{equation}
 where $\bar{\eta}$ is the depth-averaged effective viscosity and the strain rates are computed from the depth-averaged velocities.  A full derivation is given in Appendix~A.
@@ -558,19 +558,19 @@ The complete SSA system, stated without derivation (see Appendix~A), is:
 ]
 \textbf{$x$-momentum:}
 \begin{equation}
-  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right)
-  + \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,h\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right)
+  + \frac{\partial}{\partial y}\!\left(\bar{\eta}\,h\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
   - \tau_{bx}
-  = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+  = \rho_i\,g\,h\,\frac{\partial s}{\partial x}.
   \label{eq:ssa_x}
 \end{equation}
 
 \textbf{$y$-momentum:}
 \begin{equation}
-  \frac{\partial}{\partial y}\!\left(2\bar{\eta}\,H\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right)
-  + \frac{\partial}{\partial x}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
+  \frac{\partial}{\partial y}\!\left(2\bar{\eta}\,h\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right)
+  + \frac{\partial}{\partial x}\!\left(\bar{\eta}\,h\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
   - \tau_{by}
-  = \rho_i\,g\,H\,\frac{\partial s}{\partial y}.
+  = \rho_i\,g\,h\,\frac{\partial s}{\partial y}.
   \label{eq:ssa_y}
 \end{equation}
 
@@ -584,7 +584,7 @@ The complete SSA system, stated without derivation (see Appendix~A), is:
 
 \textbf{Calving front BC:}
 \begin{equation}
-  2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,H^2\left(1 - \frac{\rho_i}{\rho_w}\right).
+  2\bar{\eta}\,h\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,h^2\left(1 - \frac{\rho_i}{\rho_w}\right).
   \label{eq:calving_front_ssa}
 \end{equation}
 \end{tcolorbox}
@@ -611,14 +611,14 @@ The complete SSA system, stated without derivation (see Appendix~A), is:
 \end{equation}
 where $u_b$ is the sliding velocity and $u_{\text{def}}$ is the deformational (depth-varying) surface velocity from the SIA:
 \[
-  u_{\text{def}} = \frac{2A}{n+1}\,\tau_b^n\,H.
+  u_{\text{def}} = \frac{2A}{n+1}\,\tau_b^n\,h.
 \]
 The SSA is appropriate when $\lambda \to 1$ (sliding dominates) and breaks down when $\lambda \to 0$ (deformation dominates, SIA regime).
 
 \medskip
 \noindent To see when $\lambda$ is large, we need to relate $u_b$ and $u_{\text{def}}$.  The sliding velocity comes from a sliding law; for a Weertman-type law, $u_b = C\,\tau_b^m$ where $C$ is a sliding parameter and $m$ is a sliding exponent.  The slip ratio is then
 \[
-  \lambda = \frac{1}{1 + u_{\text{def}}/u_b} = \frac{1}{1 + \dfrac{2A\,\tau_b^n\,H}{(n+1)\,C\,\tau_b^m}} = \frac{1}{1 + \dfrac{2A\,H}{(n+1)\,C}\,\tau_b^{n-m}}.
+  \lambda = \frac{1}{1 + u_{\text{def}}/u_b} = \frac{1}{1 + \dfrac{2A\,\tau_b^n\,h}{(n+1)\,C\,\tau_b^m}} = \frac{1}{1 + \dfrac{2A\,h}{(n+1)\,C}\,\tau_b^{n-m}}.
 \]
 For $n > m$ (the common case: $n = 3$, $m = 1$--$3$), the slip ratio decreases as $\tau_b$ increases---higher basal drag means more deformation relative to sliding, as expected.
 
@@ -630,7 +630,7 @@ For $n > m$ (the common case: $n = 3$, $m = 1$--$3$), the slip ratio decreases a
 \[
   \frac{\delta \bar{u}}{\bar{u}} \sim \frac{u_{\text{def}}}{u_b + u_{\text{def}}} = 1 - \lambda.
 \]
-But the more important error is in the \emph{flux} $q = \bar{u}\,H$.  Because the SSA assumes a uniform velocity profile while the true profile concentrates flow near the surface, the SSA overestimates the depth-averaged velocity (and hence the flux) by a factor related to the shape of the profile.  Recall from Lecture~I that the ratio of depth-averaged to surface velocity for the SIA is $(n+1)/(n+2)$.  The fractional flux error scales roughly as
+But the more important error is in the \emph{flux} $q = \bar{u}\,h$.  Because the SSA assumes a uniform velocity profile while the true profile concentrates flow near the surface, the SSA overestimates the depth-averaged velocity (and hence the flux) by a factor related to the shape of the profile.  Recall from Lecture~I that the ratio of depth-averaged to surface velocity for the SIA is $(n+1)/(n+2)$.  The fractional flux error scales roughly as
 \[
   \frac{\delta q}{q} \sim \frac{1 - \lambda}{n + 2},
 \]
@@ -648,7 +648,7 @@ Even without computing $\lambda$, the \emph{curvature} of the ice surface profil
 \noindent Consider the surface slope $\alpha = |dh/dx|$ and how it varies from the divide to the margin:
 
 \begin{itemize}
-  \item \textbf{Convex profile ($d^2h/dx^2 < 0$): surface slope increases toward the margin.}  This is the hallmark of deformation-dominated flow (SIA regime).  As ice flows toward the margin, the flux $q = \dot{b}\,x$ must increase, but the ice is thinning.  To push more ice through a thinner column by internal shear alone, the surface slope must steepen---the driving stress $\tau_d = \rho_i g H\,\alpha$ can only grow if $\alpha$ increases faster than $H$ decreases.  Both the Vialov and perfectly plastic profiles are convex everywhere.
+  \item \textbf{Convex profile ($d^2h/dx^2 < 0$): surface slope increases toward the margin.}  This is the hallmark of deformation-dominated flow (SIA regime).  As ice flows toward the margin, the flux $q = \dot{b}\,x$ must increase, but the ice is thinning.  To push more ice through a thinner column by internal shear alone, the surface slope must steepen---the driving stress $\tau_d = \rho_i g h\,\alpha$ can only grow if $\alpha$ increases faster than $h$ decreases.  Both the Vialov and perfectly plastic profiles are convex everywhere.
 
   \item \textbf{Concave profile ($d^2h/dx^2 > 0$): surface slope decreases toward the margin (or the profile ``scoops out'').}  This occurs when the ice moves more efficiently than local deformation can explain---either through rapid basal sliding or through membrane stresses transmitting force from upstream.  The ice is being \emph{pulled} toward the margin rather than \emph{pushed} by steepening slopes.  This signature is observed over ice streams and outlet glaciers, where the surface draws down into the fast-flowing channel.
 \end{itemize}
@@ -677,7 +677,7 @@ We now apply the SSA to the simplest possible ice shelf: a one-dimensional, unco
 
 \subsection{Setup}
 
-Consider an ice shelf of thickness $H$, flowing in the $x$-direction.  There is:
+Consider an ice shelf of thickness $h$, flowing in the $x$-direction.  There is:
 \begin{itemize}[nosep]
   \item no lateral confinement ($\partial/\partial y = 0$, no lateral drag),
   \item no basal drag ($\tau_b = 0$, floating ice),
@@ -686,7 +686,7 @@ Consider an ice shelf of thickness $H$, flowing in the $x$-direction.  There is:
 
 \noindent The SSA $x$-equation~\eqref{eq:ssa_x} reduces to:
 \begin{equation}
-  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\,\frac{\partial u}{\partial x}\right) = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,h\,\frac{\partial u}{\partial x}\right) = \rho_i\,g\,h\,\frac{\partial s}{\partial x}.
   \label{eq:shelf_1d}
 \end{equation}
 
@@ -701,26 +701,26 @@ At the calving front, the depth-integrated ice stress must balance the depth-int
   F_{\text{ice}} &= \int_b^s \sigma_{xx}\,dz, \\[4pt]
   F_{\text{ocean}} &= -\int_{z_{\text{sl}}-D}^{z_{\text{sl}}} \rho_w\,g\,(z_{\text{sl}} - z)\,dz = -\frac{1}{2}\,\rho_w\,g\,D^2,
 \end{align}
-where $D$ is the draft (submerged thickness).  For a freely floating shelf in isostatic equilibrium, $D = (\rho_i/\rho_w)\,H$.
+where $D$ is the draft (submerged thickness).  For a freely floating shelf in isostatic equilibrium, $D = (\rho_i/\rho_w)\,h$.
 
 \medskip
-\noindent Decomposing $\sigma_{xx} = -p + \tau_{xx}$, using the glaciostatic pressure $p = \rho_i g(s-z)$, and evaluating the integral gives the depth-integrated deviatoric stress at the calving front:
+\noindent Decomposing $\sigma_{xx} = -p + \tau_{xx}$ and using $\sigma_{zz} = -p + \tau_{zz} = -\rho_i g(s-z)$ to eliminate $p$, together with the trace-free property of the deviatoric stress ($\tau_{zz} = -\tau_{xx}$ in 1D), gives $\sigma_{xx} = -\rho_i g(s-z) + 2\tau_{xx}$.  Evaluating the integral yields the depth-integrated deviatoric stress at the calving front:
 \begin{equation}
-  2\bar{\eta}\,H\,\frac{\partial u}{\partial x}\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
+  2\bar{\eta}\,h\,\frac{\partial u}{\partial x}\bigg|_{\text{front}} = \frac{1}{2}\,\rho_i\,g\,h^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
   \label{eq:calving_bc}
 \end{equation}
 The right-hand side is always positive (since $\rho_i < \rho_w$): the ice overburden exceeds the ocean back-pressure, so there is always a net extensional force at the calving front.
 
 \subsection{Solution: The Weertman Spreading Rate}
 
-For a shelf of uniform thickness, the driving stress on the right-hand side of~\eqref{eq:shelf_1d} can be rewritten.  For a floating shelf, $s = (1 - \rho_i/\rho_w)\,H$, so $\partial s/\partial x = (1 - \rho_i/\rho_w)\,\partial H/\partial x$.  If $H$ is uniform, the driving stress vanishes and~\eqref{eq:shelf_1d} implies $\partial/\partial x(2\bar{\eta}\,H\,\partial u/\partial x) = 0$.  Combined with the calving front condition~\eqref{eq:calving_bc}, the longitudinal stress is uniform throughout the shelf:
+For a shelf of uniform thickness, the driving stress on the right-hand side of~\eqref{eq:shelf_1d} can be rewritten.  For a floating shelf, $s = (1 - \rho_i/\rho_w)\,h$, so $\partial s/\partial x = (1 - \rho_i/\rho_w)\,\partial h/\partial x$.  If $h$ is uniform, the driving stress vanishes and~\eqref{eq:shelf_1d} implies $\partial/\partial x(2\bar{\eta}\,h\,\partial u/\partial x) = 0$.  Combined with the calving front condition~\eqref{eq:calving_bc}, the longitudinal stress is uniform throughout the shelf:
 \begin{equation}
-  2\bar{\eta}\,H\,\frac{\partial u}{\partial x} = \frac{1}{2}\,\rho_i\,g\,H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right) \quad \text{everywhere.}
+  2\bar{\eta}\,h\,\frac{\partial u}{\partial x} = \frac{1}{2}\,\rho_i\,g\,h^2\!\left(1 - \frac{\rho_i}{\rho_w}\right) \quad \text{everywhere.}
 \end{equation}
 
 \noindent Since $\bar{\eta} = \frac{1}{2}A^{-1/n}|\partial u/\partial x|^{(1/n)-1}$ for this 1D geometry (where $\dot{\varepsilon}_e = |\partial u/\partial x|$), we can solve for the strain rate:
 \begin{equation}
-  \boxed{\frac{\partial u}{\partial x} = A\!\left(\frac{\rho_i\,g\,H}{4}\left(1 - \frac{\rho_i}{\rho_w}\right)\right)^n.}
+  \boxed{\frac{\partial u}{\partial x} = A\!\left(\frac{\rho_i\,g\,h}{4}\left(1 - \frac{\rho_i}{\rho_w}\right)\right)^n.}
   \label{eq:weertman}
 \end{equation}
 
@@ -732,10 +732,10 @@ For a shelf of uniform thickness, the driving stress on the right-hand side of~\
 The strain rate in an unconfined ice shelf is:
 \begin{itemize}[nosep]
   \item \textbf{uniform} in space (independent of $x$),
-  \item set entirely by the \textbf{local thickness} $H$,
-  \item proportional to $H^n$ ($H^3$ for $n = 3$): thicker shelves spread much faster.
+  \item set entirely by the \textbf{local thickness} $h$,
+  \item proportional to $h^n$ ($h^3$ for $n = 3$): thicker shelves spread much faster.
 \end{itemize}
-For $H = 500$~m, $A = 2.4\times10^{-24}$~Pa$^{-3}$\,s$^{-1}$, $n = 3$:
+For $h = 500$~m, $A = 2.4\times10^{-24}$~Pa$^{-3}$\,s$^{-1}$, $n = 3$:
 \[
   \frac{\partial u}{\partial x} \approx 3 \times 10^{-10}~\text{s}^{-1} \approx 0.01~\text{yr}^{-1},
 \]
@@ -748,7 +748,7 @@ The Weertman solution illustrates several important concepts:
 \begin{enumerate}
   \item \textbf{Buttressing.}  This solution assumes no lateral confinement.  In reality, most ice shelves are confined in embayments, and lateral drag reduces the spreading rate.  The ratio of the actual spreading rate to the unconfined Weertman rate is a measure of the \textbf{buttressing} provided by the embayment.  We will return to this in later lectures.
 
-  \item \textbf{Thinning.}  As the shelf spreads, mass conservation requires it to thin: $\partial H/\partial t = \dot{b} - \partial(uH)/\partial x$.  If $\dot{b} = 0$ and $\partial u/\partial x > 0$, the shelf thins over time.  But since the spreading rate scales as $H^n$, thinning reduces the spreading rate---a stabilizing feedback.
+  \item \textbf{Thinning.}  As the shelf spreads, mass conservation requires it to thin: $\partial h/\partial t = \dot{b} - \partial(uh)/\partial x$.  If $\dot{b} = 0$ and $\partial u/\partial x > 0$, the shelf thins over time.  But since the spreading rate scales as $h^n$, thinning reduces the spreading rate---a stabilizing feedback.
 
   \item \textbf{No SIA counterpart.}  The SIA gives $\tau_{xz} = 0$ everywhere in a floating shelf (no bed to generate shear), predicting zero deformation.  The Weertman solution is entirely a membrane-stress phenomenon that the SIA cannot capture.
 \end{enumerate}
@@ -756,7 +756,7 @@ The Weertman solution illustrates several important concepts:
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/fig02_weertman_spreading.pdf}
-  \caption{Weertman spreading rate for an unconfined ice shelf as a function of ice thickness ($n = 3$).  The spreading rate scales as $H^n$, so thicker shelves spread much faster.}
+  \caption{Weertman spreading rate for an unconfined ice shelf as a function of ice thickness ($n = 3$).  The spreading rate scales as $h^n$, so thicker shelves spread much faster.}
   \label{fig:weertman_spreading}
 \end{figure}
 
@@ -769,7 +769,7 @@ We now consider the complementary problem: an ice stream where resistance is pro
 
 \subsection{Setup}
 
-Consider an ice stream of width $2W$, thickness $H$, flowing in the $x$-direction, with:
+Consider an ice stream of width $2W$, thickness $h$, flowing in the $x$-direction, with:
 \begin{itemize}[nosep]
   \item $u = u(y)$ only (no longitudinal gradients: $\partial/\partial x = 0$),
   \item weak basal drag $\tau_b$ (prescribed, constant),
@@ -778,12 +778,12 @@ Consider an ice stream of width $2W$, thickness $H$, flowing in the $x$-directio
 
 \noindent The SSA $x$-equation~\eqref{eq:ssa_x} reduces to:
 \begin{equation}
-  \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\,\frac{\partial u}{\partial y}\right) = \rho_i\,g\,H\,\frac{\partial s}{\partial x} + \tau_b.
+  \frac{\partial}{\partial y}\!\left(\bar{\eta}\,h\,\frac{\partial u}{\partial y}\right) = \rho_i\,g\,h\,\frac{\partial s}{\partial x} + \tau_b.
   \label{eq:stream_balance}
 \end{equation}
 The right-hand side is the net driving force: the gravitational driving stress (negative, since $\partial s/\partial x < 0$) partially offset by basal drag.  Define the \textbf{lateral driving stress} as the stress that must be supported by lateral drag:
 \begin{equation}
-  \tau_{\text{lat}} \equiv \tau_d - \tau_b = -\rho_i\,g\,H\,\frac{\partial s}{\partial x} - \tau_b.
+  \tau_{\text{lat}} \equiv \tau_d - \tau_b = -\rho_i\,g\,h\,\frac{\partial s}{\partial x} - \tau_b.
 \end{equation}
 
 % CHALKBOARD DRAWING 5:
@@ -794,32 +794,32 @@ The right-hand side is the net driving force: the gravitational driving stress (
 
 For a Newtonian fluid ($n = 1$, constant viscosity $\eta$), equation~\eqref{eq:stream_balance} becomes:
 \begin{equation}
-  \eta\,H\,\frac{\partial^2 u}{\partial y^2} = -\tau_{\text{lat}}.
+  \eta\,h\,\frac{\partial^2 u}{\partial y^2} = -\tau_{\text{lat}}.
 \end{equation}
 With the boundary conditions $u(\pm W) = 0$ and symmetry ($\partial u/\partial y|_{y=0} = 0$), the solution is:
 \begin{equation}
-  u(y) = \frac{\tau_{\text{lat}}}{2\,\eta\,H}\left(W^2 - y^2\right).
+  u(y) = \frac{\tau_{\text{lat}}}{2\,\eta\,h}\left(W^2 - y^2\right).
   \label{eq:stream_newtonian}
 \end{equation}
 This is a parabolic profile---the same form as plane Poiseuille flow between two parallel plates.  The centerline velocity is:
 \begin{equation}
-  u_c = u(0) = \frac{\tau_{\text{lat}}\,W^2}{2\,\eta\,H}.
+  u_c = u(0) = \frac{\tau_{\text{lat}}\,W^2}{2\,\eta\,h}.
 \end{equation}
 
 \subsection{Solution for General $n$}
 
 For general $n$, Glen's law gives $\bar{\eta}\,\partial u/\partial y = \frac{1}{2}A^{-1/n}\,|\partial u/\partial y|^{(1/n)-1}\,\partial u/\partial y$.  The force balance~\eqref{eq:stream_balance}, with $\tau_{\text{lat}}$ uniform across the stream, integrates to give the lateral shear stress:
 \begin{equation}
-  \tau_{xy}(y) = \frac{\tau_{\text{lat}}}{H}\,y.
+  \tau_{xy}(y) = \frac{\tau_{\text{lat}}}{h}\,y.
 \end{equation}
 Substituting into Glen's flow law ($\partial u/\partial y = 2A\,|\tau_{xy}|^{n-1}\tau_{xy}$) and integrating from the margin ($y = W$, $u = 0$):
 \begin{equation}
-  \boxed{u(y) = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{H}\right)^n\!\left(W^{n+1} - |y|^{n+1}\right).}
+  \boxed{u(y) = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{h}\right)^n\!\left(W^{n+1} - |y|^{n+1}\right).}
   \label{eq:stream_glen}
 \end{equation}
 The centerline velocity is:
 \begin{equation}
-  u_c = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{H}\right)^n W^{n+1}.
+  u_c = \frac{2A}{n+1}\left(\frac{\tau_{\text{lat}}}{h}\right)^n W^{n+1}.
   \label{eq:stream_centerline}
 \end{equation}
 
@@ -880,7 +880,7 @@ This has the same mathematical form as the vertical velocity profile from Lectur
 
   \item \textbf{The choice of model} depends on the ratio $\tau_b/\tau_d$: SIA when $\tau_b \approx \tau_d$, SSA when $\tau_b \ll \tau_d$, higher-order models in between.
 
-  \item \textbf{Ice shelf spreading} (the Weertman problem) shows that the spreading rate is uniform, set by thickness, and proportional to $H^n$.  The concept of buttressing arises from comparing the actual spreading rate to this unconfined solution.
+  \item \textbf{Ice shelf spreading} (the Weertman problem) shows that the spreading rate is uniform, set by thickness, and proportional to $h^n$.  The concept of buttressing arises from comparing the actual spreading rate to this unconfined solution.
 
   \item \textbf{Confined ice streams} produce velocity profiles analogous to the vertical profiles from Lecture~I, with deformation concentrated at the shear margins.  The centerline velocity scales as $W^{n+1}$.
 
@@ -914,12 +914,25 @@ This appendix provides the complete derivation of the SSA equations stated in Se
 
 \subsection{Starting Point}
 
-We begin with the Stokes equation in deviatoric form~\eqref{eq:stokes_deviatoric}, with the constitutive law $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$.  In component form, the $x$-momentum equation is:
+We begin with the Stokes equation in deviatoric form~\eqref{eq:stokes_deviatoric}.  In component form, the $x$-momentum equation is:
 \begin{equation}
-  -\frac{\partial p}{\partial x} + \frac{\partial}{\partial x}(2\eta\,\dot{\varepsilon}_{xx}) + \frac{\partial}{\partial y}(2\eta\,\dot{\varepsilon}_{xy}) + \frac{\partial}{\partial z}(2\eta\,\dot{\varepsilon}_{xz}) + \rho_i\,g_x = 0.
+  -\frac{\partial p}{\partial x} + \frac{\partial \tau_{xx}}{\partial x} + \frac{\partial \tau_{xy}}{\partial y} + \frac{\partial \tau_{xz}}{\partial z} = 0,
   \label{eq:app_x_full}
 \end{equation}
-The $z$-momentum equation gives the glaciostatic pressure: $p \approx \rho_i g(s - z)$.
+where gravity does not appear because $g_x = 0$ (gravity acts only in $z$).  The $y$-equation has the same structure (with $x \leftrightarrow y$); we carry only the $x$-equation through the derivation.
+
+\medskip
+\noindent The $z$-momentum equation is:
+\begin{equation}
+  -\frac{\partial p}{\partial z} + \frac{\partial \tau_{xz}}{\partial x} + \frac{\partial \tau_{yz}}{\partial y} + \frac{\partial \tau_{zz}}{\partial z} - \rho_i\,g = 0.
+  \label{eq:app_z_full}
+\end{equation}
+In the SSA scaling, the horizontal gradients of $\tau_{xz}$ and $\tau_{yz}$ are $O(\varepsilon^2)$ smaller than the other terms (these are the ``bridging stresses'', a term used to describe bending due to roughness).  Neglecting them and integrating from $z$ to $s$ with the stress-free surface condition $\sigma_{zz}|_s = 0$ gives:
+\begin{equation}
+  \sigma_{zz} = -p + \tau_{zz} = -\rho_i\,g\,(s - z),
+  \label{eq:app_glaciostatic}
+\end{equation}
+i.e.\ the vertical normal stress is glaciostatic.
 
 \subsection{Depth-Independent Velocity}
 
@@ -927,89 +940,86 @@ When basal drag is small, the vertical shear stress $\tau_{xz}$ is small compare
 \begin{equation}
   u \approx u(x,y), \qquad v \approx v(x,y).
 \end{equation}
-This is the key assumption of the SSA.  The vertical velocity $w$ is then determined by incompressibility:
-\begin{equation}
-  w = -\int_b^z \left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right) dz' = -\left(\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)(z - b).
-\end{equation}
+This is the key assumption of the SSA.  It follows that the membrane deviatoric stresses $\tau_{xx}$, $\tau_{xy}$, $\tau_{yy}$ are also approximately independent of $z$.
 
 \subsection{Vertical Integration}
 
 We integrate~\eqref{eq:app_x_full} from $z = b$ to $z = s$.  Consider each term:
 
 \medskip
-\noindent\textbf{Pressure gradient:}
+\noindent\textbf{Pressure gradient.}  We use $\sigma_{zz} = -p + \tau_{zz} = -\rho_i g(s-z)$ to eliminate $p$:
 \begin{equation}
-  -\int_b^s \frac{\partial p}{\partial x}\,dz = -\frac{\partial}{\partial x}\int_b^s p\,dz + p(s)\frac{\partial s}{\partial x} - p(b)\frac{\partial b}{\partial x}.
+  p = \rho_i g(s - z) + \tau_{zz}.
 \end{equation}
-Using $p = \rho_i g(s-z)$:
+Substituting into the pressure gradient:
 \begin{equation}
-  \int_b^s p\,dz = \frac{1}{2}\rho_i g H^2, \qquad p(s) = 0, \qquad p(b) = \rho_i g H.
+  -\frac{\partial p}{\partial x} = -\rho_i g \frac{\partial s}{\partial x} - \frac{\partial \tau_{zz}}{\partial x}.
 \end{equation}
-So the depth-integrated pressure gradient becomes:
+The $\partial \tau_{zz}/\partial x$ term combines with $\partial \tau_{xx}/\partial x$ in~\eqref{eq:app_x_full}.  Since the deviatoric stress tensor is traceless by definition ($\tau_{kk} = 0$), we have $\tau_{zz} = -\tau_{xx} - \tau_{yy}$, so:
 \begin{equation}
-  -\int_b^s \frac{\partial p}{\partial x}\,dz = -\frac{1}{2}\rho_i g \frac{\partial H^2}{\partial x} - \rho_i g H \frac{\partial b}{\partial x} = -\rho_i g H \frac{\partial s}{\partial x}.
-  \label{eq:app_pressure_integrated}
+  -\frac{\partial p}{\partial x} + \frac{\partial \tau_{xx}}{\partial x} = -\rho_i g\frac{\partial s}{\partial x} + \frac{\partial}{\partial x}(2\tau_{xx} + \tau_{yy}).
+  \label{eq:app_pressure_plus_txx}
 \end{equation}
-This is the driving stress (with appropriate sign).
+The $x$-momentum equation~\eqref{eq:app_x_full} therefore becomes:
+\begin{equation}
+  \frac{\partial}{\partial x}(2\tau_{xx} + \tau_{yy}) + \frac{\partial \tau_{xy}}{\partial y} + \frac{\partial \tau_{xz}}{\partial z} = \rho_i g\frac{\partial s}{\partial x}.
+  \label{eq:app_x_stress}
+\end{equation}
+This is the $x$-momentum equation written entirely in deviatoric stress---no pressure appears.
 
 \medskip
-\noindent\textbf{Membrane stress terms:}  Since $u$ and $v$ are independent of $z$, the strain rates $\dot{\varepsilon}_{xx}$, $\dot{\varepsilon}_{xy}$, $\dot{\varepsilon}_{yy}$ are also independent of $z$.  Therefore:
+\noindent\textbf{Depth integration.}  We integrate~\eqref{eq:app_x_stress} from $z = b$ to $z = s$.  Since $\tau_{xx}$, $\tau_{yy}$, and $\tau_{xy}$ are taken to be independent of $z$ (a fundamental assumption of SSA), they pass through the integral, picking up a factor of $h = s - b$:
 \begin{equation}
-  \int_b^s \frac{\partial}{\partial x}(2\eta\,\dot{\varepsilon}_{xx})\,dz = \frac{\partial}{\partial x}\!\left(2\bar{\eta}H\,\dot{\varepsilon}_{xx}\right),
+  \frac{\partial}{\partial x}\!\bigl[h(2\tau_{xx} + \tau_{yy})\bigr] + \frac{\partial}{\partial y}\!\bigl[h\,\tau_{xy}\bigr] + \bigl[\tau_{xz}\bigr]_b^s = \rho_i\,g\,h\,\frac{\partial s}{\partial x},
 \end{equation}
-where we define the depth-averaged viscosity:
-\begin{equation}
-  \bar{\eta} = \frac{1}{H}\int_b^s \eta\,dz.
-\end{equation}
-If $\eta$ is depth-independent (which follows from $u$, $v$ being depth-independent), then $\bar{\eta} = \eta$.
+where we have used the Leibniz rule and the fact that the surface and bed slope terms from the Leibniz rule cancel (the integrand is $z$-independent).
 
 \medskip
 \noindent\textbf{Vertical shear term:}
 \begin{equation}
-  \int_b^s \frac{\partial}{\partial z}(2\eta\,\dot{\varepsilon}_{xz})\,dz = \bigl[2\eta\,\dot{\varepsilon}_{xz}\bigr]_b^s = \underbrace{2\eta\,\dot{\varepsilon}_{xz}\big|_s}_{= 0\text{ (free surface)}} - \underbrace{2\eta\,\dot{\varepsilon}_{xz}\big|_b}_{= \tau_{bx}}.
+  \bigl[\tau_{xz}\bigr]_b^s = \underbrace{\tau_{xz}\big|_s}_{= 0\text{ (free surface)}} - \underbrace{\tau_{xz}\big|_b}_{= \tau_{bx}}.
 \end{equation}
 The surface term vanishes by the stress-free boundary condition.  The bed term is the basal shear traction $\tau_{bx}$.
 
-\medskip
-\noindent\textbf{Gravity:}  With $g_x = 0$ (gravity acts only in $z$), this term vanishes.
-
 \subsection{The Depth-Integrated Equations}
 
-Combining all terms and using incompressibility ($\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy} = 0$, so $\dot{\varepsilon}_{yy} = -\dot{\varepsilon}_{xx}$) to write $\tau_{xx} = 2\eta(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})$:
-
-\medskip
-\noindent\textbf{$x$-equation:}
+Combining all terms, the depth-integrated $x$-momentum equation in stress space is:
 \begin{equation}
-  \frac{\partial}{\partial x}\!\left(2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right)\right)
-  + \frac{\partial}{\partial y}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
-  - \tau_{bx}
-  = \rho_i\,g\,H\,\frac{\partial s}{\partial x}.
+  \boxed{\frac{\partial}{\partial x}\!\bigl[h(2\tau_{xx} + \tau_{yy})\bigr] + \frac{\partial}{\partial y}\!\bigl[h\,\tau_{xy}\bigr] - \tau_{bx} = \rho_i\,g\,h\,\frac{\partial s}{\partial x}.}
+  \label{eq:ssa_stress_x}
 \end{equation}
 
 \noindent\textbf{$y$-equation} (derived identically):
 \begin{equation}
-  \frac{\partial}{\partial y}\!\left(2\bar{\eta}\,H\left(2\frac{\partial v}{\partial y} + \frac{\partial u}{\partial x}\right)\right)
-  + \frac{\partial}{\partial x}\!\left(\bar{\eta}\,H\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right)\right)
-  - \tau_{by}
-  = \rho_i\,g\,H\,\frac{\partial s}{\partial y}.
+  \boxed{\frac{\partial}{\partial y}\!\bigl[h(2\tau_{yy} + \tau_{xx})\bigr] + \frac{\partial}{\partial x}\!\bigl[h\,\tau_{xy}\bigr] - \tau_{by} = \rho_i\,g\,h\,\frac{\partial s}{\partial y}.}
+  \label{eq:ssa_stress_y}
 \end{equation}
 
-\noindent These are exactly the SSA equations~\eqref{eq:ssa_x}--\eqref{eq:ssa_y}.
+\noindent These are the SSA equations in stress form.  The constitutive law has not been invoked: these equations hold for \emph{any} incompressible material.
+
+\medskip
+\noindent\textbf{Substituting Glen's flow law.}  To obtain the velocity-form SSA equations~\eqref{eq:ssa_x}--\eqref{eq:ssa_y}, we now use $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$ with $\eta = \frac{1}{2}A^{-1/n}\dot{\varepsilon}_e^{(1/n)-1}$:
+\begin{equation}
+  2\tau_{xx} + \tau_{yy} = 2\eta\!\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right), \qquad \tau_{xy} = \eta\!\left(\frac{\partial u}{\partial y} + \frac{\partial v}{\partial x}\right).
+\end{equation}
+Substituting into~\eqref{eq:ssa_stress_x}--\eqref{eq:ssa_stress_y} and replacing $\eta$ with the depth-averaged viscosity $\bar{\eta} = h^{-1}\!\int_b^s \eta\,dz$ recovers the SSA equations~\eqref{eq:ssa_x}--\eqref{eq:ssa_y} exactly.
 
 \subsection{Calving Front Boundary Condition}
 
-At the calving front (a vertical face with outward normal $\hat{x}$), the depth-integrated ice stress must balance the ocean back-pressure.  The depth-integrated $x$-traction on the ice side is:
+At the calving front (a vertical face with outward normal $\hat{x}$), the depth-integrated ice stress must balance the ocean back-pressure.  Using $\sigma_{xx} = -p + \tau_{xx} = -\rho_i g(s-z) + (2\tau_{xx} + \tau_{yy})$, the depth-integrated $x$-traction on the ice side is:
 \begin{equation}
-  \int_b^s \sigma_{xx}\,dz = \int_b^s (-p + 2\eta\,\dot{\varepsilon}_{xx})\,dz = -\frac{1}{2}\rho_i g H^2 + 2\bar{\eta}\,H\,\dot{\varepsilon}_{xx}.
+  \int_b^s \sigma_{xx}\,dz = -\frac{1}{2}\rho_i g h^2 + h(2\tau_{xx} + \tau_{yy}).
 \end{equation}
 The ocean side provides:
 \begin{equation}
   -\int_b^{z_{\text{sl}}} \rho_w g(z_{\text{sl}} - z)\,dz = -\frac{1}{2}\rho_w g D^2,
 \end{equation}
-where $D = (\rho_i/\rho_w)H$ is the draft.  Equating and using incompressibility ($\dot{\varepsilon}_{xx} = \frac{1}{2}(2\partial u/\partial x + \partial v/\partial y)$ in the depth-integrated sense, accounting for $\dot{\varepsilon}_{yy}$):
+where $D = (\rho_i/\rho_w)h$ is the draft.  Equating:
 \begin{equation}
-  2\bar{\eta}\,H\left(2\frac{\partial u}{\partial x} + \frac{\partial v}{\partial y}\right) = \frac{1}{2}\rho_i g H^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
+  h(2\tau_{xx} + \tau_{yy})\big|_{\text{front}} = \frac{1}{2}\rho_i g h^2\!\left(1 - \frac{\rho_i}{\rho_w}\right).
+  \label{eq:calving_bc_stress}
 \end{equation}
+Substituting the constitutive law recovers~\eqref{eq:calving_front_ssa}.
 
 \subsection{Properties of the SSA}
 
@@ -1048,7 +1058,7 @@ The SIA and SSA are complementary approximations valid in opposite limits of the
 
 \subsection{The Blatter--Pattyn (First-Order) Approximation}
 
-The Blatter--Pattyn model \cite{Blatter1995,Pattyn2003} starts from the full Stokes equations and makes one simplification: the vertical momentum equation is replaced by the glaciostatic pressure assumption ($p = \rho_i g(s-z)$), eliminating $w$ and $p$ as independent unknowns.  Equivalently, horizontal gradients of the vertical resistive stress ($\partial R_{zz}/\partial x$, called ``bridging effects'') are neglected.
+The Blatter--Pattyn model \cite{Blatter1995,Pattyn2003} starts from the full Stokes equations and makes one simplification: the vertical momentum equation is replaced by the glaciostatic assumption ($\sigma_{zz} = -\rho_i g(s-z)$), eliminating $w$ and $p$ as independent unknowns.  Equivalently, horizontal gradients of the vertical resistive stress ($\partial R_{zz}/\partial x$, called ``bridging effects'') are neglected.
 
 \medskip
 \noindent The resulting equations are:
@@ -1111,17 +1121,17 @@ This appendix examines ice sheet thickness profiles in the sliding regime, compl
 
 In Lecture~I, we derived the Vialov profile by combining the SIA flux with steady-state continuity.  The key step was that the SIA gives a \emph{local} relationship between flux, thickness, and surface slope:
 \begin{equation}
-  q_{\text{SIA}} = \frac{2A}{n+2}\,(\rho_i g)^n\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,H^{n+2}.
+  q_{\text{SIA}} = \frac{2A}{n+2}\,(\rho_i g)^n\left|\frac{\partial s}{\partial x}\right|^{n-1}\frac{\partial s}{\partial x}\,h^{n+2}.
 \end{equation}
-Substituting into $\partial q/\partial x = \dot{b}$ gives a single first-order ODE for $H(x)$.
+Substituting into $\partial q/\partial x = \dot{b}$ gives a single first-order ODE for $h(x)$.
 
 \medskip
 \noindent The SSA does not permit this.  For a 1D, sliding-dominated ice sheet on a flat bed with $\tau_b = C\,u^m$, the 1D SSA momentum equation is:
 \begin{equation}
-  \underbrace{\frac{d}{dx}\!\left(4\bar{\eta}\,H\,\frac{du}{dx}\right)}_{\text{membrane stress gradient}} - \underbrace{C\,u^m}_{\tau_b} = \underbrace{\rho_i\,g\,H\,\frac{dH}{dx}}_{\text{driving stress}},
+  \underbrace{\frac{d}{dx}\!\left(4\bar{\eta}\,h\,\frac{du}{dx}\right)}_{\text{membrane stress gradient}} - \underbrace{C\,u^m}_{\tau_b} = \underbrace{\rho_i\,g\,h\,\frac{dh}{dx}}_{\text{driving stress}},
   \label{eq:ssa_1d_grounded_app}
 \end{equation}
-where $\bar{\eta} = \frac{1}{2}A^{-1/n}|du/dx|^{(1/n)-1}$.  Combined with steady-state continuity $u\,H = \dot{b}\,x$, this is a coupled system for $u(x)$ and $H(x)$.  The membrane stress gradient involves the second derivative of $u$, coupling the solution at each point to its neighbors.  We cannot eliminate $u$ to obtain a single ODE for $H(x)$.
+where $\bar{\eta} = \frac{1}{2}A^{-1/n}|du/dx|^{(1/n)-1}$.  Combined with steady-state continuity $u\,h = \dot{b}\,x$, this is a coupled system for $u(x)$ and $h(x)$.  The membrane stress gradient involves the second derivative of $u$, coupling the solution at each point to its neighbors.  We cannot eliminate $u$ to obtain a single ODE for $h(x)$.
 
 \medskip
 \noindent This is not a technical inconvenience---it reflects the physics.  Membrane stresses transmit forces horizontally through the ice.  A change in thickness or basal drag at one location alters the longitudinal stress, which changes the velocity field everywhere.  A local flux formula cannot capture this coupling.  The true SSA profile requires numerical solution and is generally smoother than the SIA profile because membrane stresses redistribute the driving stress along the flow.
@@ -1130,11 +1140,11 @@ where $\bar{\eta} = \frac{1}{2}A^{-1/n}|du/dx|^{(1/n)-1}$.  Combined with steady
 
 If the membrane stress gradient is small compared to the driving stress and basal drag---i.e., if the first term in~\eqref{eq:ssa_1d_grounded_app} is negligible---the force balance reduces to the SIA force balance with a sliding law:
 \begin{equation}
-  \tau_b \approx \tau_d \quad\Longrightarrow\quad C\,u^m \approx \rho_i\,g\,H\left|\frac{dH}{dx}\right|.
+  \tau_b \approx \tau_d \quad\Longrightarrow\quad C\,u^m \approx \rho_i\,g\,h\left|\frac{dh}{dx}\right|.
 \end{equation}
-The flux becomes a local function of $H$ and $dH/dx$:
+The flux becomes a local function of $h$ and $dh/dx$:
 \begin{equation}
-  q = u\,H = C^{-1/m}\,(\rho_i g)^{1/m}\,H^{(m+1)/m}\left|\frac{dH}{dx}\right|^{1/m},
+  q = u\,h = C^{-1/m}\,(\rho_i g)^{1/m}\,h^{(m+1)/m}\left|\frac{dh}{dx}\right|^{1/m},
 \end{equation}
 and steady-state continuity gives an ODE that integrates to:
 \begin{equation}
