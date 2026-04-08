@@ -434,7 +434,7 @@ Each model retains a different subset of stress components from the full Stokes 
   SSA & $\tau_{xx}$, $\tau_{xy}$ & 2D elliptic PDE & $\tau_b \ll \tau_d$ & $u(x,y)$ \\[3pt]
   SIA+SSA & All (split) & SSA + local SIA & Any & $u(x,y) + u(z)$ \\[3pt]
   DIVA & All (depth-integrated) & 2D elliptic PDE & Any & $\bar{u}(x,y)$ \\[3pt]
-  Blatter--Pattyn & All except $\partial R_{zz}/\partial x$ & 3D elliptic PDE & Any & $u(x,y,z)$ \\[3pt]
+  Blatter--Pattyn & All except $\partial \tau_{zz}/\partial x$ & 3D elliptic PDE & Any & $u(x,y,z)$ \\[3pt]
   Full Stokes & All & 3D elliptic PDE & Any & $u,v,w,p$ \\
   \bottomrule
 \end{tabular}
@@ -995,7 +995,7 @@ Combining all terms, the depth-integrated $x$-momentum equation in stress space 
   \label{eq:ssa_stress_y}
 \end{equation}
 
-\noindent These are the SSA equations in stress form.  The constitutive law has not been invoked: these equations hold for \emph{any} incompressible material.
+\noindent These are the SSA equations in stress form.  No constitutive law has been invoked: these equations follow from force balance and geometry alone, and hold for any material.
 
 \medskip
 \noindent\textbf{Substituting Glen's flow law.}  To obtain the velocity-form SSA equations~\eqref{eq:ssa_x}--\eqref{eq:ssa_y}, we now use $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$ with $\eta = \frac{1}{2}A^{-1/n}\dot{\varepsilon}_e^{(1/n)-1}$:
@@ -1058,7 +1058,7 @@ The SIA and SSA are complementary approximations valid in opposite limits of the
 
 \subsection{The Blatter--Pattyn (First-Order) Approximation}
 
-The Blatter--Pattyn model \cite{Blatter1995,Pattyn2003} starts from the full Stokes equations and makes one simplification: the vertical momentum equation is replaced by the glaciostatic assumption ($\sigma_{zz} = -\rho_i g(s-z)$), eliminating $w$ and $p$ as independent unknowns.  Equivalently, horizontal gradients of the vertical resistive stress ($\partial R_{zz}/\partial x$, called ``bridging effects'') are neglected.
+The Blatter--Pattyn model \cite{Blatter1995,Pattyn2003} starts from the full Stokes equations and makes one simplification: the vertical momentum equation is replaced by the glaciostatic assumption ($\sigma_{zz} = -\rho_i g(s-z)$), eliminating $w$ and $p$ as independent unknowns.  Equivalently, horizontal gradients of the vertical deviatoric normal stress ($\partial \tau_{zz}/\partial x$, called ``bridging effects'') are neglected.
 
 \medskip
 \noindent The resulting equations are:
@@ -1102,11 +1102,11 @@ The Depth-Integrated Viscosity Approximation (DIVA) of \cite{SchoofHindmarsh2010
 \subsection{When to Use What}
 
 \begin{itemize}
+  \item \textbf{Ice shelves:} SSA is essentially exact ($\tau_b \approx 0$, plug flow by construction).
+  \item \textbf{Fast-sliding ice streams:} SSA captures the dominant physics (membrane stresses, lateral drag).  Add the SIA correction if the deformational velocity is non-negligible.
   \item \textbf{Long time-scale ice sheet evolution} ($>10^4$~yr): SIA or hybrid models, where computational cost matters.
-  \item \textbf{Century-scale projections:} DIVA or hybrid models.
-  \item \textbf{Grounding line dynamics:} At least Blatter--Pattyn; full Stokes is preferable for detailed process studies.
-  \item \textbf{Single-glacier studies:} Full Stokes is computationally feasible and captures all dynamics.
-  \item \textbf{The trend in the field} is toward DIVA-type models that combine the efficiency of 2D solvers with the accuracy of higher-order physics \cite{SchoofHindmarsh2010}.
+  \item \textbf{Century-scale projections:} SSA, DIVA, or hybrid models.
+  \item \textbf{Grounding line dynamics:} At least Blatter--Pattyn; full Stokes may preferable for detailed process studies with sufficient data to constrain the DOFs of the model.  The SSA can reproduce the correct grounding-line flux scaling with sufficient mesh resolution, but care is needed.
 \end{itemize}
 
 %===================================================================
