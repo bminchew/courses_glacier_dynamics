@@ -158,19 +158,19 @@ This is the form we will use most often.  The three terms have a clean physical 
 The momentum equation~\eqref{eq:stokes_momentum} is a partial differential equation that requires boundary conditions on all boundaries of the ice domain.
 
 \medskip
-\noindent\textbf{Free surface ($z = s$):}  The ice surface is stress-free (we neglect atmospheric pressure):
+\noindent\textbf{Free surface ($z = s$):}  The ice surface is stress-free (we neglect atmospheric pressure because its gradients are negligibly small and we care only about pressure gradients):
 \begin{equation}
   \sigma_{ij}\,n_j\big|_{z=s} = 0,
   \label{eq:bc_surface}
 \end{equation}
-where $\bm{n}$ is the outward unit normal to the surface.  For a nearly flat surface ($|\nabla s| \ll 1$), this simplifies to $\sigma_{iz}\big|_{z=s} \approx 0$.
+where $\bm{n}$ is the outward unit normal to the surface.  For a nearly flat surface ($|\nabla s| \ll 1$), this simplifies to $\sigma_{iz}\big|_{z=s} \approx 0$. (Fun fact: While atmospheric pressure is negligible, typical shear stresses in glaciers are of order 1 atmosphere $\approx 100$ kPa. Why do you think that is?) 
 
 \medskip
 \noindent\textbf{Bed ($z = b$):}  The bed boundary condition specifies the relationship between velocity and stress at the ice--bed interface.  Three common choices:
 \begin{itemize}[nosep]
   \item \textbf{No-slip:} $\bm{v}\big|_{z=b} = 0$.  Appropriate for a frozen bed.
-  \item \textbf{Sliding law:} $\bm{u}_b = f(\bm{\tau}_b,\,N,\,\ldots)$, where $\bm{\tau}_b$ is the basal shear traction, $N$ is the effective pressure, and $f$ is a constitutive relation for sliding.  Examples include Weertman-type ($u_b \propto \tau_b^p$) and regularized Coulomb laws.  These will be the subject of a dedicated lecture.
-  \item \textbf{Free-slip:} $\bm{\tau}_b = 0$.  The limiting case for ice shelves (no contact with a bed).
+  \item \textbf{Sliding law:} $\bm{u}_b = f(\bm{\tau}_b,\,N,\,\ldots)$, where $\bm{\tau}_b$ is the basal shear traction, $N$ is the effective pressure, and $f$ is a constitutive relation for sliding.  Examples include Weertman-type ($u_b \propto \tau_b^p$) and regularized Coulomb laws ($\tau_b \to \tau_{yield}$ where $\tau_{yield}$ is the stress at which the bed yields, aka the yield strength).  These will be the subject of a dedicated lecture.
+  \item \textbf{Free-slip:} $\bm{\tau}_b = 0$.  The limiting case for the floating ice shelves (no contact with a bed; negligible resistance from the underlying water).
 \end{itemize}
 
 \medskip
@@ -219,7 +219,7 @@ and $\dot{\varepsilon}_e = \sqrt{\frac{1}{2}\dot{\varepsilon}_{ij}\dot{\varepsil
   colframe=blue!50!black,
   title={\textbf{Key point: shear thinning}}
 ]
-For $n > 1$, the viscosity $\eta$ \emph{decreases} with increasing strain rate.  Ice under high stress deforms more easily than ice under low stress.  This is \textbf{shear thinning} (or pseudoplastic) behavior.  For the standard value $n = 3$:
+For $n > 1$, the viscosity $\eta$ \emph{decreases} with increasing strain rate.  Ice under high stress deforms more easily than ice under low stress.  This is \textbf{shear thinning} (or pseudoplastic) behavior.  For the most commonly used value $n = 3$:
 \[
   \eta \propto \dot{\varepsilon}_e^{-2/3}.
 \]
@@ -228,12 +228,12 @@ The viscosity varies by orders of magnitude across a glacier---from $\sim 10^{15
 
 \noindent Note that $\eta$ depends on the strain rate, which itself depends on the velocity, which is the unknown we are solving for.  This makes the Stokes equations \emph{nonlinear}: the ``coefficient'' in front of the strain rate is itself a function of the solution.
 
-\begin{figure}[ht]
-  \centering
-  \includegraphics[width=0.7\textwidth]{figures/fig01_effective_viscosity.pdf}
-  \caption{Effective viscosity of ice as a function of effective strain rate for different values of the flow-law exponent $n$.  For $n > 1$, ice is shear thinning: the viscosity decreases by orders of magnitude as the strain rate increases.}
-  \label{fig:effective_viscosity}
-\end{figure}
+%\begin{figure}[ht]
+%  \centering
+%  \includegraphics[width=0.7\textwidth]{figures/fig01_effective_viscosity.pdf}
+%  \caption{Effective viscosity of ice as a function of effective strain rate for different values of the flow-law exponent $n$.  For $n > 1$, ice is shear thinning: the viscosity decreases by orders of magnitude as the strain rate increases.}
+%  \label{fig:effective_viscosity}
+%\end{figure}
 
 \subsection{The Full Stokes System}
 \label{sec:full_stokes}
@@ -400,7 +400,7 @@ We define a stress scale $[\tau] = \eta_0\,U/H$, where $\eta_0$ is a reference v
     \frac{\partial \tau_{xz}}{\partial z} = \rho\,g\,\frac{\partial s}{\partial x},
     \label{eq:sia_balance}
   \end{equation}
-  which is exactly the force balance we derived from the parallel-slab free-body diagram in Lecture~I.  The membrane stresses $\tau_{xx}$ and $\tau_{xy}$ are negligible at this order.
+  which is exactly the force balance we derived from the parallel-slab free-body diagram in the previous lecture.  The membrane stresses $\tau_{xx}$ and $\tau_{xy}$ are negligible at this order.
   \item The membrane stress terms enter at $O(\varepsilon^2)$---they are \emph{two orders of magnitude} smaller than the leading balance.
 \end{enumerate}
 
