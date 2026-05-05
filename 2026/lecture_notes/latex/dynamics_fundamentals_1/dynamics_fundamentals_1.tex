@@ -137,25 +137,25 @@ This is the \textbf{incompressibility constraint}: any stretching in one directi
   breakable
 ]
 We derive Eq.~\eqref{eq:incompressible} from conservation of mass.  The general continuity equation for a material with density $\rho$ and velocity field $u_i$ is
-\begin{equation*}
+\begin{equation}
   \frac{\partial \rho}{\partial t} + \frac{\partial}{\partial x_i}(\rho\,u_i) = 0.
-\end{equation*}
+\end{equation}
 Expanding the divergence term using the product rule:
-\begin{equation*}
+\begin{equation}
   \frac{\partial \rho}{\partial t} + u_i\frac{\partial \rho}{\partial x_i} + \rho\,\frac{\partial u_i}{\partial x_i} = 0.
-\end{equation*}
+\end{equation}
 The first two terms together form the material (Lagrangian) derivative of density:
-\begin{equation*}
+\begin{equation}
   \frac{D\rho}{Dt} + \rho\,\frac{\partial u_i}{\partial x_i} = 0.
-\end{equation*}
+\end{equation}
 Below the firn layer, the density of glacier ice is effectively constant ($\rho \approx \rho_i = 917~\text{kg\,m}^{-3}$), meaning the density of each material parcel does not change as it moves: $D\rho/Dt = 0$.  Therefore:
-\begin{equation*}
+\begin{equation}
   \frac{\partial u_i}{\partial x_i} = \nabla \cdot \bm{u} = 0.
-\end{equation*}
+\end{equation}
 Since the trace of the strain-rate tensor is $\dot{\varepsilon}_{kk} = \partial u_i / \partial x_i$ (the antisymmetric part $\omega_{ij}$ is traceless and does not contribute), we recover Eq.~\eqref{eq:incompressible}:
-\begin{equation*}
+\begin{equation}
   \boxed{\dot{\varepsilon}_{kk} = \frac{\partial u}{\partial x} + \frac{\partial v}{\partial y} + \frac{\partial w}{\partial z} = 0.}
-\end{equation*}
+\end{equation}
 \end{tcolorbox}
 
 \subsection{Effective Strain Rate}
@@ -586,9 +586,9 @@ Key results from this lecture:
   \item \textbf{Glen's flow law} $\dot{\varepsilon}_{ij} = A\,\tau_e^{n-1}\,\tau_{ij}$ with $n \approx 3$ is the constitutive relation for glacier ice.  It implies shear-thinning: deformation concentrates where stress is large.
 
   \item \textbf{The parallel-slab solution} gives the velocity profile under simple shear:
-  \begin{equation*}
+  \begin{equation}
     u(z) = u_b + \frac{2A}{n+1}(\rho_i g \sin\alpha)^n \left[h^{n+1} - (s-z)^{n+1}\right].
-  \end{equation*}
+  \end{equation}
   For $n = 3$, most shearing occurs in the basal $\sim$20\% of the ice column.
 
   \item \textbf{The shallow-ice approximation} treats each column as a local slab, coupling the flux $q \propto h^{n+2}|ds/dx|^{n-1}(ds/dx)$ to the continuity equation.

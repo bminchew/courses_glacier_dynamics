@@ -581,23 +581,23 @@ Consider a column of ice between positions $x$ and $x + \delta x$, with thicknes
 \medskip
 \noindent\textbf{Step 1: Mass balance on the column.}
 Over a short time interval $\delta t$, the mass per unit width entering from the left is $\rho\, q(x)\,\delta t$. The mass leaving from the right is $\rho\, q(x + \delta x)\,\delta t$.  The mass added at the surface by accumulation (or removed by ablation) is $\rho\, \dot{b}_i\, \delta x\, \delta t$.  The change in mass stored in the column is $\rho\, \delta h\, \delta x$.  Setting input minus output equal to the change in storage:
-\begin{equation*}
+\begin{equation}
   \rho\bigl[q(x) - q(x + \delta x)\bigr]\,\delta t \;+\; \rho\,\dot{b}_i\,\delta x\,\delta t \;=\; \rho\,\delta h\,\delta x.
-\end{equation*}
+\end{equation}
 
 \medskip
 \noindent\textbf{Step 2: Divide through by $\rho\,\delta x\,\delta t$.}
-\begin{equation*}
+\begin{equation}
   \frac{q(x) - q(x + \delta x)}{\delta x} + \dot{b}_i = \frac{\delta h}{\delta t}.
-\end{equation*}
+\end{equation}
 
 \medskip
 \noindent\textbf{Step 3: Take the limit $\delta x \to 0$, $\delta t \to 0$.}
 
 Recognizing that $\displaystyle\lim_{\delta x \to 0} \frac{q(x) - q(x + \delta x)}{\delta x} = -\frac{\partial q}{\partial x}$, we obtain
-\begin{equation*}
+\begin{equation}
   \boxed{\frac{\partial h}{\partial t} = \dot{b}_i - \frac{\partial q}{\partial x}},
-\end{equation*}
+\end{equation}
 which is the vertically integrated continuity equation in one horizontal dimension (C\&P Eq.~8.70).  The generalization to two horizontal dimensions replaces $\partial q / \partial x$ with the flux divergence $\bm{\nabla} \cdot \bm{q}$.
 \end{tcolorbox}
 
@@ -707,27 +707,27 @@ The first term is the mass balance contribution; the second and third terms toge
 
 \medskip
 \noindent\textbf{Step 1: Define the perpendicular velocity into the ice.}  The outward unit normal to the surface is
-\begin{equation*}
+\begin{equation}
   \hat{\bm{n}} = \frac{1}{\sqrt{1 + \left(\partial s/\partial x\right)^2}}
     \begin{pmatrix} -\partial s/\partial x \\ 1 \end{pmatrix}.
-\end{equation*}
+\end{equation}
 The component of ice velocity directed into the surface (opposite to $\hat{\bm{n}}$) is
-\begin{equation*}
+\begin{equation}
   v_\perp = -\bm{v}_s \cdot \hat{\bm{n}}
     = \frac{u_s\,\dfrac{\partial s}{\partial x} - w_s}{\sqrt{1 + \left(\partial s/\partial x\right)^2}}.
-\end{equation*}
+\end{equation}
 
 \medskip
 \noindent\textbf{Step 2: Substitute the kinematic condition.}  Rearranging \eqref{eq:kinematic} gives $u_s\,\partial s/\partial x - w_s = \dot{b}_i - \partial s/\partial t$, so
-\begin{equation*}
+\begin{equation}
   v_\perp = \frac{\dot{b}_i - \dfrac{\partial s}{\partial t}}{\sqrt{1 + \left(\partial s/\partial x\right)^2}}.
-\end{equation*}
+\end{equation}
 
 \medskip
 \noindent\textbf{Step 3: Steady state and small surface slope.}  Taking $\partial s/\partial t = 0$ and $|\partial s/\partial x| \ll 1$:
-\begin{equation*}
+\begin{equation}
   \boxed{v_\perp \approx \dot{b}_i.}
-\end{equation*}
+\end{equation}
 
 \begin{itemize}
   \item In the \textbf{accumulation zone} ($\dot{b}_i > 0$): $v_\perp > 0$, meaning ice moves into the surface---this is the \textbf{submergence velocity}, $w_s = \dot{b}_i$.
@@ -834,9 +834,9 @@ Key ideas from this lecture:
   \item \textbf{Snow becomes ice through densification:} fresh snow transforms into glacier ice via mechanical compaction, sintering, and pore close-off.  The firn layer affects density profiles, altimetry interpretation, and meltwater storage.
 
   \item \textbf{Balance velocity follows from mass conservation at steady state:}
-  \begin{equation*}
+  \begin{equation}
     U_B = \frac{1}{h\,Y} \int_{\mathcal{A}} \dot{b}_i \, d\mathcal{A}.
-  \end{equation*}
+  \end{equation}
   It links climate forcing directly to the velocity field without requiring knowledge of ice rheology or basal conditions.
 
   \item \textbf{The continuity equation} $\partial h/\partial t = \dot{b}_i - \bm{\nabla}\cdot\bm{q}$ governs how ice thickness evolves, and its surface counterpart yields the submergence and emergence velocities that control flow trajectories within the glacier.

@@ -99,12 +99,12 @@ Consider a body of volume $V$ enclosed by surface $S$ (Fig.~\ref{fig:potato}).
 \end{figure}
 
 \noindent Define:
-\begin{align*}
+\begin{align}
   \bm{r}   &= \text{position vector}  \\
   \bm{f}   &= \text{body force (per unit volume)}  \\
   \bm{T}   &= \text{traction}  \\
   \hat{\bm{n}}      &= \text{outward-pointing surface normal}
-\end{align*}
+\end{align}
 
 \noindent Sum of moments:
 \begin{equation}
@@ -119,14 +119,14 @@ Consider a body of volume $V$ enclosed by surface $S$ (Fig.~\ref{fig:potato}).
     + \int_V \epsilon_{ijk}\, x_j\, f_k\, dV
 \end{equation}
 where $\epsilon_{ijk}$ is the Levi-Civita (permutation) symbol:
-\[
+\begin{equation}
   \epsilon_{ijk} =
   \begin{cases}
     +1 & \text{(even permutation), if } ijk = 123,\ 231,\ 312 \\
     -1 & \text{(odd permutation), if } ijk = 321,\ 213,\ 132 \\
     \phantom{+}0  & \text{otherwise (if any index is repeated)}
   \end{cases}
-\]
+\end{equation}
 
 Graphically, cycling $1 \to 2 \to 3 \to 1$ gives $+1$; cycling $1 \to 3 \to 2 \to 1$ gives $-1$.
 
@@ -142,9 +142,9 @@ Apply the divergence theorem to convert the surface integral to a volume integra
 
 \begin{quote}
 \textit{Divergence theorem} states that the outward flux of a tensor field through a closed surface equals the integral of the divergence over the volume inside the surface:
-\[
+\begin{equation}
   \int_S A_i\, n_i\, dS = \int_V A_{j,j}\, dV
-\]
+\end{equation}
 where $A_{j,j} = \nabla \cdot \bm{A}$ for an arbitrary tensor.
 \end{quote}
 
@@ -230,9 +230,9 @@ $\Rightarrow$ Solutions to Eq.~(1) are the \textbf{principal stresses}.
 We denote the principal stresses $\sigma_1$, $\sigma_2$, $\sigma_3$.
 
 Substituting these terms into the formula
-\[
+\begin{equation}
   \sigma_{ij}\, n_j = \lambda\, n_i \qquad \text{where } \lambda = \sigma_1,\, \sigma_2,\, \sigma_3
-\]
+\end{equation}
 we solve for eigenvectors $\hat{\bm{n}}_1$, $\hat{\bm{n}}_2$, $\hat{\bm{n}}_3$ $\to$ called \textbf{principal directions}.
 
 We know from linear algebra that eigenvectors are mutually orthogonal $\Rightarrow$ the principal directions define a coordinate system, and these are the \textbf{principal axes}.

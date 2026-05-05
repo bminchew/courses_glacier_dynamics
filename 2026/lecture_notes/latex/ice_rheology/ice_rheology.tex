@@ -1,0 +1,472 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath, amssymb, amsfonts}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage[most]{tcolorbox}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\title{Ice Rheology: Creep Mechanisms and Glen's Flow Law}
+\author{Brent Minchew \\Caltech Ge 193, Spring 2026}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+%===================================================================
+% Topics Covered
+%===================================================================
+\section*{Topics Covered}
+
+\begin{itemize}
+  \item The four creep mechanisms in polycrystalline ice
+  \item The composite flow law of Goldsby \& Kohlstedt (2001)
+  \item How the composite flow law reduces to Glen's flow law
+  \item Physical basis for the rate factor $A$ and the creep exponent $n$
+\end{itemize}
+
+\noindent\textbf{Primary reference:} Cuffey \& Paterson, \textit{Physics of Glaciers}, 4th ed., Chapter~3; Goldsby \& Kohlstedt (2001).
+
+%===================================================================
+% SECTION 1 -- Introduction and Motivation
+%===================================================================
+\section{Introduction and Motivation}
+
+In the preceding lectures, we stated Glen's flow law as the constitutive relation for glacier ice:
+\begin{equation}
+  \dot{\varepsilon}_{ij} = A\,\tau_e^{\,n-1}\,\tau_{ij},
+  \label{eq:glen_recap}
+\end{equation}
+with $n = 3$ the typical assumption and $A$ a temperature-dependent rate factor.  We used this relation to derive velocity profiles, build the SIA, formulate the full Stokes system, and study the SSA equations.  Throughout, we treated $A$ and $n$ as given without examining their physical basis.
+
+\medskip
+\noindent The goal of this lecture is to understand where Eq.~\ref{eq:glen_recap} comes from.  
+\medskip
+
+\noindent Ice is a polycrystalline material, and its deformation is governed by several grain-scale mechanisms that operate in parallel or in series depending on the stress, temperature, and grain size.  A grain is a single crystal and the terms `grain' and `crystal' are often casually interchanged. Polycrystalline simply means there are many grains. Understanding the deformation mechanisms is important for at least three reasons:
+\begin{enumerate}
+  \item It reveals when Glen's law is a good approximation and when it breaks down.
+  \item It explains the temperature dependence of the rate factor $A$ through activation energies.
+  \item It clarifies the physical meaning of the creep exponent $n$ and why the commonly assumed value of $n = 3$ is not a material property but rather a special case that, unfortunately for the field, was casually taken to be general several decades ago. The near-universal assumption of $n=3$ has severely limited progress in glacier dynamics, as will no doubt become increasingly clear in the coming years and decades. 
+\end{enumerate}
+
+\medskip
+\noindent\textbf{Plan for this lecture.}  We first review the general form of creep flow laws for crystalline materials (\S\ref{sec:general_form}).  We then discuss the four creep mechanisms identified in ice (\S\ref{sec:creep_mechanisms}).  Next, we present the composite flow law that combines all four mechanisms (\S\ref{sec:composite}).  Finally, we show how this composite law reduces to Glen's flow law under the conditions typically assumed in glaciology (\S\ref{sec:glen_reduction}).
+
+%===================================================================
+% SECTION 2 -- General Form of Creep Flow Laws
+%===================================================================
+\section{General Form of Creep Flow Laws}
+\label{sec:general_form}
+
+Rheological data for crystalline materials are typically analyzed with a power law of the form
+\begin{equation}
+  \boxed{\dot{\varepsilon}_e = A_0 \,\frac{\tau_e^{\,n}}{d^r} \,\exp\!\left(-\frac{Q + pV}{RT}\right),}
+  \label{eq:general_creep}
+\end{equation}
+where:
+\begin{itemize}
+  \item $\dot{\varepsilon}_e$ is the effective strain rate and $\tau_e$ is the effective deviatoric stress,
+  \item $A_0$ is a material-dependent prefactor,
+  \item $n$ is the stress exponent,
+  \item $d$ is the mean grain size and $r$ is the grain-size exponent,
+  \item $Q$ is the activation energy for creep,
+  \item $p$ is the pressure and $V$ is the activation volume,
+  \item $R$ is the gas constant and $T$ is the absolute temperature.
+\end{itemize}
+
+\noindent The values of $n$, $r$, and $Q$ are diagnostic: they identify which physical mechanism controls the creep rate.  For example, a stress exponent $n = 1$ indicates diffusion-controlled flow, while $n > 1$ indicates a dislocation-mediated process.  A grain-size exponent $r > 0$ indicates that grain boundaries participate in the rate-limiting process.
+
+\medskip
+\noindent The activation volume $V$ describes the pressure dependence of the creep rate.  For ice, $V \approx -13 \times 10^{-6}$~m$^3$\,mol$^{-1}$ \cite{GoldsbyKohlstedt2001}.  The $pV$ term modifies the effective activation energy under pressure: at the base of a 3~km-thick ice sheet, $p \approx \rho_i g h \approx 27$~MPa, giving $pV \approx -0.35$~kJ\,mol$^{-1}$, which is negligible compared to $Q \approx 60$~kJ\,mol$^{-1}$.  The activation volume is therefore typically omitted in glaciological applications, reducing the Arrhenius factor to $\exp(-Q/RT)$.
+
+%===================================================================
+% SECTION 3 -- The Four Creep Mechanisms
+%===================================================================
+\section{The Four Creep Mechanisms in Ice}
+\label{sec:creep_mechanisms}
+
+Laboratory experiments on fine-grained ice by \cite{GoldsbyKohlstedt2001} reveal four distinct creep regimes, each characterized by different values of $n$ and $r$.  A useful organizing principle is to distinguish between \textbf{intragranular} deformation mechanisms and \textbf{intergranular} accommodation mechanisms:
+\begin{itemize}
+  \item \textbf{Intragranular} mechanisms deform the interior of individual grains.  In ice, these are dislocation creep (the motion of dislocations through the crystal lattice) and diffusion (the transport of molecules through the lattice or along grain boundaries driven by stress gradients).  These are the fundamental crystalline deformation mechanisms---they produce strain.
+  \item \textbf{Intergranular} accommodation mechanisms operate at grain boundaries to maintain compatibility between neighboring grains.  The most important is grain boundary sliding (GBS), in which neighboring grains translate and rotate relative to one another along their shared boundary.
+\end{itemize}
+
+\noindent A single crystal deforming in isolation needs only intragranular mechanisms.  In a polycrystal, however, grains must deform compatibly with their neighbors---each grain is constrained by the grains surrounding it.  This compatibility requirement means that the intragranular deformation mechanisms must be accompanied by an accommodation mechanism that resolves the mismatch at grain boundaries.  Accommodation can be achieved either intragranularly (by activating hard slip systems within each grain, as in dislocation creep) or intergranularly (by GBS).  The nature of this coupling---which mechanism is rate-limiting---determines the observed creep parameters.
+
+\medskip
+\noindent The four creep regimes identified by \cite{GoldsbyKohlstedt2001} are, in order of decreasing stress: dislocation creep, GBS-accommodated basal slip (``superplastic flow''), basal-slip-accommodated GBS, and diffusional flow.  Each is described by a flow law of the form given in equation~\eqref{eq:general_creep}.  We discuss each mechanism below.
+
+% CHALKBOARD DRAWING 1:
+% Sketch a schematic log(strain rate) vs. log(stress) plot showing four creep regimes
+% with different slopes, similar to Figure 5 of Goldsby & Kohlstedt (2001).
+
+\subsection{Dislocation Creep ($n = 4.0$, $r = 0$)}
+\label{sec:dislocation}
+
+At the highest stresses, deformation is controlled by the motion of dislocations through the crystal lattice---a purely intragranular process.  Dislocations are line defects in the crystal structure, and their motion under an applied stress produces macroscopic strain.  In ice, the dominant slip system is the basal plane (the hexagonal plane perpendicular to the $c$-axis), on which dislocations glide easily.  Non-basal slip (on prismatic and pyramidal planes) is much more difficult---single crystals oriented for easy basal slip can deform $>10^5$ times faster than those oriented for hard slip.
+
+\medskip
+\noindent Dislocation creep in polycrystalline ice is characterized by:
+\begin{itemize}
+  \item A stress exponent $n = 4.0$, measured consistently in experiments at high confining pressure.
+  \item No grain-size dependence ($r = 0$): the strain rate depends only on stress and temperature, because the rate-limiting step is dislocation motion within grains.
+  \item An activation energy $Q \approx 60$~kJ\,mol$^{-1}$ below $\sim$258~K, increasing to $\sim$180~kJ\,mol$^{-1}$ above 258~K due to premelting at grain boundaries.
+\end{itemize}
+
+\noindent The rate-limiting step in dislocation creep is dislocation climb, in which edge dislocations move perpendicular to their glide plane by absorbing or emitting point defects.  Climb allows dislocations to bypass obstacles (other dislocations, grain boundaries), and is controlled by volume self-diffusion.  The equivalence of the activation energy for dislocation creep ($\sim$60~kJ\,mol$^{-1}$) with that for volume self-diffusion of hydrogen and oxygen in ice confirms that climb limits the creep rate.
+
+\medskip
+\noindent The creep strength of polycrystalline ice in the dislocation creep regime is intermediate between the strengths of single crystals oriented for easy (basal) and hard (non-basal) slip.  This reflects the fact that each grain in a polycrystal must deform compatibly with its neighbors, requiring activation of both basal and non-basal slip systems.  In this regime, the intergranular accommodation is achieved entirely by intragranular means---hard (non-basal) slip within each grain resolves the mismatch at grain boundaries, so GBS plays no role and $r = 0$.
+
+\subsection{GBS-Accommodated Basal Slip --- Superplastic Flow ($n = 1.8$, $r = 1.4$)}
+\label{sec:superplastic}
+
+At intermediate stresses, a transition occurs to a creep regime characterized by $n = 1.8$ and a strong dependence on grain size ($r = 1.4$).  In this regime, the intragranular mechanism is basal slip (easy glide on the basal plane), while the intergranular accommodation mechanism is grain boundary sliding (GBS).
+
+\medskip
+\noindent Recall that in dislocation creep, grain-to-grain compatibility is achieved by an intragranular process: activation of hard (non-basal) slip systems within each grain.  In the superplastic regime, an intergranular process takes over this role: grains slide past one another along their boundaries, accommodating the mismatch produced by easy basal slip within each grain.  Because GBS is the slower of the two serial processes (basal slip and GBS) under these conditions, GBS limits the overall strain rate.
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{Key point: serial vs.\ parallel processes}}
+]
+When two deformation processes operate in \textbf{series} (both must occur for macroscopic strain), the slower process limits the rate:
+\begin{equation}
+  \dot{\varepsilon}_{\text{total}}^{-1} = \dot{\varepsilon}_{\text{basal}}^{-1} + \dot{\varepsilon}_{\text{GBS}}^{-1}.
+\end{equation}
+When two processes operate in \textbf{parallel} (either alone can produce macroscopic strain), their rates add:
+\begin{equation}
+  \dot{\varepsilon}_{\text{total}} = \dot{\varepsilon}_1 + \dot{\varepsilon}_2.
+\end{equation}
+Basal slip (intragranular) and GBS (intergranular) are serial processes: basal slip produces strain within grains, but without GBS to accommodate grain-to-grain incompatibility, the polycrystal cannot deform.  The transition from dislocation creep ($n = 4$) to superplastic flow ($n = 1.8$) occurs when GBS becomes slower than the hard-slip accommodation mechanism and thereby becomes the rate-limiting step.  This is a transition in the intergranular accommodation mechanism---from hard slip within grains to sliding between grains.
+\end{tcolorbox}
+
+\noindent The superplastic regime is characterized by:
+\begin{itemize}
+  \item A stress exponent $n = 1.8$.
+  \item A grain-size exponent $r = 1.4$: finer-grained ice deforms faster because there is more grain-boundary area per unit volume.
+  \item An activation energy $Q \approx 49$~kJ\,mol$^{-1}$ below $\sim$258~K, increasing at higher temperatures due to premelting.
+\end{itemize}
+
+\noindent Microstructural evidence supports the role of GBS in this regime.  Samples deformed in the $n = 1.8$ regime show minimal grain flattening (unlike dislocation creep, where grains are substantially deformed), numerous four-grain junctions (a signature of grain switching associated with GBS), and straight, regular grain boundaries (unlike the irregular boundaries produced by dynamic recrystallization in dislocation creep).
+
+\subsection{Basal-Slip-Accommodated GBS ($n = 2.4$, $r = 0$)}
+\label{sec:basal_slip}
+
+At still lower stresses and for the finest grain sizes ($d \lesssim 5$~$\mu$m), a third creep regime appears with $n = 2.4$ and no grain-size dependence ($r = 0$).  Here, the intergranular mechanism (GBS) is faster than the intragranular mechanism (basal slip), so basal slip becomes the rate-limiting step.
+
+\medskip
+\noindent This represents the other limit of the serial intragranular/intergranular process.  In the superplastic regime ($n = 1.8$), the intergranular process (GBS) is slower and controls the rate.  At lower stresses, the strain-rate contributions cross over because of their different stress exponents, and now the intragranular process (basal slip) is the slower of the two.  Because the rate-limiting step is intragranular, the creep rate is independent of grain size ($r = 0$).
+
+\medskip
+\noindent The creep parameters in this regime---$n = 2.4$ and $Q \approx 60$~kJ\,mol$^{-1}$---are in excellent agreement with those for basal slip in single crystals, confirming that basal slip is rate-limiting.  The absolute creep strengths of polycrystalline samples in this regime also agree well with single-crystal basal-slip data.  This regime has only been observed experimentally for very fine-grained samples ($d \lesssim 5$~$\mu$m) at very low stresses and is likely inaccessible for the grain sizes relevant to glacier flow.
+
+\subsection{Diffusional Flow ($n = 1.0$, $r = 2$--$3$)}
+\label{sec:diffusion}
+
+At the lowest stresses, deformation can in principle occur by diffusion of molecules either through the crystal lattice (Nabarro--Herring creep, $r = 2$) or along grain boundaries (Coble creep, $r = 3$).  Both are intragranular deformation mechanisms---they produce strain by rearranging molecules within or between grains in response to stress gradients.  The grain-size dependence ($r > 0$) arises because smaller grains have shorter diffusion paths, not because diffusion is an accommodation mechanism.  Both are characterized by a stress exponent $n = 1$ (Newtonian behavior).
+
+\medskip
+\noindent The diffusional flow rate for polycrystalline ice can be written as
+\begin{equation}
+  \dot{\varepsilon}_{\text{diff}} = \frac{42\,\tau_e\,V_m}{R\,T\,d^2}\!\left(D_v + \frac{\pi\,\delta}{d}\,D_b\right),
+  \label{eq:diffusion}
+\end{equation}
+where $V_m$ is the molar volume, $D_v$ is the volume diffusion coefficient, $\delta$ is the grain-boundary width, and $D_b$ is the grain-boundary diffusion coefficient.
+
+\medskip
+\noindent Based on estimates of the diffusion parameters for ice, \cite{GoldsbyKohlstedt2001} conclude that diffusional flow is unattainably slow at laboratory strain rates for grain sizes $\gtrsim 3$~$\mu$m.  For glaciologically relevant grain sizes (typically $\geq 1$~mm), the diffusional flow rate is negligible compared to the other creep mechanisms.  Diffusional flow has not been observed experimentally in ice even for samples with grain sizes as small as 3~$\mu$m.
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{Key point: the dominant creep mechanism depends on conditions}}
+]
+The four creep mechanisms are summarized below.  At glaciologically relevant conditions (shear stresses $\lesssim 0.1$~MPa, grain sizes $\geq 1$~mm, temperatures 233--273~K), the superplastic flow regime ($n = 1.8$) is predicted to be the rate-limiting mechanism for much of the stress range encountered in glaciers and ice sheets.
+
+\medskip
+\begin{center}
+\small
+\begin{tabular}{lccccl}
+\toprule
+\textbf{Mechanism} & $n$ & $r$ & $Q$ (kJ\,mol$^{-1}$) & \textbf{Scale} & \textbf{Rate-limiting step} \\
+\midrule
+Dislocation creep & 4.0 & 0 & 60 & Intra & Dislocation climb \\
+GBS-accomm.\ basal slip & 1.8 & 1.4 & 49 & Inter & Grain boundary sliding \\
+Basal-slip-accomm.\ GBS & 2.4 & 0 & 60 & Intra & Basal slip \\
+Diffusional flow & 1.0 & 2--3 & $\sim$60 & Intra & Vol./boundary diffusion \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{tcolorbox}
+
+%===================================================================
+% SECTION 4 -- The Composite Flow Law
+%===================================================================
+\section{The Composite Flow Law}
+\label{sec:composite}
+
+The flow of polycrystalline ice cannot be adequately described by a single power law (i.e., Glen's Flow Law) with one set of creep parameters.  \cite{GoldsbyKohlstedt2001} proposed a composite constitutive equation that combines all four creep mechanisms:
+\begin{equation}
+  \boxed{\dot{\varepsilon}_e = \dot{\varepsilon}_{\text{diff}} + \left(\frac{1}{\dot{\varepsilon}_{\text{basal}}} + \frac{1}{\dot{\varepsilon}_{\text{gbs}}}\right)^{-1} + \dot{\varepsilon}_{\text{disl}},}
+  \label{eq:composite}
+\end{equation}
+where $\dot{\varepsilon}_{\text{diff}}$ is the diffusional flow rate, $\dot{\varepsilon}_{\text{basal}}$ is the basal-slip rate, $\dot{\varepsilon}_{\text{gbs}}$ is the GBS rate, and $\dot{\varepsilon}_{\text{disl}}$ is the dislocation creep rate. It can be shown that this is the minimum viable representation for viscous (creep) deformation in isotropic ice Ih (all ice we're interested in on Earth is ice Ih). 
+
+\medskip
+\noindent The structure of equation~\eqref{eq:composite} reflects the physical relationships between intragranular and intergranular processes:
+\begin{itemize}
+  \item \textbf{Basal slip (intragranular) and GBS (intergranular) are in series} (the harmonic mean): both must operate for grain-size-sensitive deformation, and the slower process limits the rate.  At high stresses, the intergranular process (GBS) is slower and the effective stress exponent approaches $n = 1.8$; at low stresses, the intragranular process (basal slip) is slower and $n \to 2.4$.
+  \item \textbf{Dislocation creep (intragranular) operates in parallel} with the grain-size-sensitive mechanisms: it provides an independent intragranular deformation pathway through the activation of multiple slip systems, with hard slip serving as the intergranular accommodation mechanism.  At high stresses, dislocation creep dominates because of its high stress exponent ($n = 4$).
+  \item \textbf{Diffusional flow also operates in parallel}: it provides yet another independent intragranular deformation pathway, dominant only at very low stresses and very small grain sizes.
+\end{itemize}
+
+\noindent Each term in equation~\eqref{eq:composite} has the form of equation~\eqref{eq:general_creep}, with parameters given in Table~\ref{tab:parameters}.
+
+\begin{table}[ht]
+\centering
+\caption{Constitutive equation parameters from \cite{GoldsbyKohlstedt2001}.  Two sets of parameters are given for dislocation creep and GBS-accommodated basal slip to account for the increase in activation energy above $\sim$258~K due to premelting.}
+\label{tab:parameters}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Creep regime} & $A_0$ (units vary) & $n$ & $r$ & $Q$ (kJ\,mol$^{-1}$) \\
+\midrule
+Dislocation creep ($T < 258$~K) & $4.0 \times 10^5$~MPa$^{-4.0}$\,s$^{-1}$ & 4.0 & 0 & 60 \\
+Dislocation creep ($T > 258$~K) & $6.0 \times 10^{28}$~MPa$^{-4.0}$\,s$^{-1}$ & 4.0 & 0 & $\sim$181 \\
+GBS-accomm.\ basal slip ($T < 255$~K) & $3.9 \times 10^{-3}$~MPa$^{-1.8}$\,m$^{1.4}$\,s$^{-1}$ & 1.8 & 1.4 & 49 \\
+GBS-accomm.\ basal slip ($T > 255$~K) & $3.0 \times 10^{26}$~MPa$^{-1.8}$\,m$^{1.4}$\,s$^{-1}$ & 1.8 & 1.4 & $\sim$192 \\
+Basal-slip-accomm.\ GBS & $5.5 \times 10^{7}$~MPa$^{-2.4}$\,s$^{-1}$ & 2.4 & 0 & 60 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent Predictions of this composite flow law are in excellent agreement with published creep data for coarse-grained ($d \geq 1$~mm) polycrystalline ice across a wide range of temperatures and stresses.
+
+%===================================================================
+% SECTION 5 -- Deformation Mechanism Maps
+%===================================================================
+\section{Deformation Mechanism Maps}
+\label{sec:mechanism_maps}
+
+The composite flow law involves multiple mechanisms with different dependencies on stress, temperature, and grain size.  A \textbf{deformation mechanism map} is a graphical tool that shows which mechanism dominates at each point in parameter space.  These maps are widely used in materials science and provide an intuitive picture of the rheological behavior of a material across a range of conditions.
+
+\subsection{Strain Rate vs.\ Stress}
+
+The most direct view of the composite flow law is a log-log plot of $\dot{\varepsilon}_e$ vs.\ $\tau_e$ at fixed temperature and grain size (Figure~\ref{fig:strain_rate_stress}).  At high stresses, the composite curve follows the dislocation creep line (slope $= 4$).  At lower stresses, it transitions to the GBS-accommodated basal slip line (slope $= 1.8$).  Glen's original experiments were conducted in the transition region between these two regimes, where the apparent slope is $\sim$3.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/fig01_strain_rate_vs_stress.pdf}
+  \caption{Log-log plot of effective strain rate vs.\ effective deviatoric stress at $T = 263$~K for two grain sizes: $d = 1$~mm (solid lines) and $d = 10$~mm (dashed lines).  Colors indicate the creep mechanism; black curves show the composite flow law.  Dislocation creep (red) is grain-size independent, so the solid and dashed red lines overlap.  GBS-accommodated basal slip (green) and diffusional flow (orange) are grain-size sensitive: their rates decrease for larger grains.  The crossover stress between GBS-dominated and dislocation-dominated flow shifts to lower values for larger grains.  Glen's experimental stress range (0.1--1~MPa, shaded) straddles this transition.}
+  \label{fig:strain_rate_stress}
+\end{figure}
+
+\subsection{Stress--Temperature Map}
+
+At fixed grain size, we can color the $\tau_e$--$T$ plane by the dominant mechanism (Figure~\ref{fig:mechanism_map_tau_T}).  For stresses above $\sim$1~MPa, dislocation creep dominates at all temperatures.  Below $\sim$0.1~MPa, superplastic flow dominates.  The boundary between these regimes is the locus of the crossover stress $\tau_e^*$ discussed in \S\ref{sec:glen_reduction}, and it shifts with temperature because the two mechanisms have different activation energies.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/fig02_mechanism_map_stress_temp.pdf}
+  \caption{Deformation mechanism map in $\tau_e$--$T$ space for $d = 1$~mm.  Colors indicate the dominant creep mechanism.  The dashed line marks $\tau_e = 0.1$~MPa, a typical stress scale for glaciers.  At glaciological stresses, superplastic flow ($n = 1.8$) dominates at low temperatures, while dislocation creep ($n = 4$) can become important near the melting point due to the increase in activation energy.}
+  \label{fig:mechanism_map_tau_T}
+\end{figure}
+
+\subsection{Stress--Grain Size Map}
+
+At fixed temperature, the $\tau_e$--$d$ map (Figure~\ref{fig:mechanism_map_tau_d}) reveals the role of grain size.  For large grains ($d \gtrsim 10$~mm), the grain-size-sensitive mechanisms (GBS-accommodated basal slip) require each grain boundary to accommodate more slip, reducing the GBS strain rate and expanding the domain of dislocation creep to lower stresses.  For small grains ($d \lesssim 1$~mm), the transition stress $\tau_e^*$ shifts upward and superplastic flow dominates over a wider stress range.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/fig03_mechanism_map_stress_grain.pdf}
+  \caption{Deformation mechanism map in $\tau_e$--$d$ space for $T = 263$~K.  Vertical lines mark $d = 1$~mm and $d = 10$~mm, spanning the range typical of glacier ice.  Finer-grained ice (e.g., ice-age ice with high impurity content) has a broader superplastic flow domain.}
+  \label{fig:mechanism_map_tau_d}
+\end{figure}
+
+\subsection{The Effective Stress Exponent}
+
+A useful complement to the mechanism map is a plot of the effective stress exponent $n_{\text{eff}}$ as a function of stress (Figure~\ref{fig:n_eff}).  This makes concrete the idea that $n = 3$ is not a fundamental value but a transitional one.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/fig04_effective_n_vs_stress.pdf}
+  \caption{Effective stress exponent $n_{\text{eff}} = \partial\log\dot{\varepsilon}_e/\partial\log\tau_e$ as a function of stress for $T = 263$~K, $d = 1$~mm.  The exponent transitions smoothly from $n \approx 1.8$ at low stresses to $n \approx 4$ at high stresses, passing through $n \approx 3$ in Glen's experimental stress range (shaded).}
+  \label{fig:n_eff}
+\end{figure}
+
+\subsection{Effect of Grain Size on the Composite Flow Law}
+
+Figure~\ref{fig:grain_size_effect} shows the composite flow law for several grain sizes at fixed temperature.  At high stresses, all curves converge to the dislocation creep line (which is grain-size independent).  At lower stresses, finer-grained ice deforms faster because the GBS-accommodated basal slip mechanism ($r = 1.4$) is more efficient.  The crossover stress between dislocation-dominated and GBS-dominated flow shifts to higher values for finer grains.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.75\textwidth]{figures/fig05_grain_size_effect.pdf}
+  \caption{Composite flow law for different grain sizes at $T = 263$~K.  At high stresses, all curves converge to the grain-size-independent dislocation creep line (dashed).  At low stresses, finer-grained ice deforms faster due to the grain-size sensitivity of GBS-accommodated basal slip.}
+  \label{fig:grain_size_effect}
+\end{figure}
+
+%===================================================================
+% SECTION 6 -- Reduction to Glen's Flow Law
+%===================================================================
+\section{From the Composite Flow Law to Glen's Flow Law}
+\label{sec:glen_reduction}
+
+In glaciology, the composite flow law~\eqref{eq:composite} has traditionally been replaced by the much simpler Glen's flow law:
+\begin{equation}
+  \dot{\varepsilon}_e = A\,\tau_e^{\,n},
+  \label{eq:glen_simple}
+\end{equation}
+where $n$ is taken to be a constant (usually $n = 3$) and $A$ absorbs all dependence on temperature and grain size.  This simplification traces back to the pioneering experiments of \cite{Glen1952,Glen1955}, conducted on polycrystalline ice at stresses of 0.1--1~MPa and temperatures near the melting point.  Here we show how the composite flow law reduces to Glen's law under certain conditions, and what is lost in the reduction.
+
+\subsection{Glen's Original Experiments}
+
+Glen's experiments were performed on coarse-grained polycrystalline ice ($d \geq 1$~mm) at differential stresses of approximately 0.1--1~MPa and temperatures near the melting point.  His data yielded stress exponents ranging from roughly 3 to 4, depending on the stress range considered.  It was Nye \cite{Nye1957} and subsequent workers who adopted the single value $n = 3$ as a convenient simplification for analytical glacier-flow models.  As shown in Figure~1 of \cite{GoldsbyKohlstedt2001}, Glen's data fall precisely in the transition region between the dislocation creep regime ($n = 4$) and the superplastic flow regime ($n = 1.8$).
+
+\medskip
+\noindent Fitting a single power law through data that span a transition between two regimes yields an \textit{apparent} stress exponent that is intermediate between the exponents of the two regimes.  The value $n = 3$ adopted by the glaciological community is effectively an average of $n = 4.0$ (dislocation creep) and $n = 1.8$ (superplastic flow), weighted by the relative contributions of the two mechanisms in the stress range of Glen's experiments.
+
+\begin{tcolorbox}[
+  colback=orange!25,
+  colframe=orange!70!black,
+  title={\textbf{Derivation: $n \approx 3$ as a transitional value \cite{RanganathanMinchew2024}}}
+]
+Consider the composite flow law in the regime where only dislocation creep and superplastic flow contribute significantly (neglecting diffusional flow and noting that basal-slip-accommodated GBS is relevant only for very fine grains):
+\begin{equation}
+  \dot{\varepsilon}_e \approx \dot{\varepsilon}_{\text{gbs}} + \dot{\varepsilon}_{\text{disl}} = A_{\text{gbs}} \frac{\tau_e^{\,1.8}}{d^{1.4}} \exp\!\left(-\frac{Q_{\text{gbs}}}{RT}\right) + A_{\text{disl}}\, \tau_e^{\,4.0} \exp\!\left(-\frac{Q_{\text{disl}}}{RT}\right).
+  \label{eq:two_mechanism}
+\end{equation}
+At stresses $\tau_e \ll \tau_e^*$, the GBS term dominates and $\dot{\varepsilon}_e \propto \tau_e^{\,1.8}$.  At stresses $\tau_e \gg \tau_e^*$, dislocation creep dominates and $\dot{\varepsilon}_e \propto \tau_e^{\,4.0}$.  The crossover stress $\tau_e^*$ is the stress at which the two mechanisms contribute equally.
+
+\medskip
+\noindent If one fits a single power law $\dot{\varepsilon}_e = B\,\tau_e^{\,n_{\text{eff}}}$ over a stress range that straddles $\tau_e^*$, the effective exponent $n_{\text{eff}}$ varies continuously from 1.8 to 4.0, passing through $\sim$3 near the crossover.  This is the origin of Glen's $n \approx 3$.
+
+\medskip
+\noindent The local slope of the $\log\dot{\varepsilon}_e$--$\log\tau_e$ curve defines the apparent stress exponent at any given stress:
+\begin{equation}
+  n_{\text{eff}}(\tau_e) = \frac{\partial \log \dot{\varepsilon}_e}{\partial \log \tau_e} = \frac{1.8\,\dot{\varepsilon}_{\text{gbs}} + 4.0\,\dot{\varepsilon}_{\text{disl}}}{\dot{\varepsilon}_{\text{gbs}} + \dot{\varepsilon}_{\text{disl}}}.
+  \label{eq:n_eff}
+\end{equation}
+This is a weighted average of the two stress exponents, with weights proportional to the strain-rate contribution of each mechanism.
+\end{tcolorbox}
+
+\subsection{Conditions Under Which Glen's Law Holds}
+
+Glen's law with $n = 3$ and a constant $A$ is a reasonable approximation when:
+\begin{enumerate}
+  \item \textbf{The stress range is narrow.}  Over a limited range of stresses, the curvature of the $\log\dot{\varepsilon}_e$--$\log\tau_e$ relation is small enough that a single power law provides an adequate fit.
+  \item \textbf{The grain size is approximately constant.}  The grain-size dependence of the superplastic flow term ($r = 1.4$) is absorbed into the rate factor $A$.  If the grain size varies spatially, a single value of $A$ cannot capture this variation.
+  \item \textbf{The temperature field is known or parameterized.}  The strong temperature dependence of $A$ is typically handled separately through the Arrhenius relation.
+\end{enumerate}
+
+\noindent Under these conditions, we'll use the simple form of Glen's flow law throughout this course with the understanding that this is a choice of convenience and consistency with the literature.  The rate factor $A$ is treated as a function of temperature (and implicitly of grain size, impurity content, fabric, and water content) following an Arrhenius relation:
+\begin{equation}
+  A = A_0\,\exp\!\left(-\frac{Q}{RT}\right),
+  \label{eq:arrhenius}
+\end{equation}
+with $Q \approx 60$~kJ\,mol$^{-1}$ below 263~K and $Q \approx 115$--139~kJ\,mol$^{-1}$ above 263~K.
+
+\subsection{What Glen's Law Does Not Capture}
+
+The reduction from the composite flow law to Glen's law discards several features that may be important in some glaciological settings:
+
+\begin{enumerate}
+  \item \textbf{Grain-size dependence.}  Glen's law is independent of grain size ($r = 0$), but the superplastic flow mechanism has $r = 1.4$.  In ice with fine grains (e.g., ice-age ice with high dust content that inhibits grain growth), the effective viscosity may be lower than Glen's law predicts.
+
+  \item \textbf{Stress-dependent exponent.}  Glen's law assumes a constant $n$, but the composite flow law predicts that the effective stress exponent varies from $\sim$1.8 at low stresses to $\sim$4.0 at high stresses.  At stresses typical of ice-sheet interiors ($\tau_e \lesssim 0.01$~MPa), the effective exponent may be closer to 1.8 than to 3.
+
+  \item \textbf{Distinct activation energies.}  Each creep mechanism has its own activation energy, and the effective activation energy of the composite law varies with stress.  Glen's law uses a single $Q$ (or at most two values, above and below a threshold temperature), which is an approximation.
+\end{enumerate}
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{Key point: implications for glacier modeling \cite{RanganathanMinchew2024,GetraerMorlighem2025,Martinetal2026}}}
+]
+At shear stresses typical of glacier interiors ($\tau \lesssim 0.1$~MPa) and for grain sizes of 1~mm or larger, the composite flow law of \cite{GoldsbyKohlstedt2001} predicts that superplastic flow ($n = 1.8$) is the rate-limiting creep mechanism.  \cite{RanganathanMinchew2024} showed that dislocation creep ($n = 4$) dominates in fast-flowing regions of the Antarctic Ice Sheet, where stresses are highest, while grain-boundary sliding ($n = 1.8$) dominates elsewhere.  The effective value of $n$ thus varies spatially and temporally across an ice sheet, and the canonical $n = 3$ is an adequate representation only in the narrow transitional stress range between these two regimes.
+
+\medskip
+\noindent The choice of $n$ has direct consequences for projections of sea-level rise.  \cite{GetraerMorlighem2025} found that increasing $n$ from 3 to 4 in simulations of the Amundsen Sea Embayment accelerates projected ice loss by 32$\pm$14\%, with the largest sensitivity near grounding lines and shear margins where stresses are highest.  \cite{Martinetal2026} showed that in standard benchmark experiments, incorrectly assuming $n = 3$ when the ice behaves as $n = 4$ leads to underestimates of 100-year sea-level rise contributions of 21--35\%, depending on the climate forcing.  These results demonstrate that the stress exponent is not merely a theoretical nuance but a first-order control on ice-sheet projections.
+\end{tcolorbox}
+
+%===================================================================
+% Reading
+%===================================================================
+\section*{Reading}
+
+Cuffey \& Paterson, \textit{Physics of Glaciers}, 4th ed.:
+\begin{itemize}
+  \item Section 3.4: The flow law---overview and experimental basis
+  \item Section 3.4.4: Creep mechanisms and the stress exponent
+  \item Section 3.4.6: Temperature dependence and the rate factor
+\end{itemize}
+
+%===================================================================
+% Bibliography
+%===================================================================
+\begin{thebibliography}{99}
+
+\bibitem{GoldsbyKohlstedt2001}
+Goldsby, D.~L.\ and D.~L.\ Kohlstedt (2001).
+Superplastic deformation of ice: Experimental observations.
+\textit{Journal of Geophysical Research: Solid Earth}, 106(B6), 11017--11030.
+\texttt{doi:10.1029/2000JB900336}
+
+\bibitem{Glen1952}
+Glen, J.~W.\ (1952).
+Experiments on the deformation of ice.
+\textit{Journal of Glaciology}, 2(12), 111--114.
+\texttt{doi:10.3189/S0022143000034067}
+
+\bibitem{Glen1955}
+Glen, J.~W.\ (1955).
+The creep of polycrystalline ice.
+\textit{Proceedings of the Royal Society of London.\ Series A}, 228(1175), 519--538.
+\texttt{doi:10.1098/rspa.1955.0066}
+
+\bibitem{Durham1992}
+Durham, W.~B., S.~H.\ Kirby, and L.~A.\ Stern (1992).
+Effects of dispersed particulates on the rheology of water ice at planetary conditions.
+\textit{Journal of Geophysical Research}, 97(E12), 20883--20897.
+\texttt{doi:10.1029/92JE02326}
+
+\bibitem{GoldsbyKohlstedt1997a}
+Goldsby, D.~L.\ and D.~L.\ Kohlstedt (1997).
+Grain boundary sliding in fine-grained ice~I.
+\textit{Scripta Materialia}, 37(9), 1399--1406.
+\texttt{doi:10.1016/S1359-6462(97)00246-7}
+
+\bibitem{GetraerMorlighem2025}
+Getraer, B.\ and M.\ Morlighem (2025).
+Increasing the Glen--Nye power-law exponent accelerates ice-loss projections for the Amundsen Sea Embayment, West Antarctica.
+\textit{Geophysical Research Letters}, 52, e2024GL112516.
+\texttt{doi:10.1029/2024GL112516}
+
+\bibitem{Martinetal2026}
+Martin, D.~F., S.~B.\ Kachuck, M.\ Trevers, J.~D.\ Millstein, S.~L.\ Cornford, and B.~M.\ Minchew (2026).
+Rates of sea-level rise are highly sensitive to ice viscosity parameters in model benchmarks.
+\textit{AGU Advances}, 7, e2025AV001946.
+\texttt{doi:10.1029/2025AV001946}
+
+\bibitem{RanganathanMinchew2024}
+Ranganathan, M.\ and B.\ Minchew (2024).
+A modified viscous flow law for natural glacier ice: Scaling from laboratories to ice sheets.
+\textit{Proceedings of the National Academy of Sciences}, 121(23), e2309788121.
+\texttt{doi:10.1073/pnas.2309788121}
+
+\bibitem{Nye1957}
+Nye, J.~F.\ (1957).
+The distribution of stress and velocity in glaciers and ice-sheets.
+\textit{Proceedings of the Royal Society of London.\ Series A}, 239(1216), 113--133.
+\texttt{doi:10.1098/rspa.1957.0026}
+
+\end{thebibliography}
+
+\end{document}
