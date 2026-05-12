@@ -79,10 +79,10 @@ are the same as in the viscous theory.  What changes is the kinematic quantity t
   \varepsilon_{ij} = \frac{1}{2}\!\left(\frac{\partial s_i}{\partial x_j} + \frac{\partial s_j}{\partial x_i}\right),
   \label{eq:strain_tensor}
 \end{equation}
-where $s_i$ is the displacement of a material point from its reference position.  We reserve $u_i$ for velocity, as in the viscous theory, so that $u_i = \dot{s}_i$ and the strain rate is $\dot{\varepsilon}_{ij} = \frac{1}{2}(\partial u_i / \partial x_j + \partial u_j / \partial x_i)$.  The two frameworks are connected by a time derivative: $\dot{\varepsilon}_{ij}$ is the rate of change of $\varepsilon_{ij}$. It is important to remember that strain $\varepsilon_{ij} $ is always defined relative to the reference, or zero-stress, state, whereas strain rate is the instantaneous rate of change of strain. It is important to remember this because strain is a state variable that evolves over time and not necessarily at the same rate nor even monotonically.
+where $s_i$ is the displacement of a material point from its reference position.  We reserve $u_i$ for velocity, as in the viscous theory, so that $u_i = \dot{s}_i$ and the strain rate is $\dot{\varepsilon}_{ij} = \frac{1}{2}(\partial u_i / \partial x_j + \partial u_j / \partial x_i)$.  The two frameworks are connected by a time derivative: $\dot{\varepsilon}_{ij}$ is the rate of change of $\varepsilon_{ij}$. Strain $\varepsilon_{ij}$ is always defined relative to the reference (zero-stress) state, whereas strain rate is the instantaneous rate of change of strain.  Because strain is a state variable, it evolves over time and not necessarily at the same rate nor even monotonically.
 
 \medskip
-\noindent The ``small deformation'' assumption means $|\varepsilon_{ij}| \ll 1$, allowing us to drop higher-order terms in the full expansion and retain only the linear terms --- hence, \emph{linear} elasticity. In glaciology, elastic strains are tiny: a stress of $\tau_e = 0.1$~MPa produces an elastic strain of order $\varepsilon \sim \tau_e / \mu \sim 10^5 / 3.5 \times 10^9 \approx 3 \times 10^{-5}$.  The small-strain approximation is therefore excellent for the elastic response of ice. (Pedantic: Note that in the strictest sense, linear elasticity requires more conditions than just small-strain. An example of small-strain nonlinear elasticity is the case where the elastic moduli have a frequency dependence like ice does.)
+\noindent The ``small deformation'' assumption means $|\varepsilon_{ij}| \ll 1$, allowing us to drop higher-order terms in the full expansion and retain only the linear terms --- hence, \emph{linear} elasticity. In glaciology, elastic strains are tiny: a stress of $\tau_e = 0.1$~MPa produces an elastic strain of order $\varepsilon \sim \tau_e / \mu \sim 10^5 / 3.5 \times 10^9 \approx 3 \times 10^{-5}$.  The small-strain approximation is therefore excellent for the elastic response of ice. (Pedantic: Linear elasticity strictly requires both small strains and a stress--strain relation that is linear and rate-independent.  Ice exhibits a weak frequency dependence of its elastic moduli---a form of anelasticity---which means the moduli measured at seismic frequencies differ slightly from those at tidal frequencies.  This is a departure from ideal linear elasticity, though it is a small effect at glaciological stress levels.)
 
 \subsection{Hooke's Law}
 \label{sec:hookes_law}
@@ -204,10 +204,10 @@ This wave equation admits two types of plane-wave solutions:
 \end{itemize}
 For ice ($\rho_i = 917$~kg\,m$^{-3}$):
 \begin{equation}
-  v_p = \sqrt{\frac{6550 + 2 \times 3520}{917} \times 10^6} \approx 3900 \text{ m\,s}^{-1}, \qquad v_s = \sqrt{\frac{3520 \times 10^6}{917}} \approx 1960 \text{ m\,s}^{-1}.
+  v_p = \sqrt{\frac{6550 + 2 \times 3520}{917} \times 10^6} \approx 3850 \text{ m\,s}^{-1}, \qquad v_s = \sqrt{\frac{3520 \times 10^6}{917}} \approx 1960 \text{ m\,s}^{-1}.
   \label{eq:wave_speeds}
 \end{equation}
-These values agree well with seismic observations in glaciers and ice sheets \cite{Kohnenetal1982}.  The P-wave speed in ice is notably higher than in water (1480~m\,s$^{-1}$) and lower than in most rocks (4000--7000~m\,s$^{-1}$).
+These values agree well with seismic observations in glaciers and ice sheets \cite{KohnenBentley1973}.  The P-wave speed in ice is notably higher than in water (1480~m\,s$^{-1}$) and lower than in most rocks (4000--7000~m\,s$^{-1}$).
 
 %===================================================================
 % SECTION 4 -- Elastic Flexure of Thin Plates
@@ -249,7 +249,7 @@ The flexural wavelength sets the horizontal distance over which the plate adjust
 
 For an ice shelf of thickness $h$, using $E = 9.33$~GPa, $\nu = 0.325$, and $\rho_w = 1025$~kg\,m$^{-3}$:
 \begin{equation}
-  \ell_f = \left(\frac{9.33 \times 10^9 \times h^3}{3 \times 0.894 \times 1025 \times 9.8}\right)^{1/4} = \left(\frac{9.33 \times 10^9}{2.70 \times 10^4}\right)^{1/4} h^{3/4} = 740\;h^{3/4},
+  \ell_f = \left(\frac{9.33 \times 10^9 \times h^3}{3 \times 0.894 \times 1025 \times 9.8}\right)^{1/4} = \left(\frac{9.33 \times 10^9}{2.70 \times 10^4}\right)^{1/4} h^{3/4} \approx 24.2\;h^{3/4},
   \label{eq:lf_ice}
 \end{equation}
 where $h$ is in meters and $\ell_f$ is in meters.  Representative values:
@@ -259,14 +259,14 @@ where $h$ is in meters and $\ell_f$ is in meters.  Representative values:
 \toprule
 Ice thickness $h$ (m) & Flexural rigidity $D$ (N\,m) & Flexural wavelength $\ell_f$ (km) \\
 \midrule
-200 & $6.9 \times 10^{15}$ & 5.0 \\
-500 & $1.1 \times 10^{17}$ & 9.3 \\
-1000 & $8.7 \times 10^{17}$ & 15.6 \\
+200 & $6.9 \times 10^{15}$ & 1.3 \\
+500 & $1.1 \times 10^{17}$ & 2.6 \\
+1000 & $8.7 \times 10^{17}$ & 4.3 \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\noindent The flexural wavelength is typically 5--15~km for Antarctic ice shelves.  This length scale appears repeatedly in our worked examples.
+\noindent The flexural wavelength is typically 1--5~km for Antarctic ice shelves.  This length scale appears repeatedly in our worked examples.
 
 \subsection{Bending Stresses}
 \label{sec:bending_stresses}
@@ -382,16 +382,16 @@ The Maxwell time is short where ice is warm and highly stressed, and long where 
 \toprule
 \textbf{Setting} & $T$ (K) & $\tau_e$ (MPa) & $A$ (Pa$^{-3}$\,s$^{-1}$) & $t_M$ \\
 \midrule
-Warm shear margin & 270 & 0.2 & $2.0 \times 10^{-24}$ & 50 min \\
-Warm grounding zone & 270 & 0.1 & $2.0 \times 10^{-24}$ & 3 hours \\
-Temperate glacier & 263 & 0.1 & $3.5 \times 10^{-25}$ & 18 hours \\
-Cold ice-sheet interior & 243 & 0.05 & $1.2 \times 10^{-26}$ & 76 days \\
-Cold, low-stress interior & 233 & 0.01 & $1.6 \times 10^{-27}$ & $\sim$300 years \\
+Warm shear margin & 270 & 0.2 & $2.0 \times 10^{-24}$ & 30 min \\
+Warm grounding zone & 270 & 0.1 & $2.0 \times 10^{-24}$ & 2.0 hours \\
+Temperate glacier & 263 & 0.1 & $3.5 \times 10^{-25}$ & 11 hours \\
+Cold ice-sheet interior & 243 & 0.05 & $1.2 \times 10^{-26}$ & 55 days \\
+Cold, low-stress interior & 233 & 0.01 & $1.6 \times 10^{-27}$ & $\sim$28 years \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\noindent The Maxwell time ranges from less than an hour in warm, highly stressed ice (shear margins, grounding zones) to centuries in the cold, low-stress interiors of ice sheets.  This enormous range---more than six orders of magnitude---means that the same material can behave as an elastic solid or a viscous fluid depending on the local conditions and the timescale of the forcing.
+\noindent The Maxwell time ranges from about half an hour in warm, highly stressed ice (shear margins, grounding zones) to decades in the cold, low-stress interiors of ice sheets.  This enormous range---more than five orders of magnitude---means that the same material can behave as an elastic solid or a viscous fluid depending on the local conditions and the timescale of the forcing.
 
 \subsection{The Deborah Number}
 \label{sec:deborah}
@@ -415,8 +415,8 @@ where $t_p$ is the characteristic timescale of the process or forcing.
 ]
 Elasticity matters when the Deborah number is of order unity or larger.  For glacier ice, this means:
 \begin{itemize}
-  \item \textbf{Tidal forcing} ($t_p \sim 12$~hours): De $\sim 0.2$--$1.5$ in warm ice near grounding zones.  Viscoelastic effects are important.
-  \item \textbf{J\"{o}kulhlaup drainage} ($t_p \sim$ hours to days): De $\sim 0.1$--$10$ depending on conditions.  Both elastic and viscous responses are relevant.
+  \item \textbf{Tidal forcing} ($t_p \sim 12$~hours): De $\sim 0.04$--$0.9$ in warm ice near grounding zones.  Viscoelastic effects are important.
+  \item \textbf{J\"{o}kulhlaup drainage} ($t_p \sim$ hours to days): De $\sim 0.05$--$5$ depending on conditions.  Both elastic and viscous responses are relevant.
   \item \textbf{Lake drainage / hydrofracture} ($t_p \sim$ minutes to hours): De $\gg 1$ everywhere.  The response is essentially elastic.
   \item \textbf{Seismic waves} ($t_p \sim 0.01$--$1$~s): De $\gg 1$ everywhere.  Purely elastic.
   \item \textbf{Seasonal flow variations} ($t_p \sim$ months): De $\ll 1$ in warm ice.  Viscous.
@@ -447,12 +447,12 @@ There is an instantaneous elastic strain $\tau_0/(2\mu)$ at $t = 0$, followed by
 The initial stress is $2\mu\,\varepsilon_0$ (fully elastic), and it relaxes exponentially as the viscous element accommodates the imposed strain.  After a time $t_M$, the stress has decayed to $1/e \approx 37\%$ of its initial value.  After $3\,t_M$, it has decayed to $\sim$5\%.
 
 \medskip
-\noindent\textbf{Oscillatory loading (harmonic forcing).}  For a sinusoidal stress $\tau(t) = \tau_0\,\sin(\omega t)$, the strain response of a linear Maxwell material is
+\noindent\textbf{Oscillatory loading (harmonic forcing).}  For a sinusoidal stress $\tau(t) = \tau_0\,\sin(\omega t)$, the strain response of a linear Maxwell material is obtained by direct integration of the constitutive equation~\eqref{eq:maxwell_constitutive} (with $\dot{\tau} = \tau_0\,\omega\cos(\omega t)$ and $\tau/(2\eta) = \tau_0\sin(\omega t)/(2\eta)$):
 \begin{equation}
-  \varepsilon(t) = \frac{\tau_0}{2\mu}\!\left[\frac{1}{1 + (\omega\,t_M)^2}\,\sin(\omega t) - \frac{\omega\,t_M}{1 + (\omega\,t_M)^2}\,\cos(\omega t)\right] + \frac{\tau_0}{2\eta\,\omega}\!\left[1 - \cos(\omega t)\right].
+  \varepsilon(t) = \frac{\tau_0}{2\mu}\,\sin(\omega t) + \frac{\tau_0}{2\eta\,\omega}\!\left[1 - \cos(\omega t)\right].
   \label{eq:harmonic_response_transient}
 \end{equation}
-The first term (in brackets) is the steady-state oscillatory response, with an amplitude that depends on the Deborah number $\text{De} = \omega\,t_M$; the last term is a secular drift due to net viscous creep (since the mean stress is zero but the strain accumulates asymmetrically for nonlinear viscosity---for linear viscosity the drift vanishes after the transient).  At high frequency ($\omega\,t_M \gg 1$), the strain amplitude approaches $\tau_0/(2\mu)$ (elastic limit).  At low frequency ($\omega\,t_M \ll 1$), the response is dominated by the viscous term.
+The first term is the elastic strain (in phase with the stress); the second is the viscous contribution, which oscillates about a mean offset of $\tau_0/(2\eta\omega)$.  At high frequency ($\omega\,t_M \gg 1$), the elastic term dominates and the strain amplitude approaches $\tau_0/(2\mu)$ (elastic limit).  At low frequency ($\omega\,t_M \ll 1$), the viscous term dominates and the strain amplitude scales as $\tau_0/(\eta\omega) = \tau_0\,t_M/(\mu)$.
 
 \medskip
 \noindent The tidal flexure of ice shelves near grounding zones is a natural example of oscillatory loading.  The tidal period ($\sim$12~hours for the dominant M$_2$ constituent) is comparable to the Maxwell time of warm ice near the grounding line, placing this problem squarely in the viscoelastic regime.
@@ -492,11 +492,7 @@ The general bounded solution for $x > 0$ is
 \[
   w(x) = w_0 + e^{-x/\ell_f}\!\left[C_1\cos\frac{x}{\ell_f} + C_2\sin\frac{x}{\ell_f}\right],
 \]
-where we have added the far-field displacement $w_0$ as a particular solution (the weight of the tide is supported by buoyancy, not by the plate).  Applying $w(0) = 0$: $C_1 = -w_0$.  Applying $w'(0) = 0$:
-\[
-  w'(0) = \frac{1}{\ell_f}\!\left[-C_1 + C_2 - C_1 - C_2\right]\,e^{0} = \frac{1}{\ell_f}\!\left(-2C_1\right)...
-\]
-Wait---let us compute the derivative carefully.  Write $\xi = x/\ell_f$:
+where we have added the far-field displacement $w_0$ as a particular solution (the weight of the tide is supported by buoyancy, not by the plate).  Applying $w(0) = 0$: $C_1 = -w_0$.  For the slope condition, write $\xi = x/\ell_f$:
 \[
   w(\xi) = w_0 + e^{-\xi}\!\left[C_1\cos\xi + C_2\sin\xi\right].
 \]
@@ -524,14 +520,14 @@ The maximum tensile stress at the ice surface is (from equation~\eqref{eq:max_be
 \noindent\textbf{Numerical evaluation.}  For an ice shelf with $h = 500$~m and a tidal amplitude $w_0 = 1$~m:
 \begin{itemize}
   \item Flexural rigidity: $D = 9.33 \times 10^9 \times 500^3 / [12 \times 0.894] = 1.09 \times 10^{17}$~N\,m.
-  \item Flexural wavelength: $\ell_f = (4 \times 1.09 \times 10^{17} / (1025 \times 9.8))^{1/4} = 8.2$~km.
-  \item Maximum bending stress: $\sigma_{\text{max}} = 9.33 \times 10^9 \times 500 \times 1 / (0.894 \times (8200)^2) = 78$~kPa.
+  \item Flexural wavelength: $\ell_f = (4 \times 1.09 \times 10^{17} / (1025 \times 9.8))^{1/4} = 2.6$~km.
+  \item Maximum bending stress: $\sigma_{\text{max}} = 9.33 \times 10^9 \times 500 \times 1 / (0.894 \times (2600)^2) = 770$~kPa.
 \end{itemize}
 
-\noindent This stress is below the tensile strength of ice ($\sim$1~MPa), consistent with the observation that tidal flexure does not typically fracture ice shelves.  Repeated tidal flexure can, however, promote fatigue crack growth in pre-existing crevasses at grounding zones, a process that has been linked to ice-shelf rifting.
+\noindent This stress is below but approaching the tensile strength of ice ($\sim$1~MPa).  Tidal flexure alone does not typically fracture intact ice, but the stresses are large enough to promote fatigue crack growth in pre-existing crevasses at grounding zones, a process that has been linked to ice-shelf rifting.
 
 \medskip
-\noindent\textbf{Viscoelastic correction.}  The purely elastic solution~\eqref{eq:tidal_flexure} assumes that the ice responds instantaneously and completely to each tidal cycle.  At the grounding zone of a warm ice shelf, the Maxwell time ($t_M \sim 3$~hours; Table~\ref{tab:maxwell_times}) is comparable to the tidal period ($\sim$12~hours for M$_2$), so the Deborah number De $\approx 0.25$.  The viscous component therefore accommodates a significant fraction of the tidal flexure.  This has two consequences:
+\noindent\textbf{Viscoelastic correction.}  The purely elastic solution~\eqref{eq:tidal_flexure} assumes that the ice responds instantaneously and completely to each tidal cycle.  At the grounding zone of a warm ice shelf, the Maxwell time ($t_M \sim 2$~hours; Table~\ref{tab:maxwell_times}) is comparable to the tidal period ($\sim$12~hours for M$_2$), so the Deborah number De $\approx 0.17$.  The viscous component therefore accommodates a significant fraction of the tidal flexure.  This has two consequences:
 \begin{enumerate}
   \item The effective flexural rigidity is reduced, because part of the deformation is viscous and unrecoverable.  The flexural wavelength is shorter than the elastic prediction.
   \item There is a phase lag between the tidal forcing and the ice-shelf response, because the viscous element introduces a delay.
@@ -544,39 +540,39 @@ Both effects are observed in GPS and tiltmeter measurements at Antarctic groundi
 A j\"{o}kulhlaup is a glacial outburst flood caused by the sudden drainage of a subglacial or ice-marginal lake.  The drainage removes a distributed load from the glacier surface or bed, and the ice responds to this unloading.  Whether the response is elastic, viscous, or viscoelastic depends on the drainage timescale relative to the Maxwell time.
 
 \medskip
-\noindent\textbf{Setup.}  Consider a subglacial lake of area $\mathcal{A}$ and depth $d_{\ell}$ beneath an ice sheet of thickness $h$.  The lake supports a fraction of the overburden pressure: the water pressure at the lake surface is $p_w = \rho_w\,g\,d_{\ell}$.  When the lake drains on a timescale $t_d$, this hydraulic support is removed and the ice above the former lake must be supported entirely by the surrounding ice and bed.
+\noindent\textbf{Setup.}  Consider a subglacial lake of area $\mathcal{A}$ and depth $d_{\ell}$ beneath an ice sheet of thickness $h$.  The lake supports a fraction of the overburden pressure: the water pressure at the ice--lake interface is $p_w = \rho_w\,g\,d_{\ell}$.  When the lake drains on a timescale $t_d$, this hydraulic support is removed and the ice above the former lake must be supported entirely by the surrounding ice and bed.
 
 \medskip
 \noindent\textbf{Elastic limit: fast drainage.}  If $t_d \ll t_M$, the ice responds elastically.  The removal of the water load $q = \rho_w\,g\,d_{\ell}$ over the lake area produces an elastic subsidence of the ice surface.  For a circular lake of radius $R$:
 \begin{itemize}
-  \item If $R \ll \ell_f$: the plate is effectively rigid over the lake area, and the subsidence is determined by the elastic foundation.  The surface displacement is $w \approx \rho_w\,g\,d_{\ell} / (\rho_w\,g) = d_{\ell}$ (the ice simply sinks by the former lake depth, as the buoyancy support is removed).  More precisely, the ice surface subsides by an amount that depends on the geometry and boundary conditions.
+  \item If $R \ll \ell_f$: the plate is effectively rigid over the lake area, and the deflection is controlled by the plate's flexural resistance.  The maximum subsidence scales as $w \sim q\,R^4/D$.
   \item If $R \gg \ell_f$: the center of the former lake reaches isostatic equilibrium while the edges are supported by flexure.
 \end{itemize}
 
-\noindent For a more instructive estimate, consider the Deborah number.  Suppose the ice above the lake is at $T = 270$~K with $\tau_e \approx 0.1$~MPa.  From Table~\ref{tab:maxwell_times}, $t_M \approx 3$~hours.
+\noindent For a more instructive estimate, consider the Deborah number.  Suppose the ice above the lake is at $T = 270$~K with $\tau_e \approx 0.1$~MPa.  From Table~\ref{tab:maxwell_times}, $t_M \approx 2$~hours.
 
 \medskip
-\noindent\textbf{Case 1: Gr\'{i}msv\"{o}tn-type j\"{o}kulhlaup} ($t_d \sim 1$--2~weeks).  The Deborah number is De $= t_M / t_d \approx 3/(24 \times 10) \approx 0.01$.  The drainage is slow compared to the Maxwell time, so the ice responds viscously.  Elastic stresses relax as the lake drains, and the surface subsidence is controlled by viscous flow.  GPS observations of surface displacement show smooth, gradual subsidence consistent with a viscous response.
+\noindent\textbf{Case 1: Gr\'{i}msv\"{o}tn-type j\"{o}kulhlaup} ($t_d \sim 1$--2~weeks).  The Deborah number is De $= t_M / t_d \approx 2/(24 \times 10) \approx 0.008$.  The drainage is slow compared to the Maxwell time, so the ice responds viscously.  Elastic stresses relax as the lake drains, and the surface subsidence is controlled by viscous flow.  GPS observations of surface displacement show smooth, gradual subsidence consistent with a viscous response.
 
 \medskip
-\noindent\textbf{Case 2: Rapid subglacial lake drainage} ($t_d \sim 2$~hours).  De $= t_M / t_d \approx 1.5$.  The drainage timescale is comparable to the Maxwell time.  The initial surface response is elastic---a rapid subsidence of order centimeters to decimeters---followed by viscous relaxation over subsequent hours to days.  Both elastic and viscous effects are important, and the full Maxwell model is needed to interpret surface displacement observations.
+\noindent\textbf{Case 2: Rapid subglacial lake drainage} ($t_d \sim 2$~hours).  De $= t_M / t_d \approx 1.0$.  The drainage timescale is comparable to the Maxwell time.  The initial surface response is elastic---a rapid subsidence of order centimeters to decimeters---followed by viscous relaxation over subsequent hours to days.  Both elastic and viscous effects are important, and the full Maxwell model is needed to interpret surface displacement observations.
 
 \medskip
 \noindent\textbf{Elastic subsidence estimate.}  For an instantaneous drainage of a subglacial lake with $d_{\ell} = 10$~m and $R = 5$~km beneath $h = 1000$~m of ice:
 \begin{equation}
   q = \rho_w\,g\,d_{\ell} = 1000 \times 9.8 \times 10 = 98 \text{ kPa},
 \end{equation}
-and the flexural wavelength is $\ell_f \approx 16$~km (for $h = 1000$~m, Table in \S\ref{sec:flexure}).  Since $R < \ell_f$, the plate is stiff relative to the lake size.  The maximum elastic deflection scales as
+and the flexural wavelength is $\ell_f \approx 4.3$~km (for $h = 1000$~m, table in \S\ref{sec:flexure}).  Since $R \approx \ell_f$, the plate rigidity and buoyancy restoring force are both important.  The maximum elastic deflection scales as
 \begin{equation}
-  w_{\text{max}} \sim \frac{q\,R^4}{D} = \frac{98 \times 10^3 \times (5000)^4}{8.7 \times 10^{17}} \approx 70 \text{ cm}.
+  w_{\text{max}} \sim \frac{q\,R^4}{D} = \frac{98 \times 10^3 \times (5000)^4}{8.7 \times 10^{17}} \approx 70 \text{ m}.
   \label{eq:jokulhlaup_deflection}
 \end{equation}
-The exact value depends on the boundary conditions and lake geometry (the prefactor depends on whether the load is uniform, the plate is clamped or simply supported, etc.), but the order of magnitude---decimeters to a meter---is consistent with GPS observations of elastic rebound following rapid subglacial lake drainage events in Antarctica \cite{Siegfriedetal2016}.
+This crude scaling omits geometric prefactors that depend on the boundary conditions and load distribution.  For a clamped circular plate, the central deflection is $q\,R^4/(64\,D) \approx 1.1$~m; the exact value for a floating plate lies between this and the full scaling estimate.  The order of magnitude---decimeters to a meter---is consistent with GPS observations of elastic rebound following rapid subglacial lake drainage events in Antarctica \cite{Siegfriedetal2014}.
 
 \subsection{Example 3: Supraglacial Lake Drainage and Ice-Shelf Hydrofracture}
 \label{sec:example_lake}
 
-Meltwater lakes that form on the surface of ice shelves can trigger a catastrophic chain of events: the weight of the lake water flexes the ice shelf, producing tensile stresses at the base.  If these stresses are large enough, they can initiate a fracture that propagates vertically through the full ice-shelf thickness---a process called \textbf{hydrofracture}.  Hydrofracture has been proposed as the mechanism that caused the rapid disintegration of the Larsen B Ice Shelf in 2002 \cite{ScambosHulbe2004,BanwellMacAyeal2015}.
+Meltwater lakes that form on the surface of ice shelves can trigger a catastrophic chain of events: the weight of the lake water flexes the ice shelf, producing tensile stresses at the base.  If these stresses are large enough, they can initiate a fracture that propagates vertically through the full ice-shelf thickness---a process called \textbf{hydrofracture}.  Hydrofracture has been proposed as the mechanism that caused the rapid disintegration of the Larsen B Ice Shelf in 2002 \cite{ScambosHulbe2000,BanwellMacAyeal2013}.
 
 \medskip
 \noindent\textbf{Why elasticity?}  Lake loading and unloading occur on timescales of days to weeks (filling) and minutes to hours (drainage).  The Deborah number for the drainage phase is De $\gg 1$: the ice shelf responds elastically.  The elastic analysis therefore governs whether hydrofracture can initiate.
@@ -587,10 +583,10 @@ Meltwater lakes that form on the surface of ice shelves can trigger a catastroph
 \medskip
 \noindent\textbf{Flexural stress beneath the lake.}  The lake load causes the ice shelf to deflect downward beneath the lake and upward at its edges.  The downward deflection produces a concave-up curvature, which puts the bottom of the ice shelf in tension.  For a lake much smaller than the flexural wavelength ($R \ll \ell_f$), the maximum bending stress at the base of the ice shelf (at the center of the lake) scales as
 \begin{equation}
-  \sigma_{\text{tens}} \sim \frac{3\,\rho_w\,g\,d_w\,R^2}{4\,h^2}.
+  \sigma_{\text{tens}} \sim \frac{3\,(1+\nu)\,\rho_w\,g\,d_w\,R^2}{8\,h^2}.
   \label{eq:lake_stress}
 \end{equation}
-This is the maximum tensile stress (in the radial direction) at $z = -h/2$ beneath a uniform circular load on a thin plate, valid for $R \ll \ell_f$.
+This is the maximum tensile stress at $z = -h/2$ beneath a uniform circular load on a thin plate, valid for $R \ll \ell_f$.  The factor $(1+\nu)$ arises from the biaxial bending moment at the center of an axisymmetric load.
 
 \begin{tcolorbox}[
   colback=orange!25,
@@ -599,33 +595,33 @@ This is the maximum tensile stress (in the radial direction) at $z = -h/2$ benea
 ]
 For a uniform pressure $q$ over a circle of radius $R$ on an infinite plate floating on a fluid, the central deflection (for $R \ll \ell_f$) is approximately
 \[
-  w_0 \approx \frac{q\,R^2}{8D}\,R^2 = \frac{q\,R^4}{64\,D}.
+  w_0 \approx \frac{q\,R^4}{64\,D}.
 \]
-The curvature at the center is $\kappa = d^2w/dr^2|_{r=0} \approx q\,R^2/(16\,D)$ (from the exact Kelvin function solution in the limit $R/\ell_f \to 0$).  The maximum bending stress at the bottom surface is
+The curvature at the center is $\kappa = d^2w/dr^2|_{r=0} \approx q\,R^2/(16\,D)$ (from the exact Kelvin function solution in the limit $R/\ell_f \to 0$).  At the center of an axisymmetric problem, $\kappa_{rr} = \kappa_{\theta\theta} = \kappa$, so the bending stress at the bottom surface ($z = -h/2$) is
 \[
-  \sigma_{\text{tens}} = \frac{E\,h}{2(1-\nu^2)}\,\kappa = \frac{E\,h}{2(1-\nu^2)}\,\frac{q\,R^2}{16\,D} = \frac{E\,h}{2(1-\nu^2)}\,\frac{q\,R^2\,12(1-\nu^2)}{16\,E\,h^3} = \frac{3\,q\,R^2}{8\,h^2}.
+  \sigma_{\text{tens}} = \frac{E\,h}{2(1-\nu^2)}\,(1+\nu)\,\kappa = \frac{E\,h\,(1+\nu)}{2(1-\nu^2)}\,\frac{q\,R^2}{16\,D} = \frac{E\,h}{2(1-\nu)}\,\frac{q\,R^2\,12(1-\nu^2)}{16\,E\,h^3} = \frac{3\,(1+\nu)\,q\,R^2}{8\,h^2}.
 \]
-Substituting $q = \rho_w\,g\,d_w$ and noting that the exact axisymmetric solution gives a factor $3/(4h^2)$ rather than $3/(8h^2)$ when the full moment tensor is included:
+Substituting $q = \rho_w\,g\,d_w$:
 \[
-  \sigma_{\text{tens}} \approx \frac{3\,\rho_w\,g\,d_w\,R^2}{4\,h^2}. \qquad \square
+  \sigma_{\text{tens}} \approx \frac{3\,(1+\nu)\,\rho_w\,g\,d_w\,R^2}{8\,h^2}. \qquad \square
 \]
 \end{tcolorbox}
 
-\noindent\textbf{Numerical evaluation.}  Consider a lake with $d_w = 2$~m and $R = 500$~m on an ice shelf of thickness $h = 200$~m.  The flexural wavelength is $\ell_f \approx 5$~km, so $R/\ell_f \approx 0.1 \ll 1$ and the small-load approximation is valid.
+\noindent\textbf{Numerical evaluation.}  Consider a lake with $d_w = 2$~m and $R = 500$~m on an ice shelf of thickness $h = 200$~m.  The flexural wavelength is $\ell_f \approx 1.3$~km, so $R/\ell_f \approx 0.4$ and the small-load approximation is reasonable.  Using $\nu = 0.325$:
 \begin{equation}
-  \sigma_{\text{tens}} \approx \frac{3 \times 1000 \times 9.8 \times 2 \times 500^2}{4 \times 200^2} = \frac{1.47 \times 10^{10}}{1.6 \times 10^5} \approx 92 \text{ kPa}.
+  \sigma_{\text{tens}} \approx \frac{3 \times 1.325 \times 1000 \times 9.8 \times 2 \times 500^2}{8 \times 200^2} = \frac{1.95 \times 10^{10}}{3.2 \times 10^5} \approx 61 \text{ kPa}.
   \label{eq:lake_stress_numerical}
 \end{equation}
-This is about 10\% of the tensile strength of intact ice ($\sim$1~MPa).  A deeper lake ($d_w = 5$~m) or a larger lake ($R = 1$~km) would produce stresses of 230~kPa or 370~kPa, respectively---still below the tensile strength of intact ice but potentially sufficient to reactivate pre-existing crevasses, which have a much lower critical stress intensity.
+This is about 6\% of the tensile strength of intact ice ($\sim$1~MPa).  A deeper lake ($d_w = 5$~m) or a larger lake ($R = 1$~km) would produce stresses of 150~kPa or 240~kPa, respectively---still below the tensile strength of intact ice but potentially sufficient to reactivate pre-existing crevasses, which have a much lower critical stress intensity.
 
 \medskip
-\noindent\textbf{The hydrofracture feedback.}  Once a crevasse begins to propagate from the base (or surface) of the ice shelf, the water that enters the crack provides a pressure that drives the crack deeper.  The key physics is that the hydrostatic pressure of water in the crack exceeds the lithostatic (ice overburden) pressure because $\rho_w > \rho_i$: at every depth, the water pressure in a water-filled crevasse exceeds the compressive stress from the weight of the overlying ice.  This means a water-filled crevasse can, in principle, propagate through the full ice-shelf thickness regardless of thickness---a result first demonstrated by \cite{Weertman1973} and extended to ice shelves by \cite{vanderVeenCalving1998,ScambosHulbe2004}.
+\noindent\textbf{The hydrofracture feedback.}  Once a crevasse begins to propagate from the base (or surface) of the ice shelf, the water that enters the crack provides a pressure that drives the crack deeper.  The key physics is that the hydrostatic pressure of water in the crack exceeds the lithostatic (ice overburden) pressure because $\rho_w > \rho_i$: at every depth, the water pressure in a water-filled crevasse exceeds the compressive stress from the weight of the overlying ice.  This means a water-filled crevasse can, in principle, propagate through the full ice-shelf thickness regardless of thickness---a result first demonstrated by \cite{Weertman1973} and extended to ice shelves by \cite{vanderVeenCalving1998,ScambosHulbe2000}.
 
 \medskip
 \noindent The elastic flexural analysis provides the initial stress state that determines whether hydrofracture can initiate.  The subsequent propagation involves fracture mechanics (stress intensity factors, crack-tip processes) and the coupling between the fracture, the water supply, and the evolving stress field---topics beyond the scope of this lecture.
 
 \medskip
-\noindent\textbf{Connection to ice-shelf collapse.}  Prior to the disintegration of the Larsen B Ice Shelf in March 2002, satellite imagery showed extensive supraglacial lake formation on the shelf surface during the warm austral summer.  Many of these lakes drained rapidly in the days immediately preceding the collapse.  The elastic flexural stresses from the filling and draining of these lakes---compressive during filling, tensile during draining (from the elastic rebound)---are thought to have produced a ``domino effect'' in which the draining of one lake stressed neighboring regions, triggering further fracture and lake drainage \cite{BanwellMacAyeal2015}.  This example illustrates how elastic processes operating on timescales of hours to days can trigger ice-shelf disintegration events that reshape the ice-sheet system over decades.
+\noindent\textbf{Connection to ice-shelf collapse.}  Prior to the disintegration of the Larsen B Ice Shelf in March 2002, satellite imagery showed extensive supraglacial lake formation on the shelf surface during the warm austral summer.  Many of these lakes drained rapidly in the days immediately preceding the collapse.  The elastic flexural stresses from the filling and draining of these lakes---compressive during filling, tensile during draining (from the elastic rebound)---are thought to have produced a ``domino effect'' in which the draining of one lake stressed neighboring regions, triggering further fracture and lake drainage \cite{BanwellMacAyeal2013}.  This example illustrates how elastic processes operating on timescales of hours to days can trigger ice-shelf disintegration events that reshape the ice-sheet system over decades.
 
 \clearpage
 %===================================================================
@@ -803,7 +799,7 @@ This is the \textbf{standard heat equation}---a parabolic partial differential e
 \begin{equation}
   \kappa = \frac{2.1}{917 \times 2090} = 1.1 \times 10^{-6} \text{ m}^2\text{\,s}^{-1}.
 \end{equation}
-The characteristic diffusion time over a length scale $L$ is $t_{\text{diff}} \sim L^2 / \kappa$.  For an ice thickness of $h = 1000$~m: $t_{\text{diff}} \sim 10^{12}/(1.1 \times 10^{-6}) \sim 10^{18}/1.1 \approx 30\,000$~years.  Temperature changes in the interior of a thick ice sheet diffuse only over timescales comparable to glacial cycles.
+The characteristic diffusion time over a length scale $L$ is $t_{\text{diff}} \sim L^2 / \kappa$.  For an ice thickness of $h = 1000$~m: $t_{\text{diff}} \sim 10^{6}/(1.1 \times 10^{-6}) \approx 9 \times 10^{11}$~s~$\approx 29\,000$~years.  Temperature changes in the interior of a thick ice sheet diffuse only over timescales comparable to glacial cycles.
 
 \clearpage
 %===================================================================
@@ -841,7 +837,7 @@ where the second equality uses $\dot{\varepsilon}_e = A\,\tau_e^n$.  The dissipa
   \boxed{\rho\,c_p\,\frac{\partial T}{\partial t} = 2A\,\tau_e^{\,n+1} + k\,\nabla^2 T + \rho\,H.}
   \label{eq:generalized_heat_glen}
 \end{equation}
-This is the \textbf{generalized heat equation for glacier ice}.  It states that the local temperature changes due to three effects: viscous dissipation (first term), thermal conduction (second term), and internal heat generation (third term).
+This is the \textbf{generalized heat equation for glacier ice (assuming single-power-law viscosity)}.  It states that the local temperature changes due to three effects: viscous dissipation (first term), thermal conduction (second term), and internal heat generation (third term).
 
 \medskip
 \noindent\textbf{When does viscous dissipation matter?}  The ratio of viscous heating to conductive heat transport scales as
@@ -874,11 +870,11 @@ Elastic constants of ice samples by Brillouin spectroscopy.
 \textit{Journal of Physical Chemistry}, 87(21), 4025--4029.
 \texttt{doi:10.1021/j100244a004}
 
-\bibitem{Kohnenetal1982}
-Kohnen, H.\ and C.~R.\ Bentley (1982).
-Seismic refraction and reflection measurements at Byrd Station, Antarctica.
-\textit{Journal of Glaciology}, 28(99), 209--230.
-\texttt{doi:10.3189/S0022143000011564}
+\bibitem{KohnenBentley1973}
+Kohnen, H.\ and C.~R.\ Bentley (1973).
+Seismic refraction and reflection measurements at ``Byrd'' Station, Antarctica.
+\textit{Journal of Glaciology}, 12(64), 101--111.
+\texttt{doi:10.3189/S0022143000022747}
 
 \bibitem{Vaughan1995}
 Vaughan, D.~G.\ (1995).
@@ -888,23 +884,23 @@ Tidal flexure at ice shelf margins.
 
 \bibitem{Rignot2011}
 Rignot, E., J.\ Mouginot, and B.\ Scheuchl (2011).
-Ice flow of the Antarctic ice sheet.
-\textit{Science}, 333(6048), 1427--1430.
-\texttt{doi:10.1126/science.1208336}
+Antarctic grounding line mapping from differential satellite radar interferometry.
+\textit{Geophysical Research Letters}, 38, L10504.
+\texttt{doi:10.1029/2011GL047109}
 
-\bibitem{Siegfriedetal2016}
-Siegfried, M.~R., H.~A.\ Fricker, M.\ Roberts, T.~A.\ Scambos, and S.\ Tulaczyk (2016).
+\bibitem{Siegfriedetal2014}
+Siegfried, M.~R., H.~A.\ Fricker, M.\ Roberts, T.~A.\ Scambos, and S.\ Tulaczyk (2014).
 A decade of West Antarctic subglacial lake interactions from combined ICESat and CryoSat-2 altimetry.
-\textit{Geophysical Research Letters}, 43(7), 3502--3511.
-\texttt{doi:10.1002/2016GL068050}
+\textit{Geophysical Research Letters}, 41, 891--898.
+\texttt{doi:10.1002/2013GL058616}
 
-\bibitem{ScambosHulbe2004}
-Scambos, T.~A., C.\ Hulbe, M.\ Fahnestock, and J.\ Bohlander (2004).
+\bibitem{ScambosHulbe2000}
+Scambos, T.~A., C.\ Hulbe, M.\ Fahnestock, and J.\ Bohlander (2000).
 The link between climate warming and break-up of ice shelves in the Antarctic Peninsula.
 \textit{Journal of Glaciology}, 46(154), 516--530.
 \texttt{doi:10.3189/172756500781833043}
 
-\bibitem{BanwellMacAyeal2015}
+\bibitem{BanwellMacAyeal2013}
 Banwell, A.~F., D.~R.\ MacAyeal, and O.~V.\ Sergienko (2013).
 Breakup of the Larsen B Ice Shelf triggered by chain reaction drainage of supraglacial lakes.
 \textit{Geophysical Research Letters}, 40(22), 5872--5876.
@@ -920,6 +916,7 @@ Estimating effective elasticity in grounding zones of the Ross Ice Shelf with ti
 Weertman, J.\ (1973).
 Can a water-filled crevasse reach the bottom surface of a glacier?
 \textit{IASH Publication}, 95, 139--145.
+(No DOI available for this proceedings volume.)
 
 \bibitem{vanderVeenCalving1998}
 van der Veen, C.~J.\ (1998).
