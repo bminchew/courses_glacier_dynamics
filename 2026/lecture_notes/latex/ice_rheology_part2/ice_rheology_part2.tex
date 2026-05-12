@@ -63,7 +63,7 @@ In the preceding lectures on ice rheology, we treated ice as a viscous fluid whe
 \subsection{Stress and Infinitesimal Strain}
 \label{sec:strain}
 
-In the viscous framework developed in earlier lectures, the constitutive relation links stress to the \textit{rate} of deformation: $\dot{\varepsilon}_{ij} = f(\tau_{ij})$.  In an elastic solid, the constitutive relation links stress to the deformation itself: $\sigma_{ij} = g(\varepsilon_{ij})$.
+In the viscous framework developed in earlier lectures, the constitutive relation links deviatoric stress to the \textit{rate} of deformation: $\dot{\varepsilon}_{ij} = f(\tau_{ij})$.  In an elastic solid, the constitutive relation links Cauchy stress to the deformation itself: $\sigma_{ij} = g(\varepsilon_{ij})$.
 
 \medskip
 \noindent The Cauchy stress tensor $\sigma_{ij}$ and its decomposition into pressure and deviatoric parts,
@@ -187,6 +187,8 @@ Poisson's ratio & $\nu$ & 0.325 \\
   \item \textbf{Poisson's ratio is close to 1/3.}  A Poisson's ratio $\nu = 0.325$ means that ice contracts laterally by about one-third of the amount it extends axially under uniaxial tension.  For comparison, $\nu = 0.5$ corresponds to an incompressible material (no volume change under any deformation), and $\nu = 0$ corresponds to a material that does not contract laterally at all (like cork).
 
   \item \textbf{Temperature dependence is weak.}  The elastic moduli increase by roughly 5\% between 0\textdegree C and $-40$\textdegree C \cite{Gammonetal1983}.  This is a minor effect compared to the strong temperature dependence of viscous creep (activation energies of 49--180~kJ\,mol$^{-1}$).  For most glaciological calculations, the elastic moduli can be treated as constants.
+
+  \item \textbf{The shear modulus has a weak frequency dependence.}  The values in Table~\ref{tab:elastic_moduli} are measured at ultrasonic frequencies ($\sim$MHz) and represent the unrelaxed (instantaneous) elastic response.  At lower frequencies---tidal ($\sim 10^{-5}$~Hz) or seismic ($\sim$1--100~Hz)---the effective shear modulus is slightly lower because thermally activated processes at grain boundaries and lattice defects allow a small amount of anelastic relaxation on the timescale of each loading cycle.  Physically, this arises because grain boundaries in polycrystalline ice can slide viscously over short distances (grain boundary sliding) and dislocations can bow between pinning points, both of which accommodate a small additional strain that is recoverable but delayed.  At high frequencies, these relaxation mechanisms cannot keep pace with the loading and the material responds with the full lattice stiffness; at lower frequencies, the mechanisms contribute additional compliance.  The effect is small---the shear modulus decreases by roughly 5--10\% from MHz to tidal frequencies---but it means that the ``elastic modulus'' inferred from tidal flexure observations is systematically lower than the laboratory ultrasonic value, even before accounting for viscous creep (which further reduces the effective modulus through the viscoelastic mechanism described in \S\ref{sec:maxwell}).
 \end{enumerate}
 
 \subsection{Elastic Wave Speeds}
@@ -332,7 +334,7 @@ The elastic strain rate is the time derivative of the elastic constitutive relat
   \dot{\varepsilon}_{ij}^{(\text{elastic})} = \frac{1}{2\mu}\,\dot{\tau}_{ij}.
   \label{eq:elastic_rate}
 \end{equation}
-The viscous strain rate is given by the creep flow law.  For Glen's law:
+assuming incompressibility. The viscous strain rate is given by the creep flow law.  For Glen's law:
 \begin{equation}
   \dot{\varepsilon}_{ij}^{(\text{viscous})} = A\,\tau_e^{\,n-1}\,\tau_{ij}.
   \label{eq:viscous_rate}
@@ -393,6 +395,13 @@ Cold, low-stress interior & 233 & 0.01 & $1.6 \times 10^{-27}$ & $\sim$28 years 
 
 \noindent The Maxwell time ranges from about half an hour in warm, highly stressed ice (shear margins, grounding zones) to decades in the cold, low-stress interiors of ice sheets.  This enormous range---more than five orders of magnitude---means that the same material can behave as an elastic solid or a viscous fluid depending on the local conditions and the timescale of the forcing.
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig02_maxwell_time_contours.pdf}
+\caption{Maxwell relaxation time $t_M = 1/(2\mu A\,\tau_e^{\,n-1})$ as a function of temperature and effective stress, computed using the Arrhenius relation for $A(T)$.  Contour labels indicate the relaxation time in human-readable units.  Black dots mark the five settings from Table~\ref{tab:maxwell_times}.}
+\label{fig:maxwell_time_contours}
+\end{figure}
+
 \subsection{The Deborah Number}
 \label{sec:deborah}
 
@@ -425,6 +434,13 @@ Elasticity matters when the Deborah number is of order unity or larger.  For gla
 The line between ``elastic'' and ``viscous'' behavior is not a property of the material alone---it depends on both the material state (which controls $t_M$) and the timescale of the process (which sets $t_p$).
 \end{tcolorbox}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.95\textwidth]{figures/fig04_deborah_number.pdf}
+\caption{Deborah number De~$= t_M / t_p$ as a function of process timescale for four glaciological settings (Table~\ref{tab:maxwell_times}).  Vertical dotted lines mark characteristic timescales of glaciological processes.  The shaded bands indicate the elastic ($\text{De} \gg 1$), viscoelastic ($\text{De} \sim 1$), and viscous ($\text{De} \ll 1$) regimes.}
+\label{fig:deborah_number}
+\end{figure}
+
 \subsection{Response to Step Loading}
 \label{sec:step_loading}
 
@@ -456,6 +472,13 @@ The first term is the elastic strain (in phase with the stress); the second is t
 
 \medskip
 \noindent The tidal flexure of ice shelves near grounding zones is a natural example of oscillatory loading.  The tidal period ($\sim$12~hours for the dominant M$_2$ constituent) is comparable to the Maxwell time of warm ice near the grounding line, placing this problem squarely in the viscoelastic regime.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig01_maxwell_responses.pdf}
+\caption{Response of a linear Maxwell material to three types of loading.  (a)~Creep test: a step stress produces an instantaneous elastic strain followed by steady viscous creep; at $t = t_M$ the viscous strain equals the elastic strain.  (b)~Relaxation test: a step strain produces an initial elastic stress that decays exponentially with $e$-folding time $t_M$.  (c)~Oscillatory stress at three Deborah numbers: for De~$= 0.2$ (viscous regime) the strain drifts; for De~$= 5$ (elastic regime) the strain oscillates in phase with the stress; for De~$= 1$ the response is transitional.}
+\label{fig:maxwell_responses}
+\end{figure}
 
 %===================================================================
 % SECTION 6 -- Worked Examples
@@ -533,6 +556,13 @@ The maximum tensile stress at the ice surface is (from equation~\eqref{eq:max_be
   \item There is a phase lag between the tidal forcing and the ice-shelf response, because the viscous element introduces a delay.
 \end{enumerate}
 Both effects are observed in GPS and tiltmeter measurements at Antarctic grounding zones \cite{Vaughan1995,Rignot2011}.  \cite{ElgartMinchewMeyer2026} used ICESat-2 laser altimetry to estimate the effective elastic modulus in grounding zones of the Ross Ice Shelf from tidal flexure profiles, finding that quantitative agreement with observed flexure requires accounting for viscoelastic effects through a reduced effective modulus.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{figures/fig03_tidal_flexure.pdf}
+\caption{Elastic tidal flexure at a grounding zone for a tidal amplitude $w_0 = 1$~m and three ice thicknesses.  Top: vertical deflection profile $w(x)$ from equation~\eqref{eq:tidal_flexure}, with the flexural wavelength $\ell_f$ marked for each thickness.  Bottom: maximum bending stress at the ice surface, showing that stresses approach but remain below the tensile strength of intact ice ($\sim$1~MPa) for thick ice shelves.}
+\label{fig:tidal_flexure}
+\end{figure}
 
 \subsection{Example 2: J\"{o}kulhlaups and Elastic Rebound}
 \label{sec:example_jokulhlaup}
@@ -613,6 +643,13 @@ Substituting $q = \rho_w\,g\,d_w$:
   \label{eq:lake_stress_numerical}
 \end{equation}
 This is about 6\% of the tensile strength of intact ice ($\sim$1~MPa).  A deeper lake ($d_w = 5$~m) or a larger lake ($R = 1$~km) would produce stresses of 150~kPa or 240~kPa, respectively---still below the tensile strength of intact ice but potentially sufficient to reactivate pre-existing crevasses, which have a much lower critical stress intensity.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig05_lake_stress.pdf}
+\caption{Basal tensile stress beneath a circular supraglacial lake from equation~\eqref{eq:lake_stress}.  (a)~Stress as a function of lake radius for several lake depths on a 200~m thick ice shelf; the flexural wavelength $\ell_f$ is marked.  (b)~Stress as a function of ice-shelf thickness for a lake with $R = 500$~m and $d_w = 2$~m, showing that thin ice shelves are most vulnerable to hydrofracture initiation.}
+\label{fig:lake_stress}
+\end{figure}
 
 \medskip
 \noindent\textbf{The hydrofracture feedback.}  Once a crevasse begins to propagate from the base (or surface) of the ice shelf, the water that enters the crack provides a pressure that drives the crack deeper.  The key physics is that the hydrostatic pressure of water in the crack exceeds the lithostatic (ice overburden) pressure because $\rho_w > \rho_i$: at every depth, the water pressure in a water-filled crevasse exceeds the compressive stress from the weight of the overlying ice.  This means a water-filled crevasse can, in principle, propagate through the full ice-shelf thickness regardless of thickness---a result first demonstrated by \cite{Weertman1973} and extended to ice shelves by \cite{vanderVeenCalving1998,ScambosHulbe2000}.
@@ -829,15 +866,52 @@ where $\Phi = \tau_{ij}\,\dot{\varepsilon}_{ij}$ is the \textbf{viscous dissipat
   \Phi = \tau_{ij}\,\dot{\varepsilon}_{ij} = 2\,\tau_e\,\dot{\varepsilon}_e = 2A\,\tau_e^{\,n+1},
   \label{eq:dissipation_glen}
 \end{equation}
-where the second equality uses $\dot{\varepsilon}_e = A\,\tau_e^n$.  The dissipation is always positive ($\Phi > 0$): viscous deformation converts mechanical energy irreversibly into heat.
+where the second equality uses $\dot{\varepsilon}_e = A\,\tau_e^n$.  The dissipation is always positive ($\Phi > 0$).
+
+\medskip
+\noindent\textbf{Energy partition and the Taylor--Quinney coefficient.}  The mechanical work $\Phi$ does not all become heat.  Some fraction is stored in the microstructure as the material deforms:
+\begin{equation}
+  \Phi = \Phi_{\text{heat}} + \dot{\mathcal{U}}_{\text{disl}} + \dot{\mathcal{U}}_{\text{gb}},
+  \label{eq:energy_partition}
+\end{equation}
+where $\dot{\mathcal{U}}_{\text{disl}}$ is the rate of elastic strain energy storage due to dislocations and $\dot{\mathcal{U}}_{\text{gb}}$ is the rate of surface energy change due to recrystallization.
+
+\medskip
+\noindent \textit{Dislocation strain energy.}  Viscous creep in crystalline materials proceeds by the motion and multiplication of dislocations---line defects in the crystal lattice.  Each dislocation carries an elastic strain field, and the associated elastic energy per unit length scales as $\sim\!\mu\,b^2$, where $b$ is the magnitude of the Burgers vector ($b \approx 4.5 \times 10^{-10}$~m for basal slip in ice).  For a dislocation density $\varrho$ (total dislocation line length per unit volume), the stored elastic energy per unit volume is
+\begin{equation}
+  \mathcal{U}_{\text{disl}} \sim \frac{1}{2}\,\mu\,b^2\,\varrho.
+  \label{eq:disl_energy}
+\end{equation}
+As deformation proceeds and $\varrho$ increases, energy is drawn from the mechanical work and stored in the lattice rather than converted to heat.
+
+\medskip
+\noindent \textit{Grain boundary surface energy.}  Grain boundaries carry a surface energy $\gamma_{\text{gb}}$ per unit area ($\gamma_{\text{gb}} \approx 0.065$~J\,m$^{-2}$ for ice).  If $S_V$ denotes the grain boundary area per unit volume, the stored surface energy per unit volume is
+\begin{equation}
+  \mathcal{U}_{\text{gb}} = \gamma_{\text{gb}}\,S_V.
+  \label{eq:gb_energy}
+\end{equation}
+During dynamic recrystallization, new grain boundaries nucleate and existing boundaries migrate, changing $S_V$.  Nucleation of new grains increases $S_V$ and stores energy; grain growth decreases $S_V$ and releases energy as heat.
+
+\medskip
+\noindent The \textbf{Taylor--Quinney coefficient} $\beta$ is defined as the fraction of mechanical work that is converted to heat \cite{Ranganathanetal2021}:
+\begin{equation}
+  \Phi_{\text{heat}} = \beta\,\Phi, \qquad 0 < \beta \leq 1.
+  \label{eq:taylor_quinney}
+\end{equation}
+The remaining fraction $(1 - \beta)\,\Phi = \dot{\mathcal{U}}_{\text{disl}} + \dot{\mathcal{U}}_{\text{gb}}$ is stored in the microstructure.
 
 \medskip
 \noindent Substituting into equation~\eqref{eq:generalized_heat}:
 \begin{equation}
-  \boxed{\rho\,c_p\,\frac{\partial T}{\partial t} = 2A\,\tau_e^{\,n+1} + k\,\nabla^2 T + \rho\,H.}
+  \boxed{\rho\,c_p\,\frac{\partial T}{\partial t} = 2\beta\,A\,\tau_e^{\,n+1} + k\,\nabla^2 T + \rho\,H.}
   \label{eq:generalized_heat_glen}
 \end{equation}
-This is the \textbf{generalized heat equation for glacier ice (assuming single-power-law viscosity)}.  It states that the local temperature changes due to three effects: viscous dissipation (first term), thermal conduction (second term), and internal heat generation (third term).
+This is the \textbf{generalized heat equation for glacier ice}.  In glaciology, $\beta$ is almost universally taken to be unity: the energy stored in dislocations and grain boundaries is assumed negligible compared to the viscous dissipation.  This is a reasonable approximation for steady-state creep, where dislocation production and annihilation are in approximate balance ($\dot{\varrho} \approx 0$) and the grain size has reached a statistical steady state ($\dot{S}_V \approx 0$), so that the stored energy terms vanish.  During transient creep or active recrystallization, $\beta < 1$; measurements in metals undergoing plastic deformation give $\beta \approx 0.85$--$0.95$, though values for ice are not well constrained.  Setting $\beta = 1$, the generalized heat equation reduces to
+\begin{equation}
+  \rho\,c_p\,\frac{\partial T}{\partial t} = 2A\,\tau_e^{\,n+1} + k\,\nabla^2 T + \rho\,H,
+  \label{eq:generalized_heat_beta1}
+\end{equation}
+which is the standard form used in ice-sheet models.  The temperature changes due to three effects: viscous dissipation (first term), thermal conduction (second term), and internal heat generation (third term).
 
 \medskip
 \noindent\textbf{When does viscous dissipation matter?}  The ratio of viscous heating to conductive heat transport scales as
@@ -875,6 +949,12 @@ Kohnen, H.\ and C.~R.\ Bentley (1973).
 Seismic refraction and reflection measurements at ``Byrd'' Station, Antarctica.
 \textit{Journal of Glaciology}, 12(64), 101--111.
 \texttt{doi:10.3189/S0022143000022747}
+
+\bibitem{Ranganathanetal2021}
+Ranganathan, M., B.\ Minchew, C.~R.\ Meyer, and M.\ Pe\v{c} (2021).
+Recrystallization of ice enhances the creep and vulnerability to fracture of ice shelves.
+\textit{Earth and Planetary Science Letters}, 576, 117219.
+\texttt{doi:10.1016/j.epsl.2021.117219}
 
 \bibitem{Vaughan1995}
 Vaughan, D.~G.\ (1995).
