@@ -52,7 +52,7 @@ In the preceding lectures on ice rheology, we treated ice as a viscous fluid whe
 \noindent Two appendices derive Hooke's law and the heat equation from the first law of thermodynamics, showing how elasticity (the reversible storage of energy through molecular displacement) and heat conduction (the irreversible transport of energy through molecular vibration) arise from the same fundamental energy balance.
 
 \medskip
-\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; and Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization.
+\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization; and Appendix~\ref{app:flexure_derivation} derives the thin plate flexure equation from the force balance on a plate element.
 
 %===================================================================
 % SECTION 2 -- Linear Elasticity
@@ -79,7 +79,7 @@ are the same as in the viscous theory.  What changes is the kinematic quantity t
   \varepsilon_{ij} = \frac{1}{2}\!\left(\frac{\partial s_i}{\partial x_j} + \frac{\partial s_j}{\partial x_i}\right),
   \label{eq:strain_tensor}
 \end{equation}
-where $s_i$ is the displacement of a material point from its reference position.  We reserve $u_i$ for velocity, as in the viscous theory, so that $u_i = \dot{s}_i$ and the strain rate is $\dot{\varepsilon}_{ij} = \frac{1}{2}(\partial u_i / \partial x_j + \partial u_j / \partial x_i)$.  The two frameworks are connected by a time derivative: $\dot{\varepsilon}_{ij}$ is the rate of change of $\varepsilon_{ij}$. Strain $\varepsilon_{ij}$ is always defined relative to the reference (zero-stress) state, whereas strain rate is the instantaneous rate of change of strain.  Because strain is a state variable, it evolves over time and not necessarily at the same rate nor even monotonically.
+where $s_i$ is the displacement of a material point from its reference position.  We reserve $u_i$ for velocity, as in the viscous theory, so that $u_i = \dot{s}_i$ and the strain rate is $\dot{\varepsilon}_{ij} = \frac{1}{2}(\partial u_i / \partial x_j + \partial u_j / \partial x_i)$.  The two frameworks are connected by a time derivative: $\dot{\varepsilon}_{ij}$ is the \emph{instantaneous} rate of change of $\varepsilon_{ij}$. Strain $\varepsilon_{ij}$ is always defined relative to the reference (zero-stress) state, whereas strain rate is the instantaneous rate of change of strain.  Because strain is a state variable, it evolves over time and not necessarily at the same rate nor even monotonically, a critically important fact to remember. Much confusion can arise from forgetting that strain is relative to the reference state. 
 
 \medskip
 \noindent The ``small deformation'' assumption means $|\varepsilon_{ij}| \ll 1$, allowing us to drop higher-order terms in the full expansion and retain only the linear terms --- hence, \emph{linear} elasticity. In glaciology, elastic strains are tiny: a stress of $\tau_e = 0.1$~MPa produces an elastic strain of order $\varepsilon \sim \tau_e / \mu \sim 10^5 / 3.5 \times 10^9 \approx 3 \times 10^{-5}$.  The small-strain approximation is therefore excellent for the elastic response of ice. (Pedantic: Linear elasticity strictly requires both small strains and a stress--strain relation that is linear and rate-independent.  Ice exhibits a weak frequency dependence of its elastic moduli---a form of anelasticity---which means the moduli measured at seismic frequencies differ slightly from those at tidal frequencies.  This is a departure from ideal linear elasticity, though it is a small effect at glaciological stress levels.)
@@ -128,6 +128,18 @@ so that $p = -\frac{1}{3}(3\lambda + 2\mu)\,\varepsilon_{kk}$.  The \textbf{bulk
 \end{equation}
 where $e_{ij} = \varepsilon_{ij} - \frac{1}{3}\varepsilon_{kk}\,\delta_{ij}$ is the deviatoric strain.  The shear modulus $\mu$ alone controls the deviatoric (shape-changing) response.
 
+\medskip
+\noindent\textbf{Physical meaning of the elastic moduli.}  Each modulus characterizes the material's resistance to a specific type of deformation (Figure~\ref{fig:elastic_moduli_cartoons}):
+\begin{itemize}
+  \item \textbf{Shear modulus} $\mu$ (also denoted $G$): the ratio of shear stress to shear strain.  Apply a shear stress $\tau_{xy}$ to a block of material; the block deforms into a parallelogram with shear strain $\varepsilon_{xy} = \tau_{xy}/(2\mu)$.  The shear modulus controls shape change at constant volume.
+
+  \item \textbf{Young's modulus} $E$: the ratio of axial stress to axial strain in uniaxial tension (or compression).  Stretch a bar with stress $\sigma_{xx}$ along $x$ while leaving the lateral faces traction-free ($\sigma_{yy} = \sigma_{zz} = 0$); the axial strain is $\varepsilon_{xx} = \sigma_{xx}/E$.  Young's modulus characterizes the stiffness felt in a simple pull test.
+
+  \item \textbf{Poisson's ratio} $\nu$: the ratio of lateral contraction to axial extension in uniaxial tension.  In the same pull test, the lateral strains are $\varepsilon_{yy} = \varepsilon_{zz} = -\nu\,\varepsilon_{xx}$.  A material with $\nu = 0.5$ is incompressible (no volume change); $\nu = 0$ means no lateral contraction.
+
+  \item \textbf{Bulk modulus} $K$: the ratio of pressure to volumetric strain under uniform compression.  Apply a uniform pressure $p$ to all faces of a cube; the fractional volume change is $\varepsilon_{kk} = -p/K$.  The bulk modulus controls volume change at constant shape.
+\end{itemize}
+
 \begin{tcolorbox}[
   colback=blue!5,
   colframe=blue!50!black,
@@ -152,6 +164,13 @@ All pairs are equivalent; the choice is one of convenience.  The relations are:
   \label{eq:moduli_relations}
 \end{equation}
 \end{tcolorbox}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig06_elastic_moduli_cartoons.pdf}
+\caption{Schematic illustrations of the four primary elastic moduli.  Solid rectangles show the undeformed reference state; dashed outlines show the deformed state.  (a)~Shear modulus $\mu$: shear stress produces angular distortion at constant volume.  (b)~Young's modulus $E$: uniaxial tension produces axial extension and lateral contraction.  (c)~Poisson's ratio $\nu$: the ratio of lateral contraction to axial extension in a uniaxial test.  (d)~Bulk modulus $K$: uniform pressure produces uniform volume change at constant shape.}
+\label{fig:elastic_moduli_cartoons}
+\end{figure}
 
 %===================================================================
 % SECTION 3 -- Elastic Moduli of Ice
@@ -232,7 +251,7 @@ resting on or floating in a fluid of density $\rho_w$.  Let $w(x,y)$ denote the 
   \boxed{D\,\nabla^4 w + \rho_w\,g\,w = q(x,y),}
   \label{eq:plate_flexure}
 \end{equation}
-where $\nabla^4 = \partial^4/\partial x^4 + 2\,\partial^4/(\partial x^2\,\partial y^2) + \partial^4/\partial y^4$ is the biharmonic operator, $\rho_w\,g\,w$ is the buoyancy restoring force per unit area (for a floating plate), and $q(x,y)$ is any applied load per unit area.
+where $\nabla^4 = \partial^4/\partial x^4 + 2\,\partial^4/(\partial x^2\,\partial y^2) + \partial^4/\partial y^4$ is the biharmonic operator, $\rho_w\,g\,w$ is the buoyancy restoring force per unit area (for a floating plate), and $q(x,y)$ is any applied load per unit area.  Appendix~\ref{app:flexure_derivation} derives this equation from the force and moment balance on a plate element.
 
 \medskip
 \noindent In one horizontal dimension (e.g., a beam or a plate that varies only in $x$):
@@ -398,7 +417,7 @@ Cold, low-stress interior & 233 & 0.01 & $1.6 \times 10^{-27}$ & $\sim$28 years 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.85\textwidth]{figures/fig02_maxwell_time_contours.pdf}
-\caption{Maxwell relaxation time $t_M = 1/(2\mu A\,\tau_e^{\,n-1})$ as a function of temperature and effective stress, computed using the Arrhenius relation for $A(T)$.  Contour labels indicate the relaxation time in human-readable units.  Black dots mark the five settings from Table~\ref{tab:maxwell_times}.}
+\caption{Maxwell relaxation time $t_M = 1/(2\mu A\,\tau_e^{\,n-1})$ as a function of temperature and effective stress, computed using the Arrhenius relation for $A(T)$.  Contour labels indicate the relaxation time.  Black dots mark the five settings from Table~\ref{tab:maxwell_times}.}
 \label{fig:maxwell_time_contours}
 \end{figure}
 
@@ -926,6 +945,155 @@ The two terms are comparable.  Viscous dissipation is a significant heat source 
 
 \medskip
 \noindent\textbf{The connection between elasticity and heat.}  The first law of thermodynamics provides a unified framework for understanding both elasticity and heat conduction.  The adiabatic limit ($\mathcal{Q} = 0$) yields elasticity: mechanical work is stored reversibly as potential energy through the displacement of molecules from their equilibrium positions.  The no-work limit ($\Phi = 0$) yields the heat equation: thermal energy, associated with the random vibrational motion of molecules, diffuses through the material.  The full first law couples these two modes of energy: viscous dissipation converts ordered mechanical energy (the coherent translation and deformation of the material) into disordered thermal energy (the incoherent vibration of molecules about their lattice sites).  Elasticity and heat are two manifestations of molecular-scale energy, distinguished by whether the molecular motion is ordered (elastic, recoverable) or disordered (thermal, irreversible).
+
+\clearpage
+%===================================================================
+% APPENDIX D -- Derivation of the Thin Plate Flexure Equation
+%===================================================================
+\section{Derivation of the Thin Plate Flexure Equation}
+\label{app:flexure_derivation}
+
+This appendix derives the governing equation for the bending of a thin elastic plate, equation~\eqref{eq:plate_flexure}, starting from the force balance on a plate element and the assumptions of Kirchhoff--Love plate theory.  The derivation proceeds in four steps: (1)~state the kinematic assumptions; (2)~compute the internal stresses and bending moments; (3)~derive the force and moment balance; (4)~combine to obtain the biharmonic equation.
+
+\subsection*{Step 1: Kinematic assumptions}
+
+Consider a thin plate of uniform thickness $h$, lying in the $x$--$y$ plane.  The plate's \textbf{neutral surface} (midplane) is at $z = 0$, so the plate extends from $z = -h/2$ to $z = h/2$.  The key assumptions of \textbf{Kirchhoff--Love plate theory} are:
+\begin{enumerate}
+  \item \textbf{Plane sections remain plane.}  Cross sections that are initially normal to the midplane remain plane and normal to the deformed midplane after bending.  This is the plate analogue of the Euler--Bernoulli beam assumption.
+  \item \textbf{No through-thickness stretching.}  The plate thickness does not change during bending: $\varepsilon_{zz} = 0$.
+  \item \textbf{Small deflections.}  The vertical deflection $w(x,y)$ of the midplane satisfies $|w| \ll h$ and $|\partial w/\partial x|, |\partial w/\partial y| \ll 1$, so that the geometry remains approximately flat.
+\end{enumerate}
+
+\noindent Under these assumptions, the displacement field at any point $(x,y,z)$ in the plate is determined entirely by the midplane deflection $w(x,y)$:
+\begin{equation}
+  s_x(x,y,z) = -z\,\frac{\partial w}{\partial x}, \qquad s_y(x,y,z) = -z\,\frac{\partial w}{\partial y}, \qquad s_z(x,y,z) = w(x,y).
+  \label{eq:plate_displacement}
+\end{equation}
+The first two expressions state that horizontal displacements arise from the rotation of the cross section: a point at height $z$ above the midplane moves horizontally by $-z$ times the local slope.
+
+\subsection*{Step 2: Strains, stresses, and bending moments}
+
+The in-plane strains follow from differentiating equation~\eqref{eq:plate_displacement}:
+\begin{equation}
+  \varepsilon_{xx} = \frac{\partial s_x}{\partial x} = -z\,\frac{\partial^2 w}{\partial x^2}, \quad \varepsilon_{yy} = -z\,\frac{\partial^2 w}{\partial y^2}, \quad \varepsilon_{xy} = \frac{1}{2}\!\left(\frac{\partial s_x}{\partial y} + \frac{\partial s_y}{\partial x}\right) = -z\,\frac{\partial^2 w}{\partial x\,\partial y}.
+  \label{eq:plate_strains}
+\end{equation}
+All strains are proportional to $z$: the midplane ($z = 0$) is unstrained, and the strains increase linearly toward the surfaces.  The curvatures of the midplane are $\kappa_{xx} = -\partial^2 w/\partial x^2$, $\kappa_{yy} = -\partial^2 w/\partial y^2$, and $\kappa_{xy} = -\partial^2 w/\partial x\,\partial y$, so that $\varepsilon_{ij} = z\,\kappa_{ij}$.
+
+\medskip
+\noindent For a thin plate under bending, the through-thickness normal stress $\sigma_{zz}$ is negligible compared to the in-plane stresses (this is the \textbf{plane stress} assumption: $\sigma_{zz} = 0$).  Substituting the plane-stress form of Hooke's law:
+\begin{equation}
+  \sigma_{xx} = \frac{E}{1-\nu^2}\!\left(\varepsilon_{xx} + \nu\,\varepsilon_{yy}\right) = -\frac{E\,z}{1-\nu^2}\!\left(\frac{\partial^2 w}{\partial x^2} + \nu\,\frac{\partial^2 w}{\partial y^2}\right),
+  \label{eq:plate_sigma_xx}
+\end{equation}
+and similarly for $\sigma_{yy}$ and $\tau_{xy}$.  This is the bending stress formula stated in the main text, equation~\eqref{eq:bending_stress}.
+
+\medskip
+\noindent The \textbf{bending moments} per unit width are defined by integrating the stress times the moment arm $z$ through the thickness:
+\begin{equation}
+  M_{xx} = \int_{-h/2}^{h/2} \sigma_{xx}\,z\,dz, \qquad M_{yy} = \int_{-h/2}^{h/2} \sigma_{yy}\,z\,dz, \qquad M_{xy} = \int_{-h/2}^{h/2} \tau_{xy}\,z\,dz.
+  \label{eq:moment_definition}
+\end{equation}
+Substituting equation~\eqref{eq:plate_sigma_xx} and using $\int_{-h/2}^{h/2} z^2\,dz = h^3/12$:
+\begin{equation}
+  M_{xx} = -D\!\left(\frac{\partial^2 w}{\partial x^2} + \nu\,\frac{\partial^2 w}{\partial y^2}\right), \qquad M_{yy} = -D\!\left(\frac{\partial^2 w}{\partial y^2} + \nu\,\frac{\partial^2 w}{\partial x^2}\right), \qquad M_{xy} = -D\,(1-\nu)\,\frac{\partial^2 w}{\partial x\,\partial y},
+  \label{eq:bending_moments}
+\end{equation}
+where $D = E\,h^3/[12(1-\nu^2)]$ is the \textbf{flexural rigidity}, equation~\eqref{eq:flexural_rigidity}.  The factor $h^3/12$ arises from the second moment of area of the plate cross section; the factor $(1-\nu^2)$ arises from the plane-stress constraint (the plate is free to contract laterally, unlike a plane-strain beam).
+
+\subsection*{Step 3: Force and moment balance}
+
+Consider a small element of the plate with sides $dx$ and $dy$.  The element is subject to:
+\begin{itemize}
+  \item \textbf{Applied loads}: a distributed transverse load $q(x,y)$ (force per unit area, positive upward) on the top surface, and a buoyancy restoring force $-\rho_w\,g\,w$ per unit area on the bottom surface (for a floating plate displaced by $w$ from equilibrium).
+  \item \textbf{Internal forces}: transverse shear forces $Q_x$ and $Q_y$ (force per unit length) acting on the cross-sectional faces.
+  \item \textbf{Internal moments}: bending moments $M_{xx}$, $M_{yy}$ and twisting moments $M_{xy}$ acting on the faces.
+\end{itemize}
+
+\noindent The vertical force balance on the element gives:
+\begin{equation}
+  \frac{\partial Q_x}{\partial x} + \frac{\partial Q_y}{\partial y} + q - \rho_w\,g\,w = 0.
+  \label{eq:vertical_balance}
+\end{equation}
+
+\noindent The moment balance about the $y$-axis (taking moments on the element, neglecting higher-order terms) gives:
+\begin{equation}
+  \frac{\partial M_{xx}}{\partial x} + \frac{\partial M_{xy}}{\partial y} = Q_x.
+  \label{eq:moment_balance_x}
+\end{equation}
+Similarly, the moment balance about the $x$-axis gives:
+\begin{equation}
+  \frac{\partial M_{yy}}{\partial y} + \frac{\partial M_{xy}}{\partial x} = Q_y.
+  \label{eq:moment_balance_y}
+\end{equation}
+These two equations express the fact that the transverse shear forces are not independent quantities---they are determined by the spatial gradients of the bending and twisting moments.
+
+\subsection*{Step 4: The general flexure equation for spatially varying $D$}
+
+Substitute equations~\eqref{eq:moment_balance_x} and~\eqref{eq:moment_balance_y} into the vertical force balance~\eqref{eq:vertical_balance}:
+\begin{equation}
+  \frac{\partial^2 M_{xx}}{\partial x^2} + 2\,\frac{\partial^2 M_{xy}}{\partial x\,\partial y} + \frac{\partial^2 M_{yy}}{\partial y^2} + q - \rho_w\,g\,w = 0.
+  \label{eq:combined_balance}
+\end{equation}
+Now substitute the moment--curvature relations~\eqref{eq:bending_moments}.  Because the flexural rigidity $D = E\,h^3/[12(1-\nu^2)]$ depends on the local ice thickness $h(x,y)$, $D$ must remain inside the derivatives.  Computing each term with the product rule:
+\begin{align}
+  \frac{\partial^2 M_{xx}}{\partial x^2} &= -\frac{\partial^2}{\partial x^2}\!\left[D\!\left(\frac{\partial^2 w}{\partial x^2} + \nu\,\frac{\partial^2 w}{\partial y^2}\right)\right], \nonumber \\[4pt]
+  2\,\frac{\partial^2 M_{xy}}{\partial x\,\partial y} &= -2\,\frac{\partial^2}{\partial x\,\partial y}\!\left[D\,(1-\nu)\,\frac{\partial^2 w}{\partial x\,\partial y}\right], \nonumber \\[4pt]
+  \frac{\partial^2 M_{yy}}{\partial y^2} &= -\frac{\partial^2}{\partial y^2}\!\left[D\!\left(\frac{\partial^2 w}{\partial y^2} + \nu\,\frac{\partial^2 w}{\partial x^2}\right)\right].
+  \label{eq:moment_derivatives}
+\end{align}
+Substituting into equation~\eqref{eq:combined_balance} gives the \textbf{general flexure equation for a plate with spatially varying thickness}:
+\begin{equation}
+  \boxed{\frac{\partial^2}{\partial x^2}\!\left[D\!\left(\frac{\partial^2 w}{\partial x^2} + \nu\,\frac{\partial^2 w}{\partial y^2}\right)\right] + 2\,\frac{\partial^2}{\partial x\,\partial y}\!\left[D\,(1-\nu)\,\frac{\partial^2 w}{\partial x\,\partial y}\right] + \frac{\partial^2}{\partial y^2}\!\left[D\!\left(\frac{\partial^2 w}{\partial y^2} + \nu\,\frac{\partial^2 w}{\partial x^2}\right)\right] + \rho_w\,g\,w = q.}
+  \label{eq:plate_flexure_variable_D}
+\end{equation}
+This is the form that should be used for ice shelves, where the thickness $h(x,y)$---and hence $D(x,y) \propto h^3$---varies significantly over the flexural wavelength.  The cubic dependence on thickness means that a factor-of-two change in $h$ produces an eightfold change in $D$, so even moderate thickness gradients generate substantial spatial variation in rigidity.
+
+\medskip
+\noindent In one horizontal dimension (e.g., flow-line models of ice-shelf flexure), equation~\eqref{eq:plate_flexure_variable_D} simplifies to
+\begin{equation}
+  \frac{d^2}{dx^2}\!\left(D\,\frac{d^2 w}{dx^2}\right) + \rho_w\,g\,w = q(x),
+  \label{eq:beam_flexure_variable_D}
+\end{equation}
+which, when expanded, contains terms involving $dD/dx$ and $d^2D/dx^2$ that couple the thickness gradient to the deflection.
+
+\medskip
+\noindent\textbf{Constant-$D$ limit.}  When $D$ is spatially uniform (constant thickness), it factors out of the derivatives in equation~\eqref{eq:plate_flexure_variable_D}.  The three second-derivative terms then combine as:
+\begin{equation}
+  D\!\left(\frac{\partial^4 w}{\partial x^4} + \nu\,\frac{\partial^4 w}{\partial x^2\,\partial y^2} + 2(1-\nu)\,\frac{\partial^4 w}{\partial x^2\,\partial y^2} + \frac{\partial^4 w}{\partial y^4} + \nu\,\frac{\partial^4 w}{\partial x^2\,\partial y^2}\right) = D\!\left(\frac{\partial^4 w}{\partial x^4} + 2\,\frac{\partial^4 w}{\partial x^2\,\partial y^2} + \frac{\partial^4 w}{\partial y^4}\right) = D\,\nabla^4 w,
+\end{equation}
+where $\nabla^4 = \nabla^2(\nabla^2)$ is the biharmonic operator.  The Poisson's ratio terms cancel: the coefficient of $\partial^4 w/(\partial x^2\,\partial y^2)$ is $\nu + 2(1-\nu) + \nu = 2$, independent of $\nu$.  The flexure equation reduces to
+\begin{equation}
+  \boxed{D\,\nabla^4 w + \rho_w\,g\,w = q(x,y),}
+  \label{eq:plate_flexure_derived}
+\end{equation}
+which is equation~\eqref{eq:plate_flexure}.  This biharmonic form is the classical plate equation of Kirchhoff (1850) and Love (1888).  It is a useful approximation when the thickness varies slowly compared to the flexural wavelength ($|\nabla h / h| \ll 1/\ell_f$), but should be replaced by equation~\eqref{eq:plate_flexure_variable_D} when this condition is violated.
+
+\subsection*{Boundary conditions}
+
+The flexure equation is fourth-order in each spatial coordinate, so it requires two boundary conditions at each edge.  The standard boundary conditions are:
+
+\begin{itemize}
+  \item \textbf{Clamped edge} (built-in): the deflection and slope are both zero,
+  \begin{equation}
+    w = 0, \qquad \frac{\partial w}{\partial n} = 0,
+  \end{equation}
+  where $n$ is the coordinate normal to the edge.  This is the appropriate condition at a grounding line where the ice is firmly attached to the bed (as in Example~1, \S\ref{sec:example_grounding}).
+
+  \item \textbf{Simply supported edge}: the deflection is zero but the plate is free to rotate,
+  \begin{equation}
+    w = 0, \qquad M_{nn} = 0,
+  \end{equation}
+  where $M_{nn}$ is the bending moment about the edge.  This condition sets the curvature (and hence the bending moment) to zero at the support.
+
+  \item \textbf{Free edge}: both the bending moment and the effective transverse shear (the \textbf{Kirchhoff shear}, which combines the transverse shear force and the gradient of the twisting moment) vanish,
+  \begin{equation}
+    M_{nn} = 0, \qquad Q_n + \frac{\partial M_{nt}}{\partial t} = 0,
+  \end{equation}
+  where $t$ is the coordinate along the edge.  The second condition is Kirchhoff's boundary condition (1850): the twisting moment gradient acts as an equivalent transverse shear, so the plate edge must satisfy a combined force condition rather than separate conditions on $Q_n$ and $M_{nt}$.  This subtlety reduces the number of boundary conditions from three (which a fourth-order equation in 1D might seem to require at each end: $M$, $Q$, and $M_{nt}$) to two, consistent with the order of the equation.
+\end{itemize}
+
+\noindent For the tidal flexure problem (\S\ref{sec:example_grounding}), the boundary conditions are: clamped at the grounding line ($w = 0$, $\partial w/\partial x = 0$ at $x = 0$) and bounded as $x \to \infty$.  The boundedness condition replaces the two conditions at the far end and, together with the two clamped conditions, fully determines the solution.
 
 %===================================================================
 % Bibliography
