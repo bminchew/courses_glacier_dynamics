@@ -52,7 +52,7 @@ In the preceding lectures on ice rheology, we treated ice as a viscous fluid whe
 \noindent Two appendices derive Hooke's law and the heat equation from the first law of thermodynamics, showing how elasticity (the reversible storage of energy through molecular displacement) and heat conduction (the irreversible transport of energy through molecular vibration) arise from the same fundamental energy balance.
 
 \medskip
-\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization; and Appendix~\ref{app:flexure_derivation} derives the thin plate flexure equation from the force balance on a plate element.
+\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization; Appendix~\ref{app:flexure_derivation} derives the thin plate flexure equation from the force balance on a plate element; and Appendix~\ref{app:viscous_plate} extends the plate bending theory to a Newtonian viscous fluid.
 
 %===================================================================
 % SECTION 2 -- Linear Elasticity
@@ -1094,6 +1094,119 @@ The flexure equation is fourth-order in each spatial coordinate, so it requires 
 \end{itemize}
 
 \noindent For the tidal flexure problem (\S\ref{sec:example_grounding}), the boundary conditions are: clamped at the grounding line ($w = 0$, $\partial w/\partial x = 0$ at $x = 0$) and bounded as $x \to \infty$.  The boundedness condition replaces the two conditions at the far end and, together with the two clamped conditions, fully determines the solution.
+
+\clearpage
+%===================================================================
+% APPENDIX E -- Viscous Plate Bending
+%===================================================================
+\section{Viscous Thin Plate Bending}
+\label{app:viscous_plate}
+
+Appendix~\ref{app:flexure_derivation} derived the flexure equation for an elastic plate, where the bending moments are proportional to the curvature of the midplane.  On timescales much longer than the Maxwell time ($\text{De} \ll 1$), ice behaves as a viscous fluid.  The elastic plate theory can be extended to a viscous fluid by replacing the elastic constitutive relation with a Newtonian viscous one: stress is proportional to strain \textit{rate} rather than strain.  The resulting equation governs the \textit{rate} of bending rather than the bending itself, and is the appropriate description for slow flexural processes such as the viscous adjustment of grounding zones or the long-term sagging of ice shelves under sustained loads.
+
+\subsection*{Constitutive relation for a thin Newtonian viscous plate}
+
+For a Newtonian incompressible viscous fluid, the deviatoric stress is $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$, where $\eta$ is the dynamic viscosity.  The full Cauchy stress is $\sigma_{ij} = -p\,\delta_{ij} + 2\eta\,\dot{\varepsilon}_{ij}$ with the incompressibility constraint $\dot{\varepsilon}_{kk} = 0$.
+
+\medskip
+\noindent Under the thin-plate (plane stress) assumption $\sigma_{zz} = 0$, the through-thickness strain rate is determined by incompressibility:
+\begin{equation}
+  \sigma_{zz} = -p + 2\eta\,\dot{\varepsilon}_{zz} = 0 \quad \Longrightarrow \quad p = 2\eta\,\dot{\varepsilon}_{zz} = -2\eta\,(\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy}),
+  \label{eq:viscous_plane_stress}
+\end{equation}
+where the last step uses incompressibility.  Substituting back into the in-plane stresses:
+\begin{align}
+  \sigma_{xx} &= -p + 2\eta\,\dot{\varepsilon}_{xx} = 2\eta\,(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy}), \nonumber \\[2pt]
+  \sigma_{yy} &= 2\eta\,(\dot{\varepsilon}_{xx} + 2\dot{\varepsilon}_{yy}), \nonumber \\[2pt]
+  \tau_{xy} &= 2\eta\,\dot{\varepsilon}_{xy}.
+  \label{eq:viscous_plane_stress_components}
+\end{align}
+
+\noindent These have the same structure as the elastic plane-stress relations (equation~\eqref{eq:plate_sigma_xx}) under the correspondence
+\begin{equation}
+  \frac{E}{1-\nu^2} \;\longleftrightarrow\; 4\eta, \qquad \nu \;\longleftrightarrow\; \frac{1}{2}, \qquad \varepsilon_{ij} \;\longleftrightarrow\; \dot{\varepsilon}_{ij}.
+  \label{eq:elastic_viscous_analogy}
+\end{equation}
+The viscous ``Poisson's ratio'' is $\nu_v = 1/2$, which reflects the fact that an incompressible fluid preserves volume exactly under all deformations.
+
+\subsection*{Kinematic assumption and strain rates}
+
+The Kirchhoff--Love kinematic assumption (Appendix~\ref{app:flexure_derivation}, Step~1) applies unchanged: plane sections normal to the midplane remain plane and normal after deformation.  The velocity field at any point in the plate is
+\begin{equation}
+  \dot{s}_x = -z\,\frac{\partial \dot{w}}{\partial x}, \qquad \dot{s}_y = -z\,\frac{\partial \dot{w}}{\partial y}, \qquad \dot{s}_z = \dot{w}(x,y,t),
+\end{equation}
+where $\dot{w} = \partial w / \partial t$ is the rate of vertical deflection of the midplane.  The in-plane strain rates are
+\begin{equation}
+  \dot{\varepsilon}_{xx} = -z\,\frac{\partial^2 \dot{w}}{\partial x^2}, \qquad \dot{\varepsilon}_{yy} = -z\,\frac{\partial^2 \dot{w}}{\partial y^2}, \qquad \dot{\varepsilon}_{xy} = -z\,\frac{\partial^2 \dot{w}}{\partial x\,\partial y}.
+  \label{eq:viscous_plate_strain_rates}
+\end{equation}
+
+\subsection*{Bending moments and the viscous flexural rigidity}
+
+The bending moments are defined as before (equation~\eqref{eq:moment_definition}).  Substituting the viscous constitutive relation~\eqref{eq:viscous_plane_stress_components} with the strain rates~\eqref{eq:viscous_plate_strain_rates} and integrating through the thickness:
+\begin{align}
+  M_{xx} &= -D_v\!\left(\frac{\partial^2 \dot{w}}{\partial x^2} + \frac{1}{2}\,\frac{\partial^2 \dot{w}}{\partial y^2}\right), \nonumber \\[4pt]
+  M_{yy} &= -D_v\!\left(\frac{\partial^2 \dot{w}}{\partial y^2} + \frac{1}{2}\,\frac{\partial^2 \dot{w}}{\partial x^2}\right), \nonumber \\[4pt]
+  M_{xy} &= -D_v\,\frac{1}{2}\,\frac{\partial^2 \dot{w}}{\partial x\,\partial y},
+  \label{eq:viscous_bending_moments}
+\end{align}
+where
+\begin{equation}
+  \boxed{D_v = \frac{\eta\,h^3}{3}}
+  \label{eq:viscous_flexural_rigidity}
+\end{equation}
+is the \textbf{viscous flexural rigidity}.  This follows from the elastic expression $D = E\,h^3/[12(1-\nu^2)]$ under the substitution~\eqref{eq:elastic_viscous_analogy}: $D_v = 4\eta\,h^3/12 = \eta\,h^3/3$.  The factor $1/2$ in the moment expressions is the viscous Poisson's ratio $\nu_v$.
+
+\subsection*{The viscous flexure equation}
+
+The force and moment balance equations (equations~\eqref{eq:vertical_balance}--\eqref{eq:moment_balance_y}) are statements of equilibrium and hold regardless of the constitutive law.  Substituting the viscous bending moments~\eqref{eq:viscous_bending_moments} into the combined balance~\eqref{eq:combined_balance} and following the same algebraic steps as in Appendix~\ref{app:flexure_derivation} (the Poisson's ratio terms again cancel: $\frac{1}{2} + 2 \times \frac{1}{2} + \frac{1}{2} = 2$), we obtain the \textbf{viscous flexure equation}:
+\begin{equation}
+  \boxed{D_v\,\nabla^4 \dot{w} + \rho_w\,g\,w = q(x,y,t).}
+  \label{eq:viscous_plate_flexure}
+\end{equation}
+For spatially varying thickness, $D_v(x,y)$ must remain inside the derivatives, as in equation~\eqref{eq:plate_flexure_variable_D}.
+
+\medskip
+\noindent This equation is fundamentally different from the elastic flexure equation~\eqref{eq:plate_flexure_derived}.  The elastic equation relates the deflection $w$ to the load $q$ and is elliptic in space: given a load, the deflection is determined instantaneously.  The viscous equation relates the \textit{rate of deflection} $\dot{w}$ to the load and the current deflection, making it a parabolic PDE that is first-order in time and fourth-order in space.  The deflection evolves: a suddenly applied load produces a gradual viscous sagging rather than an instantaneous elastic response.
+
+\subsection*{Relaxation of a viscous floating plate}
+
+The character of equation~\eqref{eq:viscous_plate_flexure} is best understood by considering the free relaxation of a floating plate after a load is removed.  Setting $q = 0$ and decomposing $w$ into spatial Fourier modes $w = \hat{w}(t)\,e^{ikx}$ in one dimension:
+\begin{equation}
+  D_v\,k^4\,\dot{\hat{w}} + \rho_w\,g\,\hat{w} = 0 \quad \Longrightarrow \quad \hat{w}(t) = \hat{w}_0\,\exp\!\left(-\frac{t}{t_r}\right),
+  \label{eq:viscous_relaxation}
+\end{equation}
+where the relaxation time for a mode of wavenumber $k$ is
+\begin{equation}
+  \boxed{t_r(k) = \frac{D_v\,k^4}{\rho_w\,g} = \frac{\eta\,h^3\,k^4}{3\,\rho_w\,g}.}
+  \label{eq:viscous_relaxation_time}
+\end{equation}
+Short-wavelength perturbations (large $k$) relax \textit{slowly} because the plate's viscous resistance to bending is greatest at short wavelengths.  Long-wavelength perturbations (small $k$) relax quickly toward isostatic equilibrium because the plate offers little resistance to gentle bending.
+
+\medskip
+\noindent The wavelength at which $t_r$ equals a reference timescale $t_0$ defines a viscous flexural wavelength:
+\begin{equation}
+  \ell_v = 2\pi\!\left(\frac{D_v\,t_0}{\rho_w\,g}\right)^{1/4}\!\!= 2\pi\!\left(\frac{\eta\,h^3\,t_0}{3\,\rho_w\,g}\right)^{1/4}\!\!.
+  \label{eq:viscous_flexural_wavelength}
+\end{equation}
+Features with wavelengths shorter than $\ell_v$ are supported by the plate's viscous rigidity over the timescale $t_0$; features with wavelengths longer than $\ell_v$ have relaxed toward isostasy.  Unlike the elastic flexural wavelength~\eqref{eq:flexural_wavelength}, which depends only on the plate properties, the viscous flexural wavelength depends on the observation timescale---a consequence of the time-dependent nature of viscous flow.
+
+\subsection*{Connection to the elastic and viscoelastic cases}
+
+The elastic and viscous flexure equations are the two limits of the Maxwell viscoelastic flexure equation.  Writing the Maxwell constitutive relation in bending-moment form:
+\begin{equation}
+  M_{ij} = -D\,\kappa_{ij} - D_v\,\dot{\kappa}_{ij},
+\end{equation}
+where $\kappa_{ij}$ denotes the curvature tensor.  (This is schematic; the full tensor form includes the Poisson coupling terms.)  Substituting into the force balance yields:
+\begin{equation}
+  D\,\nabla^4 w + D_v\,\nabla^4 \dot{w} + \rho_w\,g\,w = q.
+  \label{eq:viscoelastic_flexure}
+\end{equation}
+\begin{itemize}
+  \item For $\text{De} \gg 1$ (fast loading, $\dot{w}$ changes on timescales much shorter than $t_M$): the $D\,\nabla^4 w$ term dominates, and we recover the elastic flexure equation~\eqref{eq:plate_flexure_derived}.
+  \item For $\text{De} \ll 1$ (slow loading, $\dot{w}$ changes on timescales much longer than $t_M$): the $D_v\,\nabla^4 \dot{w}$ term dominates, and we recover the viscous flexure equation~\eqref{eq:viscous_plate_flexure}.
+\end{itemize}
+The ratio of the two rigidities is the Maxwell time: $D_v / D = \eta\,h^3/(3) \times 12(1-\nu^2)/(E\,h^3) = 4\eta(1-\nu^2)/(E) = \eta/\mu = t_M$ (using $E = 2\mu(1+\nu)$ and $\nu_v = 1/2$).  The Maxwell time thus controls the transition from elastic to viscous plate behavior, consistent with the bulk Deborah-number analysis in \S\ref{sec:deborah}.
 
 %===================================================================
 % Bibliography
