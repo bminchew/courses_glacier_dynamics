@@ -397,7 +397,7 @@ The Maxwell time is short where ice is warm and highly stressed, and long where 
 
 \begin{table}[ht]
 \centering
-\caption{Maxwell relaxation time $t_M$ for polycrystalline ice under different conditions, computed from equation~\eqref{eq:maxwell_time} using $\mu = 3.5$~GPa, $n = 3$, and values of $A$ from the Arrhenius relation with $Q = 60$~kJ\,mol$^{-1}$ (below 263~K) and $Q = 139$~kJ\,mol$^{-1}$ (above 263~K).}
+\caption{Maxwell relaxation time $t_M$ for polycrystalline ice under different conditions, computed from equation~\eqref{eq:maxwell_time} using $\mu = 3.5$~GPa, $n = 3$, and values of $A$ from the Arrhenius relation with $Q = 90$~kJ\,mol$^{-1}$ (below 263~K) and $Q = 139$~kJ\,mol$^{-1}$ (above 263~K), fitted to the tabulated values of \cite{CuffeyPaterson2010}.}
 \label{tab:maxwell_times}
 \begin{tabular}{lcccl}
 \toprule
@@ -574,7 +574,7 @@ The maximum tensile stress at the ice surface is (from equation~\eqref{eq:max_be
   \item The effective flexural rigidity is reduced, because part of the deformation is viscous and unrecoverable.  The flexural wavelength is shorter than the elastic prediction.
   \item There is a phase lag between the tidal forcing and the ice-shelf response, because the viscous element introduces a delay (Appendix~\ref{app:viscous_plate}, equation~\eqref{eq:viscous_amplitude_phase}).
 \end{enumerate}
-Both effects are observed in GPS and tiltmeter measurements at Antarctic grounding zones \cite{Vaughan1995,Rignot2011}.  \cite{ElgartMinchewMeyer2026} used ICESat-2 laser altimetry to estimate the effective elastic modulus in grounding zones of the Ross Ice Shelf from tidal flexure profiles, finding that quantitative agreement with observed flexure requires accounting for viscoelastic effects through a reduced effective modulus.
+Both effects are observed in GPS and tiltmeter measurements at Antarctic grounding zones \cite{Vaughan1995,Rignot2011}.  Elgart et al.~\cite{ElgartMinchewMeyer2026} used ICESat-2 laser altimetry to estimate the effective elastic modulus in grounding zones of the Ross Ice Shelf from tidal flexure profiles, finding that quantitative agreement with observed flexure requires accounting for viscoelastic effects through a reduced effective modulus.
 
 \begin{figure}[ht]
 \centering
@@ -1242,18 +1242,19 @@ This ratio is a Deborah-like number for flexure: when $\omega D_v \gg D$ (high v
 
 \subsection*{Connection to the elastic and viscoelastic cases}
 
-The elastic and viscous flexure equations are the two limits of the Maxwell viscoelastic flexure equation.  Writing the Maxwell constitutive relation in bending-moment form:
+The elastic and viscous flexure equations are the two limits of the Maxwell viscoelastic flexure equation.  In a Maxwell material, the elastic and viscous curvature rates add in series.  Writing this in bending-moment form (schematically, suppressing the Poisson coupling terms):
 \begin{equation}
-  M_{ij} = -D\,\kappa_{ij} - D_v\,\dot{\kappa}_{ij},
+  M + \frac{D_v}{D}\,\dot{M} = -D_v\,\dot{\kappa},
+  \label{eq:maxwell_moment}
 \end{equation}
-where $\kappa_{ij}$ denotes the curvature tensor.  (This is schematic; the full tensor form includes the Poisson coupling terms.)  Substituting into the force balance yields:
+where the ratio $D_v/D$ plays the role of a relaxation time.  Combining with the force balance $M'' + \rho_w\,g\,w = q$ yields a PDE that is first-order in time through both $\dot{w}$ and $\dot{M}$:
 \begin{equation}
-  D\,\nabla^4 w + D_v\,\nabla^4 \dot{w} + \rho_w\,g\,w = q.
+  D_v\,\nabla^4 \dot{w} + \rho_w\,g\,w + \frac{D_v}{D}\,\rho_w\,g\,\dot{w} = q + \frac{D_v}{D}\,\dot{q}.
   \label{eq:viscoelastic_flexure}
 \end{equation}
 \begin{itemize}
-  \item For $\text{De} \gg 1$ (fast loading, $\dot{w}$ changes on timescales much shorter than $t_M$): the $D\,\nabla^4 w$ term dominates, and we recover the elastic flexure equation~\eqref{eq:plate_flexure_derived}.
-  \item For $\text{De} \ll 1$ (slow loading, $\dot{w}$ changes on timescales much longer than $t_M$): the $D_v\,\nabla^4 \dot{w}$ term dominates, and we recover the viscous flexure equation~\eqref{eq:viscous_plate_flexure}.
+  \item For $\text{De} \gg 1$ (fast loading, timescales much shorter than $D_v/D$): the time-derivative terms dominate.  Dividing by $D_v/D$ and integrating in time recovers the elastic flexure equation~\eqref{eq:plate_flexure_derived}.
+  \item For $\text{De} \ll 1$ (slow loading, timescales much longer than $D_v/D$): the time-derivative terms on the right-hand side and the $\dot{w}$ buoyancy term are negligible, and we recover the viscous flexure equation~\eqref{eq:viscous_plate_flexure}.
 \end{itemize}
 The ratio of the two rigidities is $D_v / D = \eta\,h^3/(3) \times 12(1-\nu^2)/(E\,h^3) = 4\eta(1-\nu^2)/E = 2\eta(1-\nu)/\mu$, using $E = 2\mu(1+\nu)$.  For ice with $\nu = 0.325$: $D_v/D = 1.35\,\eta/\mu = 1.35\,t_M$.  The Maxwell time thus controls the transition from elastic to viscous plate behavior, consistent with the bulk Deborah-number analysis in \S\ref{sec:deborah}.
 
@@ -1391,10 +1392,80 @@ For $w_0 \ll w_0^*$, the tidal perturbation is a small deviation from the backgr
 \end{equation}
 Tidal amplitudes in Antarctic grounding zones are typically 0.5--2~m, so $w_0 < w_0^*$ and the Newtonian approximation is generally adequate for tidal flexure.  However, for ice shelves with very low background strain rates (slow-flowing or confined ice), $w_0^*$ decreases and the nonlinearity becomes relevant.  Similarly, the nonlinearity matters for processes with larger curvature rates than tidal flexure, such as the localized bending associated with subglacial lake drainage or rapid grounding-line migration.
 
+\medskip
+\noindent\textbf{Multiple tidal constituents.}  Equation~\eqref{eq:critical_tidal_height} applies to monochromatic (single-frequency) tidal forcing.  In practice, two or more tidal constituents are often important at a given location (e.g., M$_2$ and S$_2$, or M$_2$ and O$_1$).  The curvature rate from multiple constituents is
+\begin{equation}
+  |\dot{w}''| \sim \frac{1}{\ell_f^2}\sum_j w_j\,\omega_j\,\sin(\omega_j\,t + \phi_j),
+\end{equation}
+where $w_j$ and $\omega_j$ are the amplitude and angular frequency of the $j$th constituent.  The nonlinearity matters when the \textit{total} curvature rate exceeds $\dot{\varepsilon}_{\text{bg}}$, not when any single constituent does.  The peak curvature rate occurs during spring tides, when the constituent phases align constructively, giving
+\begin{equation}
+  |\dot{w}''|_{\max} \sim \frac{1}{\ell_f^2}\sum_j w_j\,\omega_j.
+\end{equation}
+The generalized criterion for the onset of nonlinearity is therefore
+\begin{equation}
+  \boxed{\sum_j w_j\,\omega_j \lesssim \dot{\varepsilon}_{\text{bg}}\,\ell_f^2.}
+  \label{eq:critical_tidal_multi}
+\end{equation}
+When the dominant constituents have similar frequencies (e.g., the semidiurnal M$_2$ and S$_2$), $\omega_j \approx \omega$ and equation~\eqref{eq:critical_tidal_multi} reduces to the monochromatic result~\eqref{eq:critical_tidal_height} with $w_0$ replaced by the sum of the constituent amplitudes---the spring-tide amplitude.  For mixed diurnal--semidiurnal tides, the frequency weighting means that higher-frequency constituents contribute disproportionately to the peak curvature rate.
+
+\subsection*{Effect of depth-dependent temperature}
+
+The derivations above assumed a uniform viscosity (or stiffness parameter $B$) through the thickness.  In real glaciers, however, the temperature increases approximately linearly from the mean annual surface temperature $T_s$ at $z = h/2$ to a value near the pressure melting temperature $T_b \approx 273$~K at $z = -h/2$:
+\begin{equation}
+  T(z) = \bar{T} + G\,z, \qquad G = \frac{T_s - T_b}{h} < 0, \qquad \bar{T} = \frac{T_s + T_b}{2}.
+  \label{eq:linear_T}
+\end{equation}
+Because the rate factor $A(T)$ follows an Arrhenius relation, the viscosity $\eta(z) = 1/[2A(T(z))]$ varies strongly with depth: the cold surface is stiff and the warm base is soft (Figure~\ref{fig:depth_dependent_T}a).  The surface-to-base viscosity ratio $\eta_s/\eta_b = A(T_b)/A(T_s)$ ranges from $\sim$10 for $T_s = 263$~K to several hundred for $T_s = 243$~K.
+
+\medskip
+\noindent\textbf{Newtonian case: shifted neutral axis.}  For a 1D beam, the uniaxial bending stress is $\sigma_{xx}(z) = 3\eta(z)\,\dot{\varepsilon}_{xx}(z)$.  The Kirchhoff--Love kinematic assumption gives $\dot{\varepsilon}_{xx} = \dot{\varepsilon}_0 - z\,\dot{\kappa}$, where $\dot{\varepsilon}_0$ is the membrane strain rate and $\dot{\kappa} = \partial^2 \dot{w}/\partial x^2$.  Requiring zero net axial force, $N = \int_{-h/2}^{h/2}\!\sigma_{xx}\,dz = 0$, determines the membrane strain rate:
+\begin{equation}
+  \dot{\varepsilon}_0 = z_0\,\dot{\kappa}, \qquad z_0 \equiv \frac{\displaystyle\int_{-h/2}^{h/2}\!\eta(z)\,z\,dz}{\displaystyle\int_{-h/2}^{h/2}\!\eta(z)\,dz}\,.
+  \label{eq:z0_newtonian}
+\end{equation}
+The parameter $z_0$ is the viscosity-weighted centroid of the cross section; the strain rate vanishes at $z = z_0$, which defines the \textbf{neutral axis}.  When $\eta$ is uniform, $z_0 = 0$ and the neutral axis lies at the midplane.  When the surface is stiffer than the base, $z_0 > 0$: the neutral axis shifts toward the cold, stiff surface.
+
+\medskip
+\noindent The bending stress becomes $\sigma_{xx}(z) = -3\eta(z)\,(z - z_0)\,\dot{\kappa}$, and the bending moment $M = \int\!\sigma_{xx}\,z\,dz$ evaluates to
+\begin{equation}
+  M = -\tilde{D}_v\,\dot{\kappa}, \qquad \boxed{\tilde{D}_v = 3\!\int_{-h/2}^{h/2}\!\eta(z)\,(z - z_0)^2\,dz.}
+  \label{eq:Dv_tilde}
+\end{equation}
+This is the \textbf{effective viscous flexural rigidity} for a beam with depth-dependent viscosity.  The integral is the viscosity-weighted second moment of area about the neutral axis---a parallel-axis theorem.  For a plate (biaxial constraint), the coefficient 3 is replaced by 4.  Because the force and moment balance equations are statements of equilibrium that hold regardless of the constitutive law, the viscous flexure equation~\eqref{eq:viscous_plate_flexure} retains its form with $D_v \to \tilde{D}_v$.  The relaxation times~\eqref{eq:viscous_relaxation_time}, flexural wavelength~\eqref{eq:viscous_flexural_wavelength}, and tidal phase-lag analysis all carry through with the modified rigidity.
+
+\medskip
+\noindent\textbf{Power-law extension.}  For a power-law rheology with depth-dependent stiffness $B(z) = [3^{(n+1)/2}/(2A(T(z)))]^{1/n}$, the neutral-axis condition $N = 0$ becomes
+\begin{equation}
+  \int_{-h/2}^{h/2}\!B(z)\,|z - z_0|^{(1/n)-1}\,(z - z_0)\,dz = 0.
+  \label{eq:z0_powerlaw}
+\end{equation}
+The curvature rate $\dot{\kappa}$ cancels from this condition: the common factor $|\dot{\kappa}|^{1/n}$ divides out of the integrand.  The neutral axis position $z_0$ therefore depends on $n$ and $B(z)$ but \textit{not} on the bending rate, which keeps the problem tractable.  The nonlinear moment--curvature-rate relation becomes $M = -\tilde{D}_n\,|\dot{\kappa}|^{(1/n)-1}\,\dot{\kappa}$, where
+\begin{equation}
+  \tilde{D}_n = \int_{-h/2}^{h/2}\!B(z)\,|z - z_0|^{(1/n)+1}\,dz.
+  \label{eq:Dn_tilde}
+\end{equation}
+For $n = 1$, equation~\eqref{eq:z0_powerlaw} is linear in $z_0$ and recovers equation~\eqref{eq:z0_newtonian}.  For $n > 1$, equation~\eqref{eq:z0_powerlaw} is a nonlinear equation that requires numerical root-finding, but this is a single scalar equation and straightforward to solve.  The beam flexure equation~\eqref{eq:nl_beam_flexure} retains its structure with $D_n \to \tilde{D}_n$.
+
+\medskip
+\noindent\textbf{Physical effects (Figure~\ref{fig:depth_dependent_T}).}  The depth-dependent temperature has two effects on viscous bending.  First, the neutral axis shifts toward the cold, stiff surface ($z_0 > 0$).  The cold upper portion of the beam, which carries most of the bending resistance, becomes thinner (measured from the neutral axis), while the warm lower portion contributes little.  Second, the effective flexural rigidity $\tilde{D}_v$ is reduced relative to the value $D_v(\bar{T})$ evaluated at the depth-averaged temperature.  Both effects make ice shelves more compliant than a depth-averaged viscosity would suggest.  The rigidity reduction depends on the surface temperature and is typically 10--25\% relative to $D_v(\bar{T})$ (Figure~\ref{fig:depth_dependent_T}c), while the neutral axis can shift by more than half the distance from the midplane to the surface ($z_0 \sim 0.6\,h/2$ for $T_s = 243$~K).  The stress asymmetry is the more consequential effect: the warm, soft base carries little bending stress, concentrating the load in the cold upper portion of the beam.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig10_depth_dependent_temperature.pdf}
+\caption{Effect of depth-dependent temperature on viscous beam bending, for a linear temperature profile with $T_b = 273$~K and varying surface temperature $T_s$.  (a)~Viscosity profile $\eta(z)/\eta(\bar{T})$: the surface-to-base contrast ranges from $\sim$10 ($T_s = 263$~K) to $\sim$300 ($T_s = 243$~K).  (b)~Newtonian bending stress $\sigma_{xx}(z)$ (normalized by the surface value) for uniform $\eta$ (dashed black) and depth-dependent $\eta$ (solid curves).  The neutral axis (horizontal dotted lines) shifts toward the cold surface.  (c)~Neutral axis position $z_0/(h/2)$ and effective rigidity ratio $\tilde{D}_v/D_v(\bar{T})$ as functions of $T_s$.  Colder surface temperatures produce larger asymmetry and greater rigidity reduction.  All quantities are for the beam (uniaxial) case.}
+\label{fig:depth_dependent_T}
+\end{figure}
+
 %===================================================================
 % Bibliography
 %===================================================================
 \begin{thebibliography}{99}
+
+\bibitem{CuffeyPaterson2010}
+Cuffey, K.~M.\ and W.~S.~B.\ Paterson (2010).
+\textit{The Physics of Glaciers}, 4th ed.
+Academic Press, 693~pp.
+\texttt{doi:10.1016/C2009-0-02510-1}
 
 \bibitem{GoldsbyKohlstedt2001}
 Goldsby, D.~L.\ and D.~L.\ Kohlstedt (2001).
