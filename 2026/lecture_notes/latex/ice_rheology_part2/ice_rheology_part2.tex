@@ -611,7 +611,7 @@ where $t_K = \eta_K/\mu_K$ is the retardation time of the Kelvin--Voigt element.
 \noindent\textbf{Glaciological applications.}  The Burgers model has been used to interpret:
 \begin{itemize}
   \item Tidal modulation of ice-stream velocity, where the transient (delayed elastic) response produces a velocity signal at the tidal frequency that decays with distance from the grounding line \cite{Gudmundsson2011,Rosieretal2014}.
-  \item GPS and InSAR measurements of post-seismic ice-sheet response, where the instantaneous co-seismic elastic displacement is followed by a transient relaxation on timescales consistent with the Kelvin--Voigt element \cite{Burdetteetal2024}.
+  \item Short-term transient creep of ice observed in laboratory experiments and borehole deformation measurements, where the delayed elastic recovery upon unloading is well described by the Kelvin--Voigt element \cite{CuffeyPaterson2010}.
   \item Laboratory creep experiments at stresses below the Glen's-law regime, where the transient phase is pronounced and the Burgers model provides a better fit than the Maxwell model alone \cite{CuffeyPaterson2010}.
 \end{itemize}
 
@@ -1337,7 +1337,7 @@ Features with wavelengths shorter than $\ell_v$ are supported by the plate's vis
 
 \subsection*{Steady-state harmonic response and the tidal phase lag}
 
-The relaxation analysis above describes the transient decay of an initial perturbation.  For tidal flexure, we need the steady-state response to periodic forcing.  Consider a one-dimensional viscous beam clamped at $x = 0$ (grounding line) and floating freely for $x > 0$, with tidal forcing $q = \rho_w\,g\,w_0\,\sin(\omega t)$.  The viscous flexure equation~\eqref{eq:viscous_plate_flexure} in 1D is
+The relaxation analysis above describes the transient decay of an initial perturbation.  For tidal flexure, we need the steady-state response to periodic forcing.  Consider a one-dimensional viscous plate clamped at $x = 0$ (grounding line) and floating freely for $x > 0$, with tidal forcing $q = \rho_w\,g\,w_0\,\sin(\omega t)$.  The viscous flexure equation~\eqref{eq:viscous_plate_flexure} in 1D is
 \begin{equation}
   D_v\,\frac{\partial^4 \dot{w}}{\partial x^4} + \rho_w\,g\,w = \rho_w\,g\,w_0\,\sin(\omega t).
   \label{eq:viscous_tidal_1d}
@@ -1410,30 +1410,35 @@ The ratio of the two rigidities is $D_v / D = \eta\,h^3/(3) \times 12(1-\nu^2)/(
 \label{fig:tidal_flexure_matched}
 \end{figure}
 
-\subsection*{Extension to non-Newtonian (power-law) beam bending}
+\subsection*{Extension to non-Newtonian (power-law) plate bending}
 
-The Newtonian viscous flexure equation is linear, which makes it analytically convenient but limits its applicability to glacier ice, where the creep law is nonlinear ($n \approx 3$--$4$).  In this section we derive the moment--curvature-rate relation for a one-dimensional beam (or a plate that varies only in $x$) with a power-law rheology.  The 1D case is tractable because the stress state at any cross section is uniaxial, avoiding the complications of the 2D effective stress.
+The Newtonian viscous flexure equation is linear, which makes it analytically convenient but limits its applicability to glacier ice, where the creep law is nonlinear ($n \approx 3$--$4$).  In this section we derive the moment--curvature-rate relation for a plate in cylindrical bending (deflection varying only in $x$) with a power-law rheology.
 
 \medskip
-\noindent\textbf{Setup.}  Consider a beam of thickness $h$ bending in the $x$--$z$ plane.  The Kirchhoff--Love kinematic assumption gives a strain rate that varies linearly through the thickness:
+\noindent\textbf{Setup.}  Consider a plate of thickness $h$ undergoing cylindrical bending in the $x$--$z$ plane, so that $\dot{\varepsilon}_{yy} = 0$ (the plate is wide compared to its flexural wavelength and the deflection does not vary in $y$).  The Kirchhoff--Love kinematic assumption gives a strain rate that varies linearly through the thickness:
 \begin{equation}
   \dot{\varepsilon}_{xx}(z) = -z\,\dot{\kappa}, \qquad \dot{\kappa} \equiv \frac{\partial^2 \dot{w}}{\partial x^2},
   \label{eq:nl_strain_rate}
 \end{equation}
-where $\dot{\kappa}$ is the rate of change of curvature.  In the 1D beam problem, the lateral faces are traction-free ($\sigma_{yy} = \sigma_{zz} = 0$), so the only nonzero Cauchy stress is $\sigma_{xx}$.  The deviatoric stress is $\tau_{xx} = \sigma_{xx} - \frac{1}{3}\sigma_{kk} = \frac{2}{3}\sigma_{xx}$, and the effective stress is $\tau_e = ({\frac{1}{2}\tau_{ij}\tau_{ij}})^{1/2} = |\sigma_{xx}|/\sqrt{3}$.  These simplifications make the power-law inversion straightforward.
+where $\dot{\kappa}$ is the rate of change of curvature.  Incompressibility requires $\dot{\varepsilon}_{zz} = -\dot{\varepsilon}_{xx}$ (since $\dot{\varepsilon}_{yy} = 0$), and the plate is traction-free at the upper and lower surfaces ($\sigma_{zz} = 0$).
 
 \medskip
-\noindent Substituting into Glen's law $\dot{\varepsilon}_{ij} = A\,\tau_e^{n-1}\,\tau_{ij}$, the relation between axial stress and axial strain rate is:
+\noindent\textbf{Stress state.}  From Glen's law $\dot{\varepsilon}_{ij} = A\,\tau_e^{n-1}\,\tau_{ij}$ with $\dot{\varepsilon}_{yy} = 0$:
 \begin{equation}
-  \dot{\varepsilon}_{xx} = A\left(\frac{|\sigma_{xx}|}{\sqrt{3}}\right)^{n-1}\!\frac{2\sigma_{xx}}{3} = \frac{2A}{3^{(n+1)/2}}\,|\sigma_{xx}|^{n-1}\,\sigma_{xx}.
-  \label{eq:nl_uniaxial}
+  \tau_{yy} = 0, \qquad \tau_{zz} = -\tau_{xx}, \qquad \tau_e = \left(\tfrac{1}{2}\tau_{ij}\tau_{ij}\right)^{1/2} = |\tau_{xx}|.
+  \label{eq:nl_plate_stress_state}
+\end{equation}
+From $\sigma_{zz} = \tau_{zz} + p = 0$, the pressure is $p = -\tau_{zz} = \tau_{xx}$, so $\sigma_{xx} = \tau_{xx} + p = 2\,\tau_{xx}$ and $\tau_e = |\sigma_{xx}|/2$.  Substituting into the flow law:
+\begin{equation}
+  \dot{\varepsilon}_{xx} = A\,|\tau_{xx}|^{n-1}\,\tau_{xx} = A\left(\frac{|\sigma_{xx}|}{2}\right)^{n-1}\!\frac{\sigma_{xx}}{2} = \frac{A}{2^n}\,|\sigma_{xx}|^{n-1}\,\sigma_{xx}.
+  \label{eq:nl_plate_flow}
 \end{equation}
 Inverting to express stress in terms of strain rate:
 \begin{equation}
-  \sigma_{xx} = B\,|\dot{\varepsilon}_{xx}|^{(1/n)-1}\,\dot{\varepsilon}_{xx}, \qquad B \equiv \left(\frac{3^{(n+1)/2}}{2A}\right)^{1/n}\!\!= \frac{3^{(n+1)/(2n)}}{(2A)^{1/n}}.
+  \sigma_{xx} = B\,|\dot{\varepsilon}_{xx}|^{(1/n)-1}\,\dot{\varepsilon}_{xx}, \qquad B \equiv \frac{2}{A^{1/n}}.
   \label{eq:nl_stress_inversion}
 \end{equation}
-The constant $B$ is the effective stiffness parameter, with units Pa\,s$^{1/n}$.  For $n = 1$, $B = 3\eta = 3/(2A)$, recovering the Newtonian relation $\sigma_{xx} = 2\eta(2\dot{\varepsilon}_{xx} + \dot{\varepsilon}_{yy})$ in the uniaxial limit (where $\dot{\varepsilon}_{yy} = -\dot{\varepsilon}_{xx}/2$ by incompressibility, giving $\sigma_{xx} = 3\eta\,\dot{\varepsilon}_{xx}$).
+The constant $B$ is the effective stiffness parameter for cylindrical bending, with units Pa\,s$^{1/n}$.  For $n = 1$, $B = 2/A = 4\eta$, recovering the Newtonian plane-strain result $\sigma_{xx} = 4\eta\,\dot{\varepsilon}_{xx}$ (consistent with the viscous flexural rigidity $D_v = \eta\,h^3/3$ derived in Appendix~\ref{app:viscous_plate}).
 
 \medskip
 \noindent\textbf{Bending moment.}  The bending moment per unit width is
@@ -1461,16 +1466,16 @@ Combining:
   \boxed{M = -\frac{2n}{1+2n}\,B\!\left(\frac{h}{2}\right)^{(1/n)+2}\;|\dot{\kappa}|^{(1/n)-1}\,\dot{\kappa}.}
   \label{eq:nl_moment_curvature}
 \end{equation}
-This is the \textbf{nonlinear moment--curvature-rate relation} for a power-law beam.  It has the form $M = -D_n\,|\dot{\kappa}|^{(1/n)-1}\,\dot{\kappa}$, where the nonlinear flexural rigidity parameter is
+This is the \textbf{nonlinear moment--curvature-rate relation} for a power-law plate in cylindrical bending.  It has the form $M = -D_n\,|\dot{\kappa}|^{(1/n)-1}\,\dot{\kappa}$, where the nonlinear flexural rigidity parameter is
 \begin{equation}
-  D_n = \frac{2n}{1+2n}\,B\!\left(\frac{h}{2}\right)^{(1/n)+2} = \frac{2n}{1+2n}\left(\frac{h}{2}\right)^{(1/n)+2}\left(\frac{3^{(n+1)/2}}{2A}\right)^{1/n}\!\!.
+  D_n = \frac{2n}{1+2n}\,B\!\left(\frac{h}{2}\right)^{(1/n)+2} = \frac{4n}{1+2n}\,\frac{1}{A^{1/n}}\left(\frac{h}{2}\right)^{(1/n)+2}\!\!.
   \label{eq:nl_flexural_rigidity}
 \end{equation}
 
-\noindent\textbf{Newtonian check.}  For $n = 1$: $B = 3/(2A) = 3\eta$, and $D_1 = \frac{2}{3}\,3\eta\,\frac{h^3}{8} = \frac{\eta\,h^3}{4}$.  The bending moment is $M = -D_1\,\dot{\kappa} = -\frac{\eta\,h^3}{4}\,\dot{\kappa}$.  This differs from the Newtonian plate result $M = -\frac{\eta\,h^3}{3}\,\dot{\kappa}$ by a factor of $3/4$ because the 1D beam and 2D plate have different lateral constraint conditions: the beam allows free lateral strain ($\sigma_{yy} = 0$, no width constraint), while the plate constrains the lateral strain rate ($\dot{\varepsilon}_{yy} = 0$ in the $y$-invariant limit), which stiffens the response.  The plate result is recovered by replacing the uniaxial stiffness $3\eta$ with the biaxial (plane-strain) stiffness $4\eta$ in the derivation.
+\noindent\textbf{Newtonian check.}  For $n = 1$: $B = 4\eta = 2/A$, and $D_1 = \frac{2}{3}\cdot 4\eta\cdot\frac{h^3}{8} = \frac{\eta\,h^3}{3}$.  This recovers the Newtonian viscous flexural rigidity $D_v = \eta\,h^3/3$ derived in Appendix~\ref{app:viscous_plate} from the full plate equations---a necessary consistency check.
 
 \medskip
-\noindent\textbf{The nonlinear beam flexure equation.}  The 1D force balance (equation~\eqref{eq:combined_balance} in one dimension) is
+\noindent\textbf{The nonlinear plate flexure equation.}  The 1D force balance (equation~\eqref{eq:combined_balance} in one dimension) is
 \begin{equation}
   \frac{d^2 M}{dx^2} + q - \rho_w\,g\,w = 0.
   \label{eq:1d_force_balance}
@@ -1478,47 +1483,47 @@ This is the \textbf{nonlinear moment--curvature-rate relation} for a power-law b
 Substituting equation~\eqref{eq:nl_moment_curvature}:
 \begin{equation}
   \boxed{\frac{d^2}{dx^2}\!\left[D_n\,\left|\frac{\partial^2 \dot{w}}{\partial x^2}\right|^{(1/n)-1}\frac{\partial^2 \dot{w}}{\partial x^2}\right] + \rho_w\,g\,w = q.}
-  \label{eq:nl_beam_flexure}
+  \label{eq:nl_plate_flexure}
 \end{equation}
-This is a nonlinear parabolic PDE: fourth-order in $x$ and first-order in $t$ (through $\dot{w}$), with the nonlinearity entering through the power-law moment--curvature relation.  For $n = 1$, it reduces to the linear Newtonian beam equation.
+This is a nonlinear parabolic PDE: fourth-order in $x$ and first-order in $t$ (through $\dot{w}$), with the nonlinearity entering through the power-law moment--curvature relation.  For $n = 1$, it reduces to the linear Newtonian viscous flexure equation~\eqref{eq:viscous_plate_flexure}.
 
 \medskip
 \noindent\textbf{Key differences from the Newtonian case.}
 \begin{enumerate}
-  \item \textbf{Stress concentrates at the surfaces.}  In a Newtonian beam, the bending stress varies linearly through the thickness ($\sigma_{xx} \propto z$).  For $n > 1$, equation~\eqref{eq:nl_stress_z} gives $\sigma_{xx} \propto |z|^{1/n}$, which is sublinear: the stress is more uniform through the interior and rises steeply near the surfaces.  This means that the surfaces carry a larger fraction of the bending moment than in the Newtonian case.
+  \item \textbf{Stress concentrates at the surfaces.}  In a Newtonian plate, the bending stress varies linearly through the thickness ($\sigma_{xx} \propto z$).  For $n > 1$, equation~\eqref{eq:nl_stress_z} gives $\sigma_{xx} \propto |z|^{1/n}$, which is sublinear: the stress is more uniform through the interior and rises steeply near the surfaces.  This means that the surfaces carry a larger fraction of the bending moment than in the Newtonian case.
 
-  \item \textbf{The effective rigidity depends on the bending rate.}  The moment scales as $M \propto |\dot{\kappa}|^{1/n}$ rather than $M \propto \dot{\kappa}$.  Fast bending ($|\dot{\kappa}|$ large) produces a weaker-than-linear increase in the resisting moment, so the beam is effectively softer at high bending rates---the same strain-rate softening that characterizes power-law creep in simple shear.
+  \item \textbf{The effective rigidity depends on the bending rate.}  The moment scales as $M \propto |\dot{\kappa}|^{1/n}$ rather than $M \propto \dot{\kappa}$.  Fast bending ($|\dot{\kappa}|$ large) produces a weaker-than-linear increase in the resisting moment, so the plate is effectively softer at high bending rates---the same strain-rate softening that characterizes power-law creep in simple shear.
 
-  \item \textbf{Superposition does not hold.}  The flexure equation~\eqref{eq:nl_beam_flexure} is nonlinear, so solutions for different loads cannot be added.  Each loading configuration must be solved independently, typically by numerical methods.
+  \item \textbf{Superposition does not hold.}  The flexure equation~\eqref{eq:nl_plate_flexure} is nonlinear, so solutions for different loads cannot be added.  Each loading configuration must be solved independently, typically by numerical methods.
 
-  \item \textbf{The thickness dependence is stronger.}  The flexural rigidity scales as $D_n \propto h^{(1/n)+2}$.  For $n = 3$: $D_n \propto h^{7/3}$; for $n = 4$: $D_n \propto h^{9/4}$.  Compare the Newtonian ($n = 1$) scaling $D_v \propto h^3$ and the elastic scaling $D \propto h^3$.  The weaker thickness dependence for $n > 1$ means that thickness variations have a smaller effect on the nonlinear flexural rigidity than on the Newtonian or elastic rigidity---but the dependence is still strong enough that spatially varying $h$ cannot be ignored.
+  \item \textbf{The thickness dependence is weaker.}  The flexural rigidity scales as $D_n \propto h^{(1/n)+2}$.  For $n = 3$: $D_n \propto h^{7/3}$; for $n = 4$: $D_n \propto h^{9/4}$.  Compare the Newtonian ($n = 1$) scaling $D_v \propto h^3$ and the elastic scaling $D \propto h^3$.  The weaker thickness dependence for $n > 1$ means that thickness variations have a smaller effect on the nonlinear flexural rigidity than on the Newtonian or elastic rigidity---but the dependence is still strong enough that spatially varying $h$ cannot be ignored.
 \end{enumerate}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.95\textwidth]{figures/fig08_viscous_bending_stress.pdf}
-\caption{Viscous beam bending for Newtonian and power-law fluids.  (a)~Bending stress $\sigma_{xx}(z)$ through the beam thickness, normalized by the surface value.  For $n = 1$ (Newtonian), the stress varies linearly in $z$; for $n > 1$, the stress varies as $|z|^{1/n}$, concentrating near the surfaces.  (b)~Bending moment $|M|$ as a function of curvature rate $|\dot{\kappa}|$.  For $n = 1$, the relation is linear; for $n > 1$, the moment increases sublinearly ($M \propto |\dot{\kappa}|^{1/n}$), so the beam is effectively stiffer at low bending rates and softer at high bending rates.}
+\caption{Viscous plate bending for Newtonian and power-law fluids.  (a)~Bending stress $\sigma_{xx}(z)$ through the plate thickness, normalized by the surface value.  For $n = 1$ (Newtonian), the stress varies linearly in $z$; for $n > 1$, the stress varies as $|z|^{1/n}$, concentrating near the surfaces.  (b)~Bending moment $|M|$ as a function of curvature rate $|\dot{\kappa}|$.  For $n = 1$, the relation is linear; for $n > 1$, the moment increases sublinearly ($M \propto |\dot{\kappa}|^{1/n}$), so the plate is effectively stiffer at low bending rates and softer at high bending rates.}
 \label{fig:viscous_bending_stress}
 \end{figure}
 
-\noindent\textbf{Why the 2D plate is harder.}  In the 1D beam, the stress state at every point is uniaxial: $\sigma_{xx}$ is the only nonzero stress, so $\tau_e \propto |\sigma_{xx}|$ and the power-law inversion is straightforward.  In a 2D plate, the stress state is biaxial ($\sigma_{xx}$, $\sigma_{yy}$, $\tau_{xy}$ are all nonzero), and the effective stress $\tau_e = (\frac{1}{2}\tau_{ij}\tau_{ij})^{1/2}$ couples all stress components.  Inverting the flow law to express each stress component in terms of strain-rate components requires solving a nonlinear system at every point through the thickness and at every $(x,y)$ location, which prevents the clean separation into independent moment--curvature relations that makes the 1D and Newtonian cases tractable.
+\noindent\textbf{Why the general 2D plate is harder.}  The cylindrical bending case derived above is tractable because the constraint $\dot{\varepsilon}_{yy} = 0$ reduces the problem to a single stress component.  In a general 2D plate where both $\partial^2\dot{w}/\partial x^2$ and $\partial^2\dot{w}/\partial y^2$ are nonzero, the stress state is fully biaxial ($\sigma_{xx}$, $\sigma_{yy}$, $\tau_{xy}$ all nonzero), and the effective stress $\tau_e = (\frac{1}{2}\tau_{ij}\tau_{ij})^{1/2}$ couples all stress components.  Inverting the flow law to express each stress component in terms of strain-rate components requires solving a nonlinear system at every point through the thickness and at every $(x,y)$ location, which prevents the clean separation into independent moment--curvature relations that makes the cylindrical-bending and Newtonian cases tractable.
 
 \subsection*{When does the nonlinearity matter?  Critical tidal height}
 
-The numerical experiments in Figures~\ref{fig:tidal_flexure_rheology} and~\ref{fig:tidal_flexure_matched} show that the power-law nonlinearity affects tidal flexure when the bending strain rate at the beam surface is comparable to or exceeds the background extensional strain rate $\dot{\varepsilon}_{\text{bg}}$.  We can derive a criterion for when nonlinearity becomes important.
+The numerical experiments in Figures~\ref{fig:tidal_flexure_rheology} and~\ref{fig:tidal_flexure_matched} show that the power-law nonlinearity affects tidal flexure when the bending strain rate at the plate surface is comparable to or exceeds the background extensional strain rate $\dot{\varepsilon}_{\text{bg}}$.  We can derive a criterion for when nonlinearity becomes important.
 
 \medskip
-\noindent The bending strain rate at the beam surface ($z = \pm h/2$) is $\dot{\varepsilon}_{\text{bend}} = (h/2)\,|\dot{w}''|$.  The nonlinearity is significant when the tidal bending strain rate is comparable to the background:
+\noindent The bending strain rate at the plate surface ($z = \pm h/2$) is $\dot{\varepsilon}_{\text{bend}} = (h/2)\,|\dot{w}''|$.  The nonlinearity is significant when the tidal bending strain rate is comparable to the background:
 \begin{equation}
   \dot{\varepsilon}_{\text{bend}} = \frac{h}{2}\,|\dot{w}''| \sim \dot{\varepsilon}_{\text{bg}}.
 \end{equation}
 From the elastic flexure solution (equation~\eqref{eq:tidal_flexure}), the peak curvature at the grounding line scales as $2w_0/\ell_f^2$, where $\ell_f = (4D/\rho_w g)^{1/4}$ is the flexural wavelength (equation~\eqref{eq:flexural_wavelength}).  The surface bending strain rate is therefore $\dot{\varepsilon}_{\text{bend}} \sim (h/2) \times (2w_0/\ell_f^2) \times \omega = h\,w_0\,\omega / \ell_f^2$.  Setting this equal to $\dot{\varepsilon}_{\text{bg}}$:
 \begin{equation}
-  \frac{h\,w_0\,\omega}{2\,\ell_f^2} \sim \dot{\varepsilon}_{\text{bg}}.
+  \frac{h\,w_0\,\omega}{\ell_f^2} \sim \dot{\varepsilon}_{\text{bg}}.
 \end{equation}
 Solving for the \textbf{critical tidal amplitude} above which nonlinearity matters:
 \begin{equation}
-  \boxed{w_0^* = \frac{2\,\dot{\varepsilon}_{\text{bg}}\,\ell_f^2}{h\,\omega}.}
+  \boxed{w_0^* = \frac{\dot{\varepsilon}_{\text{bg}}\,\ell_f^2}{h\,\omega}.}
   \label{eq:critical_tidal_height}
 \end{equation}
 For $w_0 \ll w_0^*$, the tidal perturbation is a small deviation from the background state and the linearized (Newtonian) response is adequate regardless of $n$.  For $w_0 \gtrsim w_0^*$, the bending strain rate near the grounding line exceeds $\dot{\varepsilon}_{\text{bg}}$, and the effective viscosity becomes strain-rate dependent---the power-law nonlinearity shapes the flexure profile.
@@ -1526,18 +1531,18 @@ For $w_0 \ll w_0^*$, the tidal perturbation is a small deviation from the backgr
 \medskip
 \noindent\textbf{Numerical evaluation.}  For $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$, $h = 500$~m, $\ell_f = 2.6$~km, and $T_{\text{tide}} = 12$~hr ($\omega = 1.45 \times 10^{-4}$~s$^{-1}$):
 \begin{equation}
-  w_0^* = \frac{2 \times 10^{-10} \times (2600)^2}{500 \times 1.45 \times 10^{-4}} \approx 0.019~\text{m}.
+  w_0^* = \frac{10^{-10} \times (2600)^2}{500 \times 1.45 \times 10^{-4}} \approx 0.0093~\text{m}.
 \end{equation}
-This is much smaller than typical tidal amplitudes (0.5--2~m), indicating that the power-law nonlinearity is generally important for tidal flexure when background strain rates are as low as $10^{-10}$~s$^{-1}$.  The Newtonian linearization becomes adequate only when $\dot{\varepsilon}_{\text{bg}}$ is large enough---for example, in fast-flowing ice shelves or shear margins where $\dot{\varepsilon}_{\text{bg}} \gtrsim 10^{-8}$~s$^{-1}$, the critical amplitude exceeds 1~m and the linearization holds for typical tides.  More generally, the nonlinearity matters whenever the tidal bending strains at the surface, of order $h\,w_0 / \ell_f^2$, exceed the background strains accumulated over one tidal cycle, of order $\dot{\varepsilon}_{\text{bg}} / \omega$.
+This is much smaller than typical tidal amplitudes (0.5--2~m), indicating that the power-law nonlinearity is generally important for tidal flexure when background strain rates are as low as $10^{-10}$~s$^{-1}$.  The Newtonian linearization becomes adequate only when $\dot{\varepsilon}_{\text{bg}}$ is large enough---for example, in fast-flowing ice shelves or shear margins where $\dot{\varepsilon}_{\text{bg}} \gtrsim 10^{-8}$~s$^{-1}$, the critical amplitude approaches 1~m and the linearization holds for typical tides.  More generally, the nonlinearity matters whenever the tidal bending strains at the surface, of order $h\,w_0 / \ell_f^2$, exceed the background strains accumulated over one tidal cycle, of order $\dot{\varepsilon}_{\text{bg}} / \omega$.
 
 \medskip
 \noindent\textbf{Multiple tidal constituents.}  Equation~\eqref{eq:critical_tidal_height} applies to monochromatic (single-frequency) tidal forcing.  In practice, two or more tidal constituents are often important at a given location (e.g., M$_2$ and S$_2$, or M$_2$ and O$_1$).  The surface bending strain rate from multiple constituents is
 \begin{equation}
-  \dot{\varepsilon}_{\text{bend}} \sim \frac{h}{2\,\ell_f^2}\sum_j w_j\,\omega_j\,\sin(\omega_j\,t + \phi_j),
+  \dot{\varepsilon}_{\text{bend}} \sim \frac{h}{\ell_f^2}\sum_j w_j\,\omega_j\,\sin(\omega_j\,t + \phi_j),
 \end{equation}
 where $w_j$ and $\omega_j$ are the amplitude and angular frequency of the $j$th constituent.  The nonlinearity matters when the \textit{total} bending strain rate exceeds $\dot{\varepsilon}_{\text{bg}}$, not when any single constituent does.  The peak bending strain rate occurs during spring tides, when the constituent phases align constructively, giving the generalized criterion
 \begin{equation}
-  \boxed{\frac{h}{2\,\ell_f^2}\sum_j w_j\,\omega_j \lesssim \dot{\varepsilon}_{\text{bg}}.}
+  \boxed{\frac{h}{\ell_f^2}\sum_j w_j\,\omega_j \lesssim \dot{\varepsilon}_{\text{bg}}.}
   \label{eq:critical_tidal_multi}
 \end{equation}
 When the dominant constituents have similar frequencies (e.g., the semidiurnal M$_2$ and S$_2$), $\omega_j \approx \omega$ and equation~\eqref{eq:critical_tidal_multi} reduces to the monochromatic result~\eqref{eq:critical_tidal_height} with $w_0$ replaced by the sum of the constituent amplitudes---the spring-tide amplitude.  For mixed diurnal--semidiurnal tides, the frequency weighting means that higher-frequency constituents contribute disproportionately to the peak bending strain rate.
@@ -1552,7 +1557,7 @@ The derivations above assumed a uniform viscosity (or stiffness parameter $B$) t
 Because the rate factor $A(T)$ follows an Arrhenius relation, the viscosity $\eta(z) = 1/[2A(T(z))]$ varies strongly with depth: the cold surface is stiff and the warm base is soft (Figure~\ref{fig:depth_dependent_T}a).  The surface-to-base viscosity ratio $\eta_s/\eta_b = A(T_b)/A(T_s)$ ranges from $\sim$10 for $T_s = 263$~K to several hundred for $T_s = 243$~K.
 
 \medskip
-\noindent\textbf{Newtonian case: shifted neutral axis.}  For a 1D beam, the uniaxial bending stress is $\sigma_{xx}(z) = 3\eta(z)\,\dot{\varepsilon}_{xx}(z)$.  The Kirchhoff--Love kinematic assumption gives $\dot{\varepsilon}_{xx} = \dot{\varepsilon}_0 - z\,\dot{\kappa}$, where $\dot{\varepsilon}_0$ is the membrane strain rate and $\dot{\kappa} = \partial^2 \dot{w}/\partial x^2$.  Requiring zero net axial force, $N = \int_{-h/2}^{h/2}\!\sigma_{xx}\,dz = 0$, determines the membrane strain rate:
+\noindent\textbf{Newtonian case: shifted neutral axis.}  For cylindrical bending ($\dot{\varepsilon}_{yy} = 0$), the axial stress is $\sigma_{xx}(z) = 4\eta(z)\,\dot{\varepsilon}_{xx}(z)$ (the plane-strain stiffness, as derived in Appendix~\ref{app:viscous_plate}).  The Kirchhoff--Love kinematic assumption gives $\dot{\varepsilon}_{xx} = \dot{\varepsilon}_0 - z\,\dot{\kappa}$, where $\dot{\varepsilon}_0$ is the membrane strain rate and $\dot{\kappa} = \partial^2 \dot{w}/\partial x^2$.  Requiring zero net axial force, $N = \int_{-h/2}^{h/2}\!\sigma_{xx}\,dz = 0$, determines the membrane strain rate:
 \begin{equation}
   \dot{\varepsilon}_0 = z_0\,\dot{\kappa}, \qquad z_0 \equiv \frac{\displaystyle\int_{-h/2}^{h/2}\!\eta(z)\,z\,dz}{\displaystyle\int_{-h/2}^{h/2}\!\eta(z)\,dz}\,.
   \label{eq:z0_newtonian}
@@ -1560,15 +1565,15 @@ Because the rate factor $A(T)$ follows an Arrhenius relation, the viscosity $\et
 The parameter $z_0$ is the viscosity-weighted centroid of the cross section; the strain rate vanishes at $z = z_0$, which defines the \textbf{neutral axis}.  When $\eta$ is uniform, $z_0 = 0$ and the neutral axis lies at the midplane.  When the surface is stiffer than the base, $z_0 > 0$: the neutral axis shifts toward the cold, stiff surface.
 
 \medskip
-\noindent The bending stress becomes $\sigma_{xx}(z) = -3\eta(z)\,(z - z_0)\,\dot{\kappa}$, and the bending moment $M = \int\!\sigma_{xx}\,z\,dz$ evaluates to
+\noindent The bending stress becomes $\sigma_{xx}(z) = -4\eta(z)\,(z - z_0)\,\dot{\kappa}$, and the bending moment $M = \int\!\sigma_{xx}\,z\,dz$ evaluates to
 \begin{equation}
-  M = -\tilde{D}_v\,\dot{\kappa}, \qquad \boxed{\tilde{D}_v = 3\!\int_{-h/2}^{h/2}\!\eta(z)\,(z - z_0)^2\,dz.}
+  M = -\tilde{D}_v\,\dot{\kappa}, \qquad \boxed{\tilde{D}_v = 4\!\int_{-h/2}^{h/2}\!\eta(z)\,(z - z_0)^2\,dz.}
   \label{eq:Dv_tilde}
 \end{equation}
-This is the \textbf{effective viscous flexural rigidity} for a beam with depth-dependent viscosity.  The integral is the viscosity-weighted second moment of area about the neutral axis---a parallel-axis theorem.  For a plate (biaxial constraint), the coefficient 3 is replaced by 4.  Because the force and moment balance equations are statements of equilibrium that hold regardless of the constitutive law, the viscous flexure equation~\eqref{eq:viscous_plate_flexure} retains its form with $D_v \to \tilde{D}_v$.  The relaxation times~\eqref{eq:viscous_relaxation_time}, flexural wavelength~\eqref{eq:viscous_flexural_wavelength}, and tidal phase-lag analysis all carry through with the modified rigidity.
+This is the \textbf{effective viscous flexural rigidity} for a plate with depth-dependent viscosity.  The integral is the viscosity-weighted second moment of area about the neutral axis---a parallel-axis theorem.  For uniform $\eta$, this reduces to $4\eta\,h^3/12 = \eta\,h^3/3 = D_v$, consistent with Appendix~\ref{app:viscous_plate}.  Because the force and moment balance equations are statements of equilibrium that hold regardless of the constitutive law, the viscous flexure equation~\eqref{eq:viscous_plate_flexure} retains its form with $D_v \to \tilde{D}_v$.  The relaxation times~\eqref{eq:viscous_relaxation_time}, flexural wavelength~\eqref{eq:viscous_flexural_wavelength}, and tidal phase-lag analysis all carry through with the modified rigidity.
 
 \medskip
-\noindent\textbf{Power-law extension.}  For a power-law rheology with depth-dependent stiffness $B(z) = [3^{(n+1)/2}/(2A(T(z)))]^{1/n}$, the neutral-axis condition $N = 0$ becomes
+\noindent\textbf{Power-law extension.}  For a power-law rheology with depth-dependent stiffness $B(z) = 2/A(T(z))^{1/n}$ (equation~\eqref{eq:nl_stress_inversion}), the neutral-axis condition $N = 0$ becomes
 \begin{equation}
   \int_{-h/2}^{h/2}\!B(z)\,|z - z_0|^{(1/n)-1}\,(z - z_0)\,dz = 0.
   \label{eq:z0_powerlaw}
@@ -1578,15 +1583,15 @@ The curvature rate $\dot{\kappa}$ cancels from this condition: the common factor
   \tilde{D}_n = \int_{-h/2}^{h/2}\!B(z)\,|z - z_0|^{(1/n)+1}\,dz.
   \label{eq:Dn_tilde}
 \end{equation}
-For $n = 1$, equation~\eqref{eq:z0_powerlaw} is linear in $z_0$ and recovers equation~\eqref{eq:z0_newtonian}.  For $n > 1$, equation~\eqref{eq:z0_powerlaw} is a nonlinear equation that requires numerical root-finding, but this is a single scalar equation and straightforward to solve.  The beam flexure equation~\eqref{eq:nl_beam_flexure} retains its structure with $D_n \to \tilde{D}_n$.
+For $n = 1$, equation~\eqref{eq:z0_powerlaw} is linear in $z_0$ and recovers equation~\eqref{eq:z0_newtonian}.  For $n > 1$, equation~\eqref{eq:z0_powerlaw} is a nonlinear equation that requires numerical root-finding, but this is a single scalar equation and straightforward to solve.  The plate flexure equation~\eqref{eq:nl_plate_flexure} retains its structure with $D_n \to \tilde{D}_n$.
 
 \medskip
-\noindent\textbf{Physical effects (Figure~\ref{fig:depth_dependent_T}).}  The depth-dependent temperature has two effects on viscous bending.  First, the neutral axis shifts toward the cold, stiff surface ($z_0 > 0$).  The cold upper portion of the beam, which carries most of the bending resistance, becomes thinner (measured from the neutral axis), while the warm lower portion contributes little.  Second, the effective flexural rigidity $\tilde{D}_v$ is reduced relative to the value $D_v(\bar{T})$ evaluated at the depth-averaged temperature.  Both effects make ice shelves more compliant than a depth-averaged viscosity would suggest.  The rigidity reduction depends on the surface temperature and is typically 10--25\% relative to $D_v(\bar{T})$ (Figure~\ref{fig:depth_dependent_T}c), while the neutral axis can shift by more than half the distance from the midplane to the surface ($z_0 \sim 0.6\,h/2$ for $T_s = 243$~K).  The stress asymmetry is the more consequential effect: the warm, soft base carries little bending stress, concentrating the load in the cold upper portion of the beam.
+\noindent\textbf{Physical effects (Figure~\ref{fig:depth_dependent_T}).}  The depth-dependent temperature has two effects on viscous bending.  First, the neutral axis shifts toward the cold, stiff surface ($z_0 > 0$).  The cold upper portion of the plate, which carries most of the bending resistance, becomes thinner (measured from the neutral axis), while the warm lower portion contributes little.  Second, the effective flexural rigidity $\tilde{D}_v$ is reduced relative to the value $D_v(\bar{T})$ evaluated at the depth-averaged temperature.  Both effects make ice shelves more compliant than a depth-averaged viscosity would suggest.  The rigidity reduction depends on the surface temperature and is typically 10--25\% relative to $D_v(\bar{T})$ (Figure~\ref{fig:depth_dependent_T}c), while the neutral axis can shift by more than half the distance from the midplane to the surface ($z_0 \sim 0.6\,h/2$ for $T_s = 243$~K).  The stress asymmetry is the more consequential effect: the warm, soft base carries little bending stress, concentrating the load in the cold upper portion of the plate.
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fig10_depth_dependent_temperature.pdf}
-\caption{Effect of depth-dependent temperature on viscous beam bending, for a linear temperature profile with $T_b = 273$~K and varying surface temperature $T_s$.  (a)~Viscosity profile $\eta(z)/\eta(\bar{T})$: the surface-to-base contrast ranges from $\sim$10 ($T_s = 263$~K) to $\sim$300 ($T_s = 243$~K).  (b)~Newtonian bending stress $\sigma_{xx}(z)$ (normalized by the surface value) for uniform $\eta$ (dashed black) and depth-dependent $\eta$ (solid curves).  The neutral axis (horizontal dotted lines) shifts toward the cold surface.  (c)~Neutral axis position $z_0/(h/2)$ and effective rigidity ratio $\tilde{D}_v/D_v(\bar{T})$ as functions of $T_s$.  Colder surface temperatures produce larger asymmetry and greater rigidity reduction.  All quantities are for the beam (uniaxial) case.}
+\caption{Effect of depth-dependent temperature on viscous plate bending, for a linear temperature profile with $T_b = 273$~K and varying surface temperature $T_s$.  (a)~Viscosity profile $\eta(z)/\eta(\bar{T})$: the surface-to-base contrast ranges from $\sim$10 ($T_s = 263$~K) to $\sim$300 ($T_s = 243$~K).  (b)~Newtonian bending stress $\sigma_{xx}(z)$ (normalized by the surface value) for uniform $\eta$ (dashed black) and depth-dependent $\eta$ (solid curves).  The neutral axis (horizontal dotted lines) shifts toward the cold surface.  (c)~Neutral axis position $z_0/(h/2)$ and effective rigidity ratio $\tilde{D}_v/D_v(\bar{T})$ as functions of $T_s$.  Colder surface temperatures produce larger asymmetry and greater rigidity reduction.}
 \label{fig:depth_dependent_T}
 \end{figure}
 
@@ -1599,7 +1604,7 @@ For $n = 1$, equation~\eqref{eq:z0_powerlaw} is linear in $z_0$ and recovers equ
 Cuffey, K.~M.\ and W.~S.~B.\ Paterson (2010).
 \textit{The Physics of Glaciers}, 4th ed.
 Academic Press, 693~pp.
-\texttt{doi:10.1016/C2009-0-02510-1}
+ISBN 978-0-12-369461-4.
 
 \bibitem{GoldsbyKohlstedt2001}
 Goldsby, D.~L.\ and D.~L.\ Kohlstedt (2001).
@@ -1672,6 +1677,18 @@ van der Veen, C.~J.\ (1998).
 Fracture mechanics approach to penetration of surface crevasses on glaciers.
 \textit{Cold Regions Science and Technology}, 27(1), 31--47.
 \texttt{doi:10.1016/S0165-232X(97)00022-0}
+
+\bibitem{Gudmundsson2011}
+Gudmundsson, G.~H.\ (2011).
+Ice-stream response to ocean tides and the form of the basal sliding law.
+\textit{The Cryosphere}, 5, 259--270.
+\texttt{doi:10.5194/tc-5-259-2011}
+
+\bibitem{Rosieretal2014}
+Rosier, S.~H.~R., Gudmundsson, G.~H., and Green, J.~A.~M.\ (2014).
+Insights into ice stream dynamics through modelling their response to tidal forcing.
+\textit{The Cryosphere}, 8, 1763--1775.
+\texttt{doi:10.5194/tc-8-1763-2014}
 
 \end{thebibliography}
 
