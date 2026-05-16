@@ -27,7 +27,7 @@
 \begin{itemize}
   \item Linear elasticity and Hooke's law for isotropic materials
   \item Elastic moduli and wave speeds in ice
-  \item Maxwell viscoelasticity and the relaxation time
+  \item Maxwell viscoelasticity and the relaxation time; Kelvin--Voigt and Burgers models
   \item Elastic flexure of floating ice
   \item Examples: grounding zone tidal flexure, j\"{o}kulhlaups, and supraglacial lake drainage
 \end{itemize}
@@ -46,13 +46,13 @@ In the preceding lectures on ice rheology, we treated ice as a viscous fluid whe
 \noindent Many important glaciological processes, however, occur on timescales short enough that ice might behave elastically.  Tidal loading at grounding zones flexes ice shelves with periods of hours.  J\"{o}kulhlaups drain subglacial lakes over hours to days.  Supraglacial lakes load ice shelves and can drain catastrophically in minutes.  On these timescales, ice can deform like an elastic solid where the Cauchy stress is proportional to strain (symmetric component of the gradient of displacement). In an elastic material, deformation is recoverable when the load is removed.
 
 \medskip
-\noindent The goal of this lecture is to develop the elastic and viscoelastic constitutive relations for ice, building on the viscous framework established earlier.  We begin with linear elasticity---the simplest constitutive model for a solid material---and derive Hooke's law.  We then introduce the Maxwell viscoelastic model, which combines elastic and viscous behavior in a single framework and provides a natural transition between the short-timescale elastic response and the long-timescale viscous flow we have already studied.  Worked examples illustrate the application of these ideas to grounding zone flexure, j\"{o}kulhlaups, and ice-shelf hydrofracture.
+\noindent The goal of this lecture is to develop the elastic and viscoelastic constitutive relations for ice, building on the viscous framework established earlier.  We begin with linear elasticity---the simplest constitutive model for a solid material---and derive Hooke's law.  We then introduce the Maxwell viscoelastic model, which combines elastic and viscous behavior in a single framework and provides a natural transition between the short-timescale elastic response and the long-timescale viscous flow we have already studied.  We also discuss the Kelvin--Voigt and Burgers models, which extend the Maxwell framework to capture transient (delayed elastic) creep behavior.  Worked examples illustrate the application of these ideas to grounding zone flexure, j\"{o}kulhlaups, and ice-shelf hydrofracture.
 
 \medskip
 \noindent Two appendices derive Hooke's law and the heat equation from the first law of thermodynamics, showing how elasticity (the reversible storage of energy through molecular displacement) and heat conduction (the irreversible transport of energy through molecular vibration) arise from the same fundamental energy balance.
 
 \medskip
-\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization; Appendix~\ref{app:flexure_derivation} derives the thin plate flexure equation from the force balance on a plate element; and Appendix~\ref{app:viscous_plate} extends the plate bending theory to a Newtonian viscous fluid.
+\noindent\textbf{Plan for this lecture.}  We review linear elasticity and Hooke's law (\S\ref{sec:elasticity}), present the elastic properties of ice (\S\ref{sec:elastic_moduli}), develop the elastic flexure equation for thin plates (\S\ref{sec:flexure}), introduce Maxwell viscoelasticity (\S\ref{sec:maxwell}) along with the Kelvin--Voigt and Burgers models (\S\ref{sec:other_viscoelastic}), and work through three glaciological examples (\S\ref{sec:worked_examples}).  Appendix~\ref{app:hookes_law} derives Hooke's law from the first law of thermodynamics; Appendix~\ref{app:heat_equation} derives the standard heat equation; Appendix~\ref{app:generalized_heat} derives the generalized heat equation that includes viscous dissipation and recrystallization; Appendix~\ref{app:flexure_derivation} derives the thin plate flexure equation from the force balance on a plate element; and Appendix~\ref{app:viscous_plate} extends the plate bending theory to a Newtonian viscous fluid.
 
 %===================================================================
 % SECTION 2 -- Linear Elasticity
@@ -498,6 +498,144 @@ The first term is the elastic strain (in phase with the stress); the second is t
 \caption{Response of a linear Maxwell material to three types of loading.  (a)~Creep test: a step stress produces an instantaneous elastic strain followed by steady viscous creep; at $t = t_M$ the viscous strain equals the elastic strain.  (b)~Relaxation test: a step strain produces an initial elastic stress that decays exponentially with $e$-folding time $t_M$.  (c)~Oscillatory stress at three Deborah numbers: for De~$= 0.2$ (viscous regime) the strain drifts; for De~$= 5$ (elastic regime) the strain oscillates in phase with the stress; for De~$= 1$ the response is transitional.}
 \label{fig:maxwell_responses}
 \end{figure}
+
+\subsection{Other Viscoelastic Models: Kelvin--Voigt and Burgers}
+\label{sec:other_viscoelastic}
+
+The Maxwell model is not the only way to combine elastic and viscous elements.  Two other classical models---Kelvin--Voigt and Burgers---arise from different arrangements and provide qualitatively different mechanical behavior.
+
+\subsubsection{The Kelvin--Voigt Model}
+\label{sec:kelvin_voigt}
+
+The \textbf{Kelvin--Voigt model} places a spring and dashpot in \emph{parallel}, so that both elements share the same strain but carry different fractions of the stress:
+
+\begin{center}
+\begin{tikzpicture}[scale=1.2]
+  % Top branch (spring)
+  \draw[thick] (0,0) -- (0,0.5) -- (0.5,0.5);
+  \draw[thick, decorate, decoration={zigzag, segment length=6, amplitude=4}] (0.5,0.5) -- (2.5,0.5);
+  \draw[thick] (2.5,0.5) -- (3.0,0.5) -- (3.0,0);
+  \node[above] at (1.5,0.8) {$\mu$};
+  % Bottom branch (dashpot)
+  \draw[thick] (0,0) -- (0,-0.5) -- (0.5,-0.5);
+  \draw[thick] (0.5,-0.85) rectangle (1.5,-0.15);
+  \draw[thick] (0.5,-0.5) -- (1.0,-0.5);
+  \draw[thick, fill=gray!30] (1.0,-0.75) -- (1.0,-0.25);
+  \draw[thick] (1.5,-0.5) -- (3.0,-0.5) -- (3.0,0);
+  \node[below] at (1.0,-0.95) {$\eta$};
+  % Arrows
+  \draw[thick, ->] (-0.8,0) -- (0,0);
+  \draw[thick, ->] (3.0,0) -- (3.8,0);
+  \node[above] at (-0.8,0.1) {$\tau$};
+  \node[above] at (3.8,0.1) {$\tau$};
+\end{tikzpicture}
+\end{center}
+
+\noindent The constitutive equation is:
+\begin{equation}
+  \tau_{ij} = 2\mu\,\varepsilon_{ij} + 2\eta\,\dot{\varepsilon}_{ij}.
+  \label{eq:kelvin_voigt}
+\end{equation}
+In a creep test (constant applied stress $\tau_0$), the 1D response is:
+\begin{equation}
+  \varepsilon(t) = \frac{\tau_0}{2\mu}\left(1 - e^{-t/t_R}\right), \qquad t_R = \frac{\eta}{\mu},
+  \label{eq:kv_creep}
+\end{equation}
+where $t_R$ is the \textbf{retardation time}.  The strain asymptotes exponentially to the elastic equilibrium value $\tau_0/(2\mu)$; on removal of the load, the strain recovers completely on the same timescale.  This is the key distinction from the Maxwell model: the Kelvin--Voigt material exhibits \emph{delayed elasticity}---all deformation is eventually recoverable---whereas the Maxwell material exhibits permanent viscous flow.
+
+In a relaxation test (constant applied strain), the Kelvin--Voigt model predicts an instantaneously infinite stress (the dashpot resists any instantaneous deformation), which then immediately drops to the finite elastic value $2\mu\,\varepsilon_0$.  The model therefore cannot accommodate instantaneous elastic strain---a significant limitation.
+
+\medskip
+\noindent\textbf{Glaciological relevance.}  The Kelvin--Voigt model, used alone, does not capture the two behaviors most important for glacier dynamics: instantaneous elastic response and long-term irreversible creep.  For this reason, the standalone Kelvin--Voigt model is not used in glacier dynamics to the author's knowledge.  Its value lies in its role as a building block for more complete models, particularly the Burgers model described next.
+
+\subsubsection{The Burgers Model}
+\label{sec:burgers}
+
+The \textbf{Burgers model} combines a Maxwell element in series with a Kelvin--Voigt element, giving four parameters: two elastic moduli ($\mu_M$, $\mu_K$) and two viscosities ($\eta_M$, $\eta_K$).
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+  % Maxwell spring
+  \draw[thick] (0,0) -- (0.3,0);
+  \draw[thick, decorate, decoration={zigzag, segment length=5, amplitude=3.5}] (0.3,0) -- (1.7,0);
+  \draw[thick] (1.7,0) -- (2.0,0);
+  \node[above] at (1.0,0.25) {$\mu_M$};
+  \node[below] at (1.0,-0.35) {\small Maxwell};
+  % Maxwell dashpot
+  \draw[thick] (2.0,0) -- (2.3,0);
+  \draw[thick] (2.3,-0.3) rectangle (3.3,0.3);
+  \draw[thick] (2.3,0) -- (2.8,0);
+  \draw[thick, fill=gray!30] (2.8,-0.2) -- (2.8,0.2);
+  \draw[thick] (3.3,0) -- (3.6,0);
+  \node[above] at (2.8,0.4) {$\eta_M$};
+  % KV unit - parallel spring and dashpot
+  \draw[thick] (3.6,0) -- (3.6,0.5) -- (4.0,0.5);
+  \draw[thick, decorate, decoration={zigzag, segment length=5, amplitude=3.5}] (4.0,0.5) -- (5.4,0.5);
+  \draw[thick] (5.4,0.5) -- (5.8,0.5) -- (5.8,0);
+  \node[above] at (4.7,0.75) {$\mu_K$};
+  \draw[thick] (3.6,0) -- (3.6,-0.5) -- (4.0,-0.5);
+  \draw[thick] (4.0,-0.8) rectangle (5.0,-0.2);
+  \draw[thick] (4.0,-0.5) -- (4.5,-0.5);
+  \draw[thick, fill=gray!30] (4.5,-0.7) -- (4.5,-0.3);
+  \draw[thick] (5.0,-0.5) -- (5.8,-0.5) -- (5.8,0);
+  \node[below] at (4.5,-0.9) {$\eta_K$};
+  \node[below] at (4.7,-1.3) {\small Kelvin--Voigt};
+  % Output
+  \draw[thick] (5.8,0) -- (6.2,0);
+  % Arrows
+  \draw[thick, ->] (-0.6,0) -- (0,0);
+  \draw[thick, ->] (6.2,0) -- (6.8,0);
+  \node[above] at (-0.6,0.1) {$\tau$};
+  \node[above] at (6.8,0.1) {$\tau$};
+\end{tikzpicture}
+\end{center}
+
+\noindent Because the elements are in series, the total strain rate is the sum of the Maxwell and Kelvin--Voigt strain rates.  For a creep test at constant stress $\tau_0$, the 1D strain response is:
+\begin{equation}
+  \boxed{\varepsilon(t) = \underbrace{\frac{\tau_0}{2\mu_M}}_{\text{instantaneous elastic}} + \underbrace{\frac{\tau_0}{2\eta_M}\,t}_{\text{steady-state creep}} + \underbrace{\frac{\tau_0}{2\mu_K}\left(1 - e^{-t/t_K}\right)}_{\text{delayed elastic (transient)}},}
+  \label{eq:burgers_creep}
+\end{equation}
+where $t_K = \eta_K/\mu_K$ is the retardation time of the Kelvin--Voigt element.  The three terms correspond to three distinct physical regimes:
+\begin{enumerate}
+  \item An \textbf{instantaneous elastic} strain at $t = 0$ (from the Maxwell spring $\mu_M$).
+  \item A \textbf{transient creep} phase that saturates on timescale $t_K$ (from the Kelvin--Voigt unit), representing delayed elastic recovery associated with reversible processes such as grain-boundary sliding accommodated by elastic back-stresses.
+  \item A \textbf{steady-state viscous creep} at long times (from the Maxwell dashpot $\eta_M$), representing permanent dislocation creep.
+\end{enumerate}
+
+\noindent These three regimes map directly onto the primary, secondary, and tertiary stages of a laboratory creep test, making the Burgers model an attractive phenomenological description of the full transient response of polycrystalline ice.
+
+\medskip
+\noindent\textbf{Characteristic timescales.}  The Burgers model has two internal timescales: the Maxwell relaxation time $t_M = \eta_M/\mu_M$, which controls stress relaxation at constant strain, and the Kelvin--Voigt retardation time $t_K = \eta_K/\mu_K$, which controls the duration of transient creep.  For ice, laboratory experiments and field observations suggest $t_K \sim$ hours to days---comparable to the Maxwell time in many glaciological settings---while the steady-state viscosity $\eta_M$ corresponds to the effective viscosity of Glen's law \cite{CuffeyPaterson2010}.
+
+\medskip
+\noindent\textbf{Glaciological applications.}  The Burgers model has been used to interpret:
+\begin{itemize}
+  \item Tidal modulation of ice-stream velocity, where the transient (delayed elastic) response produces a velocity signal at the tidal frequency that decays with distance from the grounding line \cite{Gudmundsson2011,Rosieretal2014}.
+  \item GPS and InSAR measurements of post-seismic ice-sheet response, where the instantaneous co-seismic elastic displacement is followed by a transient relaxation on timescales consistent with the Kelvin--Voigt element \cite{Burdetteetal2024}.
+  \item Laboratory creep experiments at stresses below the Glen's-law regime, where the transient phase is pronounced and the Burgers model provides a better fit than the Maxwell model alone \cite{CuffeyPaterson2010}.
+\end{itemize}
+
+\subsubsection{Comparison of the Three Models}
+\label{sec:model_comparison}
+
+Table~\ref{tab:viscoelastic_models} summarizes the key features of the three viscoelastic models.
+
+\begin{table}[ht]
+\centering
+\caption{Comparison of linear viscoelastic models.  ``Instant elastic'' indicates whether the model permits an instantaneous elastic strain; ``permanent flow'' indicates whether strain accumulates indefinitely under constant stress; ``recoverable'' indicates whether strain is fully recovered on unloading.}
+\label{tab:viscoelastic_models}
+\begin{tabular}{lcccl}
+\toprule
+\textbf{Model} & \textbf{Instant elastic} & \textbf{Permanent flow} & \textbf{Recoverable} & \textbf{Use in glaciology} \\
+\midrule
+Maxwell & Yes & Yes & No & Most common \\
+Kelvin--Voigt & No & No & Yes & Not used alone \\
+Burgers & Yes & Yes & Partially & Occasional \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent The Maxwell model is the standard choice for most problems in glacier dynamics because it captures the two most important behaviors: instantaneous elastic response to rapid loading and permanent viscous flow under sustained stress.  The Burgers model is preferred when the transient creep phase is important---particularly for tidal problems where the forcing period is comparable to the retardation time $t_K$, so that the delayed elastic response contributes significantly to the observed deformation.
 
 %===================================================================
 % SECTION 6 -- Worked Examples
@@ -1261,14 +1399,14 @@ The ratio of the two rigidities is $D_v / D = \eta\,h^3/(3) \times 12(1-\nu^2)/(
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fig09_tidal_flexure_rheology.pdf}
-\caption{Tidal flexure at a grounding zone for five rheologies ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr, $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$, $T = 263$~K).  Flow law parameters from \cite{GoldsbyKohlstedt2001}: $n = 1.8$ (GBS-accommodated basal slip, $d = 1$~mm), $n = 3$ (Glen's law), $n = 4$ (dislocation creep).  The Newtonian viscosity is set by Glen's law at $\tau_e = 0.1$~MPa.  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Snapshots at eight tidal phases for Newtonian (dashed) and $n = 3$ (solid).  (d)~Time series at $x = \ell_f$: the elastic response (dark grey) is in phase with the tide; all viscous responses lag the tide.  Because all three flow laws produce similar strain rates near the crossover stress of $\sim$0.1~MPa (\S\ref{sec:introduction}), the power-law solutions are nearly indistinguishable.  When the flow law prefactors are matched so that $D_{\text{eff}}(\dot{\varepsilon}_{\text{bg}}) = D_v$ (Figure~\ref{fig:tidal_flexure_matched}), the solutions collapse onto the Newtonian curve, demonstrating that nonlinearity only matters when the tidal bending strain rate exceeds $\dot{\varepsilon}_{\text{bg}}$ (equation~\eqref{eq:critical_tidal_height}).}
+\caption{Tidal flexure at a grounding zone for five rheologies ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr, $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$, $T = 263$~K).  Flow law parameters from \cite{GoldsbyKohlstedt2001}: $n = 1.8$ (GBS-accommodated basal slip, $d = 1$~mm), $n = 3$ (Glen's law), $n = 4$ (dislocation creep).  The Newtonian viscosity is set by Glen's law at $\tau_e = 0.1$~MPa.  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Snapshots at eight tidal phases for Newtonian (dashed) and $n = 3$ (solid).  (d)~Time series at $x = \ell_f$: the elastic response (dark grey) is in phase with the tide; all viscous responses lag the tide.  Because the tidal bending strain rate $(h/2)\,|\dot{w}''| \gg \dot{\varepsilon}_{\text{bg}}$ (equation~\eqref{eq:critical_tidal_height}), the power-law nonlinearity is active and the effective viscous rigidity $D_{\text{eff}}$ exceeds $D_v$ by a factor of 4--7.  The power-law solutions are correspondingly stiffer and closer to the elastic response than the Newtonian solution.  All three power-law flow laws remain nearly indistinguishable because they produce similar strain rates near the crossover stress of $\sim$0.1~MPa (\S\ref{sec:introduction}).}
 \label{fig:tidal_flexure_rheology}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fig09b_tidal_flexure_matched.pdf}
-\caption{Same as Figure~\ref{fig:tidal_flexure_rheology} but with all flow law prefactors matched so that $D_{\text{eff}}(\dot{\varepsilon}_{\text{bg}}) = D_v$: the effective viscosity at the background strain rate is the same for all $n$.  The power-law solutions collapse onto the Newtonian curve, showing that nonlinear effects are negligible when the tidal bending strain rate is small compared to $\dot{\varepsilon}_{\text{bg}}$.}
+\caption{Same as Figure~\ref{fig:tidal_flexure_rheology} but with all flow law prefactors matched so that $D_{\text{eff}}(\dot{\kappa}_{\text{bg}}) = D_v$, where $\dot{\kappa}_{\text{bg}} = 2\dot{\varepsilon}_{\text{bg}}/h$ is the background curvature rate.  Even with matched background viscosities, the power-law solutions diverge from Newtonian because the tidal bending curvature rate exceeds $\dot{\kappa}_{\text{bg}}$ near the grounding line ($w_0 \gg w_0^*$), causing strain-rate softening where bending is strongest.}
 \label{fig:tidal_flexure_matched}
 \end{figure}
 
@@ -1367,46 +1505,42 @@ This is a nonlinear parabolic PDE: fourth-order in $x$ and first-order in $t$ (t
 
 \subsection*{When does the nonlinearity matter?  Critical tidal height}
 
-The numerical experiments in Figures~\ref{fig:tidal_flexure_rheology} and~\ref{fig:tidal_flexure_matched} show that the power-law nonlinearity has a negligible effect on tidal flexure when the bending curvature rate $|\dot{w}''|$ is small compared to the background extensional strain rate $\dot{\varepsilon}_{\text{bg}}$.  We can derive a criterion for when nonlinearity becomes important.
+The numerical experiments in Figures~\ref{fig:tidal_flexure_rheology} and~\ref{fig:tidal_flexure_matched} show that the power-law nonlinearity affects tidal flexure when the bending strain rate at the beam surface is comparable to or exceeds the background extensional strain rate $\dot{\varepsilon}_{\text{bg}}$.  We can derive a criterion for when nonlinearity becomes important.
 
 \medskip
-\noindent The effective viscous flexural rigidity is $D_{\text{eff}} = D_n\,(\dot{w}''^2 + \dot{\varepsilon}_{\text{bg}}^2)^{(1/n-1)/2}$.  The nonlinearity is significant when the tidal bending strain rate is comparable to the background:
+\noindent The bending strain rate at the beam surface ($z = \pm h/2$) is $\dot{\varepsilon}_{\text{bend}} = (h/2)\,|\dot{w}''|$.  The nonlinearity is significant when the tidal bending strain rate is comparable to the background:
 \begin{equation}
-  |\dot{w}''| \sim \dot{\varepsilon}_{\text{bg}}.
+  \dot{\varepsilon}_{\text{bend}} = \frac{h}{2}\,|\dot{w}''| \sim \dot{\varepsilon}_{\text{bg}}.
 \end{equation}
-The bending curvature rate scales as $|\dot{w}''| \sim w_0\,\omega / \ell_f^2$ (from the elastic flexure solution at the grounding line, equation~\eqref{eq:tidal_flexure}, with the curvature scale $2w_0/\ell_f^2$ and the time scale $\omega$).  Setting this equal to $\dot{\varepsilon}_{\text{bg}}$:
+The bending curvature rate scales as $|\dot{w}''| \sim w_0\,\omega / \ell_f^2$ (from the elastic flexure solution at the grounding line, equation~\eqref{eq:tidal_flexure}, with the curvature scale $2w_0/\ell_f^2$ and the tidal frequency $\omega$).  Setting the surface bending strain rate equal to $\dot{\varepsilon}_{\text{bg}}$:
 \begin{equation}
-  \frac{w_0\,\omega}{\ell_f^2} \sim \dot{\varepsilon}_{\text{bg}}.
+  \frac{h\,w_0\,\omega}{2\,\ell_f^2} \sim \dot{\varepsilon}_{\text{bg}}.
 \end{equation}
 Solving for the \textbf{critical tidal amplitude} above which nonlinearity matters:
 \begin{equation}
-  \boxed{w_0^* = \frac{\dot{\varepsilon}_{\text{bg}}\,\ell_f^2}{\omega}.}
+  \boxed{w_0^* = \frac{2\,\dot{\varepsilon}_{\text{bg}}\,\ell_f^2}{h\,\omega}.}
   \label{eq:critical_tidal_height}
 \end{equation}
 For $w_0 \ll w_0^*$, the tidal perturbation is a small deviation from the background state and the linearized (Newtonian) response is adequate regardless of $n$.  For $w_0 \gtrsim w_0^*$, the bending strain rate near the grounding line exceeds $\dot{\varepsilon}_{\text{bg}}$, and the effective viscosity becomes strain-rate dependent---the power-law nonlinearity shapes the flexure profile.
 
 \medskip
-\noindent\textbf{Numerical evaluation.}  For $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$, $\ell_f = 2.6$~km, and $T_{\text{tide}} = 12$~hr ($\omega = 1.45 \times 10^{-4}$~s$^{-1}$):
+\noindent\textbf{Numerical evaluation.}  For $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$, $h = 500$~m, $\ell_f = 2.6$~km, and $T_{\text{tide}} = 12$~hr ($\omega = 1.45 \times 10^{-4}$~s$^{-1}$):
 \begin{equation}
-  w_0^* = \frac{10^{-10} \times (2600)^2}{1.45 \times 10^{-4}} \approx 4.7~\text{m}.
+  w_0^* = \frac{2 \times 10^{-10} \times (2600)^2}{500 \times 1.45 \times 10^{-4}} \approx 0.019~\text{m}.
 \end{equation}
-Tidal amplitudes in Antarctic grounding zones are typically 0.5--2~m, so $w_0 < w_0^*$ and the Newtonian approximation is generally adequate for tidal flexure.  However, for ice shelves with very low background strain rates (slow-flowing or confined ice), $w_0^*$ decreases and the nonlinearity becomes relevant.  Similarly, the nonlinearity matters for processes with larger curvature rates than tidal flexure, such as the localized bending associated with subglacial lake drainage or rapid grounding-line migration.
+This is much smaller than typical tidal amplitudes (0.5--2~m), indicating that the power-law nonlinearity is generally important for tidal flexure when background strain rates are as low as $10^{-10}$~s$^{-1}$.  The Newtonian linearization becomes adequate only when $\dot{\varepsilon}_{\text{bg}}$ is large enough---for example, in fast-flowing ice shelves or shear margins where $\dot{\varepsilon}_{\text{bg}} \gtrsim 10^{-8}$~s$^{-1}$, the critical amplitude exceeds 1~m and the linearization holds for typical tides.  More generally, the nonlinearity matters whenever the tidal bending strains at the surface, of order $h\,w_0 / \ell_f^2$, exceed the background strains accumulated over one tidal cycle, of order $\dot{\varepsilon}_{\text{bg}} / \omega$.
 
 \medskip
-\noindent\textbf{Multiple tidal constituents.}  Equation~\eqref{eq:critical_tidal_height} applies to monochromatic (single-frequency) tidal forcing.  In practice, two or more tidal constituents are often important at a given location (e.g., M$_2$ and S$_2$, or M$_2$ and O$_1$).  The curvature rate from multiple constituents is
+\noindent\textbf{Multiple tidal constituents.}  Equation~\eqref{eq:critical_tidal_height} applies to monochromatic (single-frequency) tidal forcing.  In practice, two or more tidal constituents are often important at a given location (e.g., M$_2$ and S$_2$, or M$_2$ and O$_1$).  The surface bending strain rate from multiple constituents is
 \begin{equation}
-  |\dot{w}''| \sim \frac{1}{\ell_f^2}\sum_j w_j\,\omega_j\,\sin(\omega_j\,t + \phi_j),
+  \dot{\varepsilon}_{\text{bend}} \sim \frac{h}{2\,\ell_f^2}\sum_j w_j\,\omega_j\,\sin(\omega_j\,t + \phi_j),
 \end{equation}
-where $w_j$ and $\omega_j$ are the amplitude and angular frequency of the $j$th constituent.  The nonlinearity matters when the \textit{total} curvature rate exceeds $\dot{\varepsilon}_{\text{bg}}$, not when any single constituent does.  The peak curvature rate occurs during spring tides, when the constituent phases align constructively, giving
+where $w_j$ and $\omega_j$ are the amplitude and angular frequency of the $j$th constituent.  The nonlinearity matters when the \textit{total} bending strain rate exceeds $\dot{\varepsilon}_{\text{bg}}$, not when any single constituent does.  The peak bending strain rate occurs during spring tides, when the constituent phases align constructively, giving the generalized criterion
 \begin{equation}
-  |\dot{w}''|_{\max} \sim \frac{1}{\ell_f^2}\sum_j w_j\,\omega_j.
-\end{equation}
-The generalized criterion for the onset of nonlinearity is therefore
-\begin{equation}
-  \boxed{\sum_j w_j\,\omega_j \lesssim \dot{\varepsilon}_{\text{bg}}\,\ell_f^2.}
+  \boxed{\frac{h}{2\,\ell_f^2}\sum_j w_j\,\omega_j \lesssim \dot{\varepsilon}_{\text{bg}}.}
   \label{eq:critical_tidal_multi}
 \end{equation}
-When the dominant constituents have similar frequencies (e.g., the semidiurnal M$_2$ and S$_2$), $\omega_j \approx \omega$ and equation~\eqref{eq:critical_tidal_multi} reduces to the monochromatic result~\eqref{eq:critical_tidal_height} with $w_0$ replaced by the sum of the constituent amplitudes---the spring-tide amplitude.  For mixed diurnal--semidiurnal tides, the frequency weighting means that higher-frequency constituents contribute disproportionately to the peak curvature rate.
+When the dominant constituents have similar frequencies (e.g., the semidiurnal M$_2$ and S$_2$), $\omega_j \approx \omega$ and equation~\eqref{eq:critical_tidal_multi} reduces to the monochromatic result~\eqref{eq:critical_tidal_height} with $w_0$ replaced by the sum of the constituent amplitudes---the spring-tide amplitude.  For mixed diurnal--semidiurnal tides, the frequency weighting means that higher-frequency constituents contribute disproportionately to the peak bending strain rate.
 
 \subsection*{Effect of depth-dependent temperature}
 
