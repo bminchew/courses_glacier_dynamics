@@ -72,11 +72,6 @@ In the second end member, the bed provides only a small fraction of the resistan
 \medskip
 \noindent Most glaciers lie somewhere between these end members.  The key implication is that on a weak or well-lubricated bed, the sliding rate cannot generally be predicted from local bed properties alone.  This is why no single ``sliding law'' relating $u_b$ to $\tau_b$ can be universally valid.
 
-% CHALKBOARD DRAWING 1:
-% Draw a schematic of a glacier cross-section showing the two end members:
-% (a) Local control: thick arrows from bed resistance, small lateral arrows.
-% (b) Global control: thin arrows from bed, large arrows from lateral shearing and longitudinal stresses.
-
 %===================================================================
 % SECTION 3 -- Hard-Bed Sliding
 %===================================================================
@@ -94,7 +89,14 @@ Modern study of hard-bed sliding dates from the analysis of \cite{Weertman1957sl
   \item \textbf{Enhanced creep.}  A bump in the bed produces a stress anomaly of order $\tau_b/R^2$ (where $R = a/\lambda$ is the roughness, with $a$ the bump size and $\lambda$ the bump spacing), which drives viscous deformation of the ice around the bump.  This mechanism is most effective for \textit{large} bumps, because the volume of ice affected---and hence the distance over which enhanced straining occurs---scales with the bump size.
 \end{enumerate}
 
-\noindent Weertman idealized the bed as an inclined plane studded with cubical bumps of side length $a$, spaced a distance $\lambda$ apart.
+\noindent Weertman idealized the bed as an inclined plane studded with cubical bumps of side length $a$, spaced a distance $\lambda$ apart.  Figure~\ref{fig:regelation_schematic} illustrates both mechanisms.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig06_regelation_creep_schematic.pdf}
+  \caption{The two mechanisms of hard-bed sliding.  \textbf{(a)} Regelation: elevated pressure on the upstream side of a bump lowers the melting point, causing ice to melt; meltwater flows around the bump and refreezes on the low-pressure downstream side; latent heat released by refreezing is conducted back through the bump.  Effective for small bumps ($u_1 \propto 1/a$).  \textbf{(b)} Enhanced creep: the stress anomaly $\sim \tau_b / R^2$ produced by the bump drives viscous deformation of ice over and around the obstacle; flowlines (blue) are deflected around the bump.  Effective for large bumps ($u_2 \propto a$).}
+  \label{fig:regelation_schematic}
+\end{figure}
 
 \medskip
 \noindent\textbf{Regelation velocity.}  A force balance and heat conduction calculation give the regelation sliding speed as
@@ -183,7 +185,7 @@ where $P_i = \rho_i g H$ is the ice-overburden pressure and $P_w$ is the subglac
 For a sinusoidal bed with wavelength $\lambda$ and amplitude $a$, the normal stress exerted by the ice on the bed fluctuates about the overburden value $P_i$.  The minimum normal stress---and hence the water pressure at which ice first separates from the bed---is the \textbf{separation pressure}:
 \begin{equation}
   P_s = P_i - \frac{\lambda\,\tau_b}{a\,\pi}.
-  \label{eq:separation_pressure}
+  \label{eq:separatio\phi_pressure}
 \end{equation}
 Cavities begin to form when $P_w$ reaches $P_s$.  The rougher the bed (larger $a/\lambda$), the higher the water pressure required to initiate cavitation.
 
@@ -201,10 +203,12 @@ where $N_c = P_i - P_c$ is the critical effective pressure.  For a sinusoidal be
 \end{equation}
 This result establishes a fundamental constraint: the drag that a hard bed can exert on the overlying ice is bounded above by a value proportional to the effective pressure and the maximum bed slope.  Once water pressure exceeds $P_c$, a net upward force acts on the ice and sliding becomes unstable---formally analogous to the Coulomb friction criterion for landslides.  \cite{Schoof2005} proved that this bound holds for arbitrary (non-sinusoidal) bed geometries, provided the bed has no vertical faces.
 
-% CHALKBOARD DRAWING 2:
-% Sketch Figure 7.4 from C&P: schematic of slip velocity vs. water pressure,
-% showing the Weertman regime (P_w < P_s), the cavitation regime (P_s < P_w < P_c),
-% and the unstable/globally-controlled limit (P_w -> P_i).
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.85\textwidth]{figures/fig07_cavity_formation.pdf}
+  \caption{Progressive cavity formation on a sinusoidal bed as water pressure increases.  \textbf{(a)} Full ice--bed contact when $P_w < P_s$.  \textbf{(b)} Small water-filled cavities form in the lee of bumps once $P_w$ exceeds the separation pressure $P_s$.  Red arrows indicate stress concentrations on the remaining upstream contact areas.  \textbf{(c)} Extensive cavitation as $P_w \to P_c$; ice contacts only the upstream faces of bumps, and the effective roughness is greatly reduced.}
+  \label{fig:cavity_formation}
+\end{figure}
 
 \subsubsection{Schoof's Cavitation Theory}
 \label{sec:schoof_cavitation}
@@ -407,6 +411,13 @@ Before presenting specific sliding laws, it is useful to distinguish the two fun
   \item \textbf{Skin friction} arises from frictional resistance at the ice--bed contact.  On a hard bed, skin friction comes from rock--rock contact between debris-laden basal ice and the bedrock; on a deformable bed, it comes from the yield strength of the till at grain-to-grain contacts.  Skin friction depends strongly on effective pressure $N$ (through the Mohr--Coulomb criterion, $\tau_* = f\,N$) but is essentially independent of slip rate---it is a rate-independent, plastic process.
 \end{itemize}
 
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.8\textwidth]{figures/fig08_form_drag_skin_friction.pdf}
+  \caption{The two regimes of basal drag illustrated for the regularized Coulomb sliding law at $N = 300$~kPa.  At low slip velocities (blue shading), form drag dominates: drag increases with velocity as ice deforms around bed obstacles.  Above the transition velocity $u_t$, skin friction dominates (red shading): drag saturates at the Coulomb limit $f\,N$, independent of velocity.  The transition velocity depends on bed properties, ice viscosity, and effective pressure.}
+  \label{fig:form_skin}
+\end{figure}
+
 \noindent The total basal drag is the sum of form drag and skin friction.  Cavity formation mediates the transition between the two regimes: at low slip rates, the ice is in full contact with the bed and form drag dominates; at high slip rates, extensive cavitation reduces the ice--bed contact area, diminishing form drag and leaving skin friction as the primary resistance mechanism.  In the Coulomb limit ($u_b \to \infty$ or $N \to 0$), only skin friction remains and $\tau_b \to f\,N$.
 
 \subsection{The Regularized Coulomb Sliding Law}
@@ -560,6 +571,117 @@ Cuffey \& Paterson, \textit{Physics of Glaciers}, 4th ed.:
   \item Section 7.2: Hard beds---Weertman's theory, cavities, water pressure, and Iken's bound
   \item Section 7.3: Deformable beds---till properties and Mohr--Coulomb behavior
 \end{itemize}
+
+\clearpage
+%===================================================================
+% APPENDIX -- Ice Stream Stagnation
+%===================================================================
+\appendix
+\section{Ice Stream Stagnation: The Undrained Plastic Bed Model}
+\label{sec:ice_stream_stagnation}
+
+West Antarctic ice streams flow at hundreds of meters per year over beds of weak, water-saturated till with basal shear stresses of only a few kilopascals.  Despite this apparent simplicity, individual ice streams can stagnate on timescales of centuries---the best-documented example being Kamb Ice Stream (formerly Ice Stream C), which shut down approximately 150 years ago.  \cite{Tulaczyketal2000b} proposed a thermomechanical model---the \textbf{undrained plastic bed (UPB) model}---that explains how small perturbations in the basal energy balance can trigger transitions between fast-flowing and stagnant states.  This appendix summarizes the key elements of the model.
+
+\subsection{The Compressible-Coulomb-Plastic Till Model}
+
+The UPB model is built on the laboratory results of \cite{Tulaczyketal2000a}, who showed that the till beneath Ice Stream B (now Whillans Ice Stream) behaves as a Coulomb-plastic material with three interrelated state variables: shear strength $\tau_f$, effective normal stress $N$, and porosity $\phi_p$ (the fraction of total volume occupied by pore water).
+
+\medskip
+\noindent The till strength follows the Mohr--Coulomb criterion with negligible cohesion:
+\begin{equation}
+  \tau_f = N\,\tan\varphi, \qquad \varphi \approx 24^\circ.
+  \label{eq:upb_coulomb}
+\end{equation}
+The porosity depends logarithmically on effective stress.  \cite{Tulaczyketal2000a} express this in terms of the void ratio $e = \phi_p / (1 - \phi_p)$:
+\begin{equation}
+  e = e_0 - C_c\,\log\!\left(\frac{N}{N_0}\right),
+  \label{eq:upb_void}
+\end{equation}
+where $e_0$ is a reference void ratio at $N_0 = 1$~kPa and $C_c \approx 0.12$ is the dimensionless coefficient of compressibility.  Together, equations~\eqref{eq:upb_coulomb} and~\eqref{eq:upb_void} can be combined to express till strength as a function of porosity:
+\begin{equation}
+  \tau_f = a\,\exp\!\left(\frac{-b\,\phi_p}{1 - \phi_p}\right), \qquad a = 944{,}000\;\text{kPa}, \quad b = 21.7,
+  \label{eq:upb_strength_e}
+\end{equation}
+which shows that till strength is exponentially sensitive to porosity.  A change in porosity from 0.35 to 0.39 (about 4 percentage points) changes the till strength by nearly an order of magnitude.  Figure~\ref{fig:till_strength_e} illustrates this relationship.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig10_till_strength_porosity.pdf}
+  \caption{Till failure strength $\tau_f$ as a function of porosity $\phi_p$ for the UpB till, following the empirical fit of \cite{Tulaczyketal2000a}.  The red circle marks the observed conditions beneath Ice Stream B ($\phi_p \approx 0.38$, $\tau_f \approx 2$~kPa).  A change in porosity of only 4 percentage points (blue arrows) changes the till strength by nearly an order of magnitude.  The green shading marks the strength range relevant to ice streaming ($\tau_f < 10$~kPa).}
+  \label{fig:till_strength_e}
+\end{figure}
+
+\subsection{Feedback Between Water Storage, Till Strength, and Basal Melting}
+
+The key physical insight of the UPB model is that the rate of water storage in till pore spaces couples till strength to the basal thermal energy balance.  The rate of change of porosity is
+\begin{equation}
+  \frac{\partial \phi_p}{\partial t} = (1 - \phi_p)^2\,\frac{m_r - d_r}{Z_s},
+  \label{eq:upb_void_rate}
+\end{equation}
+where $m_r$ is the basal melt rate, $d_r$ is the drainage rate, and $Z_s$ is the thickness of the active till layer.  (The factor $(1-\phi_p)^2$ arises from converting the void ratio rate $\partial e/\partial t = (m_r - d_r)/Z_s$ used by \cite{Tulaczyketal2000b} to porosity via $e = \phi_p/(1-\phi_p)$.)
+
+\medskip
+\noindent The basal melt rate is determined by the thermal energy balance at the ice--bed interface:
+\begin{equation}
+  \boxed{m_r = \frac{\tau_b\,U_b + G - k_i\,\Theta_b}{L_i\,\rho_{\text{ice}}},}
+  \label{eq:upb_melt}
+\end{equation}
+where $\tau_b\,U_b$ is the shear heating rate, $G$ is the geothermal heat flux, $k_i\,\Theta_b$ is the conductive heat loss (with $\Theta_b$ the basal temperature gradient), and $L_i\,\rho_{\text{ice}}$ converts energy flux to melt rate.  If $m_r > 0$, the base is melting; if $m_r < 0$, the base is freezing.
+
+\medskip
+\noindent The coupling works as follows.  Because the till is a Coulomb-plastic material, the basal shear stress equals the till strength: $\tau_b = \tau_f$.  The till strength depends on porosity through equation~\eqref{eq:upb_strength_e}, and the porosity changes in response to the melt rate through equation~\eqref{eq:upb_void_rate}.  The melt rate in turn depends on the shear heating $\tau_b\,U_b$, which depends on the till strength.  This closes the loop: a small change in till water content affects its strength, which affects the shear heating, which affects the melt rate, which further changes the water content.
+
+\subsection{Ice Stream Velocity on a Plastic Bed}
+
+To complete the model, \cite{Tulaczyketal2000b} derived the relationship between ice stream velocity and till strength for a rectangular channel.  For an ice stream of half-width $W$ and driving stress $\tau_d$ flowing over a bed with uniform strength $\tau_b$, the centerline velocity is
+\begin{equation}
+  U_b = \left(\frac{\tau_d - \tau_b}{\tau_d}\right)^n W^{n+1}\,U_d = \left(1 - \frac{\tau_b}{\tau_d}\right)^n W^{n+1}\,U_d,
+  \label{eq:upb_velocity}
+\end{equation}
+where $U_d = 2^{1-n}\,\tau_d^n\,(n+1)^{-1}\,B_n^{-1}$ is the velocity that would result from internal deformation alone, and $n$ and $B_n$ are Glen's flow law parameters.  The marginal shear stress $(\tau_d - \tau_b)$ is the fraction of the driving stress not supported by the bed, which must be borne by the ice stream margins.  Equation~\eqref{eq:upb_velocity} predicts that the maximum ice stream velocity occurs when the bed strength is zero ($\tau_b = 0$); when $\tau_b = \tau_d$, the bed supports the entire driving stress and the sliding velocity is zero.
+
+\subsection{Two Stable Modes and the Condition for Stagnation}
+
+Substituting $\tau_b = \tau_f$ into equation~\eqref{eq:upb_melt} and using equation~\eqref{eq:upb_velocity} for $U_b$ yields the melt rate as a function of till strength alone (for fixed driving stress and geometry).  \cite{Tulaczyketal2000b} showed that the resulting function $m_r(\tau_f)$ has a maximum at $\tau_b = (n+1)^{-1}\,\tau_d = 0.25\,\tau_d$ for $n = 3$.
+
+\medskip
+\noindent At steady state, the melt rate must equal zero (in the undrained case, $d_r = 0$) or equal the drainage rate.  The condition $m_r = 0$ defines two equilibrium states (Figure~\ref{fig:upb_stability}):
+
+\begin{enumerate}
+  \item \textbf{Ice stream mode} (stable): $\tau_b < 0.25\,\tau_d$.  The bed is weak, the ice stream is fast, and shear heating is substantial.  If a perturbation weakens the bed slightly ($\tau_b$ decreases), the shear heating $\tau_b\,U_b$ also decreases (because we are on the left side of the maximum), reducing the melt rate.  This causes freeze-on, which strengthens the till, restoring the system toward equilibrium.  This is a negative feedback.
+
+  \item \textbf{Ice sheet mode} (stable): $\tau_b > 0.25\,\tau_d$.  The bed is strong, the ice stream is slow or stagnant, and the base is frozen.  If a perturbation weakens the bed, shear heating increases (because we are on the right side of the maximum, where $\partial(\tau_b U_b)/\partial \tau_b > 0$), which increases melting, further weakening the bed---a positive feedback that would push the system toward the ice stream mode.  However, if the geothermal flux is insufficient to maintain melting at any bed strength in this range, the bed remains frozen and stable.
+\end{enumerate}
+
+\noindent The boundary between the two modes is the saddle-node bifurcation at $\tau_f = (n+1)^{-1}\,\tau_d$:
+\begin{equation}
+  \boxed{\tau_f^{\text{crit}} = \frac{\tau_d}{n+1}.}
+  \label{eq:upb_bifurcation}
+\end{equation}
+For $n = 3$, ice streaming requires $\tau_f < 0.25\,\tau_d$.  With typical driving stresses of 10--30~kPa for West Antarctic ice streams, this requires till strengths below 2.5--7.5~kPa---consistent with the $\sim$2~kPa measured beneath Whillans Ice Stream.
+
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=0.7\textwidth]{figures/fig09_upb_stability.pdf}
+  \caption{Stability of the undrained plastic bed (UPB) model, computed for Ice Stream B parameters ($\tau_d = 13$~kPa, $G = 0.06$~W\,m$^{-2}$, $\Theta_b = 0.04$~K\,m$^{-1}$).  \textbf{(a)} Basal melt rate as a function of bed strength.  The maximum shear heating occurs at $\tau_b = \tau_d / (n+1) = 0.25\,\tau_d$.  Two equilibria exist where $m_r = 0$: the ice stream mode (stable, filled circle) at low $\tau_b$ and the ice sheet mode (linearly unstable, open circle) at high $\tau_b$.  Arrows show the direction of evolution: melting weakens the bed (leftward) and freezing strengthens it (rightward).  \textbf{(b)} Corresponding ice stream velocity.  After \cite{Tulaczyketal2000b}, Figure~6.}
+  \label{fig:upb_stability}
+\end{figure}
+
+\subsection{Implications}
+
+The UPB model produces several results that bear directly on ice sheet dynamics and sea-level projections:
+
+\begin{enumerate}
+  \item \textbf{Ice stream stagnation is thermally triggered.}  A small increase in conductive heat loss (e.g., from thinning of the ice column) or decrease in geothermal flux can shift the $m_r = 0$ curve below zero for all bed strengths in the ice stream mode, eliminating the stable equilibrium and forcing the system to the ice sheet mode.  The transition can be rapid---the characteristic timescale for till consolidation driven by basal freeze-on is of order 10~years.
+
+  \item \textbf{Till water content is a first-order state variable.}  The exponential sensitivity of till strength to porosity (equation~\ref{eq:upb_strength_e}) means that changes in water storage of a few percentage points can produce order-of-magnitude changes in basal resistance.  Models that treat till strength as a prescribed parameter miss this feedback.
+
+  \item \textbf{The model is consistent with observations from Kamb Ice Stream.}  Kamb Ice Stream stagnated $\sim$150 years ago despite having a driving stress ($\sim$13~kPa) similar to neighboring active ice streams.  The UPB model predicts that a slight loss of basal heat (from margin migration or changes in ice geometry) could have tipped the system from the ice stream mode to the ice sheet mode.
+
+  \item \textbf{The ice shelf mode.}  If the geothermal flux exceeds the conductive heat loss ($G > k_i\,\Theta_b$), a third stable mode exists in which the till is extremely weak ($\tau_f \to 0$, $\phi_p$ approaches unity) and the ice stream velocity approaches the ice-shelf limit $U_b(\tau_b = 0) = \tau_d^n\,W^{n+1}\,U_d$.
+\end{enumerate}
+
+\noindent The UPB model demonstrates that the stability of ice streams is governed by a subtle interplay between basal thermodynamics, till mechanics, and ice flow---and that the same physics that enables fast ice-stream flow can also bring it to an abrupt halt.
 
 %===================================================================
 % Bibliography
