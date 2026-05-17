@@ -206,22 +206,30 @@ This result establishes a fundamental constraint: the drag that a hard bed can e
 % showing the Weertman regime (P_w < P_s), the cavitation regime (P_s < P_w < P_c),
 % and the unstable/globally-controlled limit (P_w -> P_i).
 
-\subsubsection{Sliding with Cavities: Relation Between Drag and Slip}
+\subsubsection{Schoof's Cavitation Theory}
+\label{sec:schoof_cavitation}
 
-Combining the physics of enhanced creep, regelation, and cavity formation, the relationship between basal drag $\tau_b$ and slip velocity $u_b$ takes the schematic form shown in Figure~\ref{fig:drag_velocity}:
+\cite{Schoof2005} placed these ideas on a rigorous footing.  He considered the Nye--Kamb sliding problem for a Newtonian fluid flowing over a periodic hard bed with cavitation, extending Fowler's (1986) earlier model to allow any finite number of cavities per bed period and arbitrary (non-sinusoidal) bed geometries.  Three key results emerged:
 
 \begin{enumerate}
-  \item At low $u_b$ (no cavities): $\tau_b$ increases with $u_b$ following Weertman-type scaling.
-  \item At intermediate $u_b$: cavities form, reducing bed contact and increasing $u_b$ for a given $\tau_b$.  The drag $\tau_b$ reaches a maximum.
-  \item At high $u_b$: drag decreases as cavities expand and contact area shrinks, approaching the Iken bound.  The bed can no longer provide sufficient resistance, and the sliding velocity is controlled globally by lateral and longitudinal stresses.
+  \item \textbf{Iken's bound holds for arbitrary beds.}  For any bed whose slope is bounded by $\max(h') = m_{\max}$, the drag satisfies $\tau_b \leq N\,m_{\max}$, where $m_{\max}$ plays the role of $\tan\beta$.  The only geometric quantity that matters for the upper bound is the steepest upstream face of the bed.
+
+  \item \textbf{The sliding law is a relation $\tau_b/N = f(u_b / N^n)$.}  The drag-to-effective-pressure ratio depends on slip velocity only through the combination $\Lambda = u_b / N^n$.  This follows from the scaling of the Stokes equations used in the boundary-layer analysis: stress scales as $N$, velocity perturbations scale as $u_b$, and the problem is parameterized by their ratio.
+
+  \item \textbf{The drag reaches a maximum and then decreases.}  As $\Lambda$ increases from zero, $\tau_b/N$ first rises (the Weertman regime, where drag increases with velocity), reaches a global maximum (typically less than $N\,m_{\max}$), and then decreases as contact areas migrate toward the tops of bumps and the effective bed roughness is reduced.  The maximum drag is controlled by the bed obstacles with the steepest slopes.
 \end{enumerate}
 
-\noindent The existence of a maximum in the $\tau_b$--$u_b$ relation is a robust prediction of all cavity-based sliding theories.  It means that above a certain sliding speed, faster sliding produces \textit{less} drag---a velocity-weakening regime that has important consequences for glacier stability and surge dynamics.
+\noindent The existence of a maximum in the $\tau_b$--$u_b$ relation is a robust prediction of all cavity-based sliding theories.  It means that above a certain sliding speed, faster sliding produces \textit{less} drag---a velocity-weakening regime that has important consequences for glacier stability and surge dynamics.  \cite{Schoof2005} proposed a simple analytical form that captures these features:
+\begin{equation}
+  \frac{\tau_b}{N} = C\left(\frac{\Lambda}{\Lambda + \Lambda_0}\right)^{1/n}, \quad \Lambda = \frac{u_b}{N^n},
+  \label{eq:schoof_sliding}
+\end{equation}
+where $C < m_{\max}$ is a constant related to the bed geometry, $\Lambda_0 \sim \lambda_{\max}\,A / m_{\max}$ is a reference velocity scale set by the dominant obstacle wavelength $\lambda_{\max}$ and slope $m_{\max}$, and $n$ is the exponent in Glen's flow law.  At low velocities ($\Lambda \ll \Lambda_0$), equation~\eqref{eq:schoof_sliding} gives $\tau_b \propto u_b^{1/n}$ (rate-strengthening).  At high velocities ($\Lambda \gg \Lambda_0$), $\tau_b \to C\,N$ (rate-independent).
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{figures/fig02_drag_vs_slip_velocity.pdf}
-  \caption{Basal drag $\tau_b$ vs.\ slip velocity $u_b$ for the regularized Coulomb sliding law at three values of effective pressure $N$.  At low velocities, drag increases following Weertman-type scaling ($\tau_b \propto u_b^{1/n}$).  At high velocities, drag saturates at the Iken/Coulomb bound $\tau_b \to C_s\,N$ (dotted lines), where $C_s = \tan\beta$ is the maximum bed slope.  Lower effective pressure reduces both the drag maximum and the Coulomb limit.}
+  \caption{Basal drag $\tau_b$ vs.\ slip velocity $u_b$ for the regularized Coulomb sliding law (equation~\ref{eq:schoof_sliding}) at three values of effective pressure $N$.  At low velocities, drag increases following Weertman-type scaling ($\tau_b \propto u_b^{1/n}$).  At high velocities, drag saturates at the Iken/Coulomb bound $\tau_b \to C_s\,N$ (dotted lines), where $C_s = \tan\beta$ is the maximum bed slope.  Lower effective pressure reduces both the drag maximum and the Coulomb limit.}
   \label{fig:drag_velocity}
 \end{figure}
 
@@ -388,70 +396,106 @@ This form captures the first-order observation that sliding velocity increases w
 \end{equation}
 where the sliding coefficient $C$ absorbs all bed properties including roughness, water pressure, and till strength.  This is the form used in the SSA equations studied in the dynamics lectures.
 
-\subsection{Coulomb-Type Sliding Laws}
-\label{sec:coulomb_sliding}
+\subsection{Form Drag and Skin Friction: Two Categories of Resistance}
+\label{sec:form_skin}
 
-The Mohr--Coulomb behavior of till (\S\ref{sec:till_plastic}) and Iken's bound on hard-bed drag (\S\ref{sec:effective_pressure}) both suggest that the basal shear stress should be bounded by a value proportional to the effective pressure:
-\begin{equation}
-  \tau_b \leq f\,N.
-  \label{eq:coulomb_bound}
-\end{equation}
-This motivates a Coulomb-type sliding law in which the drag is capped:
-\begin{equation}
-  \boxed{\frac{\tau_b}{N} = K\,\frac{\tilde{u}^{\,1/n}}{k_0 + \tilde{u}}, \quad \text{where } \tilde{u} = \frac{u_b}{N^{n}},}
-  \label{eq:coulomb_sliding}
-\end{equation}
-following the development in \cite{CuffeyPaterson2010} (equation~7.26).  At low velocities ($\tilde{u} \ll k_0$), $\tau_b \propto u_b^{1/n}$---the Weertman-like regime.  At high velocities ($\tilde{u} \gg k_0$), $\tau_b \to K\,N\,\tilde{u}^{1/n - 1} \to f\,N$---the Coulomb regime, in which drag is controlled by effective pressure and is independent of velocity.
+Before presenting specific sliding laws, it is useful to distinguish the two fundamental mechanisms by which a glacier bed resists the overlying flow \cite{MinchewJoughin2020}:
 
-\medskip
-\noindent This type of sliding law has two physically desirable features:
 \begin{itemize}
-  \item It transitions smoothly between velocity-strengthening behavior at low velocities and velocity-independent (plastic) behavior at high velocities.
-  \item It ensures that the drag cannot exceed the Iken bound or the Mohr--Coulomb yield stress, providing a physical upper limit on basal resistance.
+  \item \textbf{Form drag} arises from the pressure gradient associated with flow around bed obstacles.  Ice must deform to pass over and around bumps, and the asymmetry of normal stress (high on the upstream side, low on the downstream side) produces a net drag in the flow direction.  Form drag depends strongly on slip rate (faster flow means more intense deformation around obstacles) but does not depend directly on effective pressure.  It is the dominant resistance mechanism on a rigid bed when the ice is in full contact with the bed (no cavities).
+
+  \item \textbf{Skin friction} arises from frictional resistance at the ice--bed contact.  On a hard bed, skin friction comes from rock--rock contact between debris-laden basal ice and the bedrock; on a deformable bed, it comes from the yield strength of the till at grain-to-grain contacts.  Skin friction depends strongly on effective pressure $N$ (through the Mohr--Coulomb criterion, $\tau_* = f\,N$) but is essentially independent of slip rate---it is a rate-independent, plastic process.
 \end{itemize}
 
-\noindent \cite{Schoof2005} and \cite{Gagliardinietal2007} derived similar relations from first principles for hard beds with cavities, confirming the existence of the drag maximum and the transition to Coulomb-like behavior.
+\noindent The total basal drag is the sum of form drag and skin friction.  Cavity formation mediates the transition between the two regimes: at low slip rates, the ice is in full contact with the bed and form drag dominates; at high slip rates, extensive cavitation reduces the ice--bed contact area, diminishing form drag and leaving skin friction as the primary resistance mechanism.  In the Coulomb limit ($u_b \to \infty$ or $N \to 0$), only skin friction remains and $\tau_b \to f\,N$.
 
-\begin{tcolorbox}[
-  colback=orange!25,
-  colframe=orange!70!black,
-  title={\textbf{Derivation: the Coulomb sliding law from cavity physics}}
-]
-Consider the simplified model of sliding with cavities from \S\ref{sec:effective_pressure}.  The nominal cavity length is $\ell = n^n\,u_b / (A\,N^n)$, and the shear stress on the remaining contact area is intensified by a factor $(1 + \ell/\lambda_o)$, where $\lambda_o$ is a length scale related to the bed roughness.
+\subsection{The Regularized Coulomb Sliding Law}
+\label{sec:coulomb_sliding}
+
+The physical picture of form drag transitioning to skin friction motivates a sliding law that smoothly interpolates between the two regimes.  \cite{Schoof2005} derived such a law from the Nye--Kamb sliding problem with cavitation (equation~\ref{eq:schoof_sliding}).  \cite{Gagliardinietal2007} obtained a similar form from finite-element simulations.  The general structure is:
+\begin{equation}
+  \boxed{\tau_b = N\,f(\Lambda), \quad \Lambda = \frac{u_b}{N^n},}
+  \label{eq:regularized_coulomb}
+\end{equation}
+where $f(\Lambda)$ is a function that increases monotonically from zero, reaches a maximum, and then remains bounded.  A widely used parameterization \cite{Schoof2005,Gagliardinietal2007} is
+\begin{equation}
+  \tau_b = C\,N\left(\frac{\Lambda}{\Lambda + \Lambda_0}\right)^{1/n},
+  \label{eq:coulomb_sliding}
+\end{equation}
+where $C$ is a constant less than $\tan\beta$ (the maximum bed slope) and $\Lambda_0$ is a reference velocity scale.  At low velocities ($\Lambda \ll \Lambda_0$), $\tau_b \propto u_b^{1/n}$---the form-drag (Weertman) regime.  At high velocities ($\Lambda \gg \Lambda_0$), $\tau_b \to C\,N$---the skin-friction (Coulomb) regime.
 
 \medskip
-\noindent Writing $\tilde{u} = u_b / N^n$ and absorbing material constants into $k_0$ and $K$:
+\noindent This sliding law has two physically desirable features:
+\begin{itemize}
+  \item It transitions smoothly between rate-strengthening behavior at low velocities (form drag dominates) and rate-independent behavior at high velocities (skin friction dominates).
+  \item It ensures that drag cannot exceed the Iken bound or the Mohr--Coulomb yield stress, providing a physical upper limit on basal resistance.
+\end{itemize}
+
+\subsection{Experimental Confirmation: Zoet \& Iverson (2020)}
+\label{sec:zoet_iverson}
+
+\cite{ZoetIverson2020} provided the first experimental evidence that the regularized Coulomb form applies to deformable beds.  Using a ring-shear device, they slid pressurized ice at its melting temperature over a water-saturated till bed and measured the steady-state relationship between slip resistance and slip velocity.  Two configurations were tested: till without clasts (smooth bed) and till with centimeter-scale clasts embedded in the surface (rough bed).
+
+\medskip
+\noindent In both experiments, the results showed two distinct regimes:
+\begin{enumerate}
+  \item At low slip velocities, drag increased with velocity (rate-strengthening).  This is the form-drag regime: ice deforms viscously around static clasts, and faster sliding produces more drag.
+  \item Above a transition velocity $u_t$, drag became independent of velocity and equal to the Coulomb shear strength of the till, $\tau_* = N\,\tan\varphi$.  This is the skin-friction regime: clasts are mobilized by the sliding ice and begin to plow through the yielding till.
+\end{enumerate}
+
+\noindent The transition between the two regimes occurs when the drag exerted by ice flow around a clast equals the force required to plow the clast through the till at its Coulomb strength.  For clasts with larger radii, the transition velocity is lower because the clast protrudes further into the till and engages more material.  The transition velocity $u_t$ depends on the effective viscosity of the ice, the clast size, the effective pressure, and the till strength.
+
+\medskip
+\noindent \cite{ZoetIverson2020} proposed a slip law that captures both regimes:
 \begin{equation}
-  \frac{\tau_b}{N} = K\,\frac{\tilde{u}^{1/n}}{k_0 + \tilde{u}}.
+  \boxed{\tau_b = N\,\tan\varphi\left(\frac{u_b}{u_b + u_t}\right)^{1/p},}
+  \label{eq:zoet_iverson}
 \end{equation}
-For $n = 3$ and using equation~\eqref{eq:fowler_sliding} for the no-cavity regime, this reproduces the qualitative behavior of Figure~\ref{fig:drag_velocity}: drag increases at low velocity, reaches a maximum at $\tilde{u} = k_0 / (n-1)$, and decreases as $\tilde{u}^{1/n - 1}$ at high velocity (approaching the Iken/Coulomb limit).
+where $\varphi$ is the friction angle of the till and $p$ is an empirical exponent ($p \approx 5$ in their experiments).  This has the same mathematical form as equation~\eqref{eq:coulomb_sliding}, with $C = \tan\varphi$, $\Lambda_0 = u_t / N^n$, and $1/p$ playing the role of $1/n$.  The fact that the same functional form emerges for both hard beds (from the Schoof/Gagliardini cavity theory) and soft beds (from the Zoet \& Iverson experiments) is a strong indication that the regularized Coulomb law captures the essential physics of basal slip.
+
+\subsection{Toward a Universal Slip Law}
+\label{sec:universal}
+
+\cite{MinchewJoughin2020} argued that the similarity between the hard-bed and soft-bed sliding laws is not a coincidence but reflects the shared underlying physics: total drag is the sum of form drag and skin friction, and the transition between the two is governed by the same competition regardless of bed type.
+
+\begin{tcolorbox}[
+  colback=blue!5,
+  colframe=blue!50!black,
+  title={\textbf{Key point: the case for a universal slip law}}
+]
+On a hard bed, form drag arises from viscous flow around bedrock bumps.  Cavities form downstream of bumps when $P_w$ exceeds the separation pressure, reducing the ice--bed contact area and transitioning the system toward skin friction (debris--bedrock friction at the remaining contacts).
+
+\medskip
+\noindent On a soft bed, form drag arises from viscous flow around static clasts embedded in the till surface.  When the drag on a clast exceeds the yield strength of the surrounding till, the clast is mobilized and plows through the till.  The resistance is then set by the Coulomb strength of the till, independent of velocity.
+
+\medskip
+\noindent In both cases, the total drag takes the form
+\begin{equation}
+  \tau_b = \min\!\left[C_{\text{form}}\,u_b^{1/m},\;\; f\,N\right],
+\end{equation}
+regularized to produce a smooth transition.  The regularized Coulomb law (equation~\ref{eq:coulomb_sliding} or~\ref{eq:zoet_iverson}) is the simplest parameterization that captures this behavior.  The same functional form---rate-strengthening at low velocity, rate-independent at high velocity---applies irrespective of bed type, with different physical interpretations of the parameters $C$, $u_t$ (or $\Lambda_0$), and $f$.
 \end{tcolorbox}
 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{figures/fig05_sliding_law_comparison.pdf}
-  \caption{Comparison of three sliding laws at fixed effective pressure $N = 200$~kPa.  The Weertman law (dashed) and Budd law (dash-dot) both allow drag to grow without bound as velocity increases.  The regularized Coulomb law (solid) transitions from Weertman-like behavior at low velocities to a Coulomb limit $\tau_b \to f\,N$ at high velocities, consistent with Iken's bound and Mohr--Coulomb till behavior.}
+  \caption{Comparison of three sliding laws at fixed effective pressure $N = 200$~kPa.  The Weertman law (dashed) and Budd law (dash-dot) both allow drag to grow without bound as velocity increases.  The regularized Coulomb law (solid) transitions from Weertman-like behavior at low velocities to a Coulomb limit $\tau_b \to f\,N$ at high velocities, consistent with Iken's bound, Mohr--Coulomb till behavior, and the experimental results of \cite{ZoetIverson2020}.}
   \label{fig:sliding_laws}
 \end{figure}
 
 \subsection{Which Law to Use?}
 
-The choice of sliding law depends on the physical setting:
+The Weertman law ($u_b = C\,\tau_b^m$) remains the most common choice in ice-sheet models because of its simplicity and because $C$ can be tuned spatially.  However, it allows unphysically large drag at high velocities and lacks effective-pressure dependence.  The Budd law ($u_b = k\,\tau_b^p / N^q$) adds $N$-dependence but still permits unbounded drag.
 
-\begin{center}
-\begin{tabular}{lll}
-\toprule
-\textbf{Regime} & \textbf{Appropriate law} & \textbf{Setting} \\
-\midrule
-Slow sliding, hard bed & Weertman: $u_b = C\,\tau_b^m$ & Mountain glaciers, low $P_w$ \\
-Moderate sliding & $u_b = k\,\tau_b^p / N^q$ & Valley glaciers with seasonal $P_w$ \\
-Fast sliding, weak bed & $\tau_b = f\,N$ (Coulomb) & Ice streams, near-flotation \\
-General & Regularized Coulomb & Transition zones, models \\
-\bottomrule
-\end{tabular}
-\end{center}
+\medskip
+\noindent The regularized Coulomb law (equations~\ref{eq:coulomb_sliding} and~\ref{eq:zoet_iverson}) is the physically preferred form for three reasons:
+\begin{enumerate}
+  \item It respects Iken's bound and Mohr--Coulomb behavior.
+  \item It is derived from first principles for hard beds \cite{Schoof2005} and confirmed experimentally for soft beds \cite{ZoetIverson2020}.
+  \item It has the same functional form regardless of bed type, requiring only reinterpretation of the parameters---making it applicable without prior knowledge of whether the bed is hard or soft \cite{MinchewJoughin2020}.
+\end{enumerate}
 
-\noindent In ice-sheet models, the Weertman law (equation~\ref{eq:weertman_law}) remains the most common choice because of its simplicity and because $C$ can be tuned spatially to match observed velocities.  The Coulomb-type law is increasingly used in studies of marine ice sheets, where effective pressures are low near grounding lines and the Weertman law allows unphysically large drag.
+\noindent For marine ice sheets near grounding lines, where $N$ is small and the Coulomb regime dominates, the regularized Coulomb law produces qualitatively different dynamics than the Weertman law---including different grounding-line flux sensitivities and stability properties.
 
 %===================================================================
 % SECTION 6 -- Worked Example
