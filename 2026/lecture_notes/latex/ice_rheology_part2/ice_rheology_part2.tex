@@ -1705,6 +1705,15 @@ Figure~\ref{fig:ve_De_sweep} shows the viscoelastic tidal flexure solution for a
 \label{fig:ve_powerlaw}
 \end{figure}
 
+\noindent Figure~\ref{fig:ve_powerlaw_4panel} shows the full spatial and temporal structure of the power-law viscoelastic flexure, in the same four-panel format as the Newtonian sweep (Figure~\ref{fig:ve_De_sweep}).  At low De the three flow laws produce similar responses, but as De increases the strain-rate softening during bending gives each $n$ a distinct effective De at the grounding line, producing visibly different flexure profiles, curvature fields, and phase lag structures.  The differences are most pronounced in the curvature (panel b), where the power-law softening narrows and amplifies the curvature peak relative to the Newtonian solution at the same reference De.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig14_powerlaw_viscoelastic_4panel.pdf}
+\caption{Power-law viscoelastic tidal flexure ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr, $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$) for three flow law exponents: dotted ($n = 1$), dashed ($n = 1.8$), solid ($n = 4$), at five Deborah numbers from $\text{De} = 0.01$ (warm colors) to $\text{De} = 100$ (cool colors).  Grey: elastic reference.  Purple: pure Newtonian viscous reference at $\text{De} = 0.1$.  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Phase lag $\varphi(x)$ extracted from the FEM time history via Fourier analysis at each node.  (d)~Time series of deflection at $x = \ell_f$.  The effective viscosity at the background curvature rate is matched across all three flow laws at each De, so differences arise from strain-rate softening during bending.}
+\label{fig:ve_powerlaw_4panel}
+\end{figure}
+
 %===================================================================
 % Bibliography
 %===================================================================
