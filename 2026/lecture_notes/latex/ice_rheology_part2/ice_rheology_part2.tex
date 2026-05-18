@@ -1683,7 +1683,7 @@ Figure~\ref{fig:ve_De_sweep} shows the viscoelastic tidal flexure solution for a
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{figures/fig11_viscoelastic_flexure_De_sweep.pdf}
-\caption{Maxwell viscoelastic tidal flexure at a grounding zone ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr), solved numerically for Deborah numbers from $\text{De} = 0.01$ (viscous limit, warm colors) to $\text{De} = 100$ (elastic limit, cool colors).  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Phase lag $\varphi(x)$ relative to the tidal forcing (from the analytical Newtonian solution).  (d)~Time series of deflection at $x = \ell_f$.  The black curves show the elastic reference ($\text{De} \to \infty$).  As De increases, the response transitions continuously from the broad, phase-shifted viscous solution to the narrow, in-phase elastic solution.}
+\caption{Maxwell (Newtonian) viscoelastic tidal flexure at a grounding zone ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr), solved numerically for Deborah numbers from $\text{De} = 0.01$ (viscous limit, warm colors) to $\text{De} = 100$ (elastic limit, cool colors).  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Phase lag $\varphi(x)$ relative to the tidal forcing (from the analytical Newtonian solution).  (d)~Time series of deflection at $x = \ell_f$.  The black curves show the elastic reference ($\text{De} \to \infty$).  As De increases, the response transitions continuously from the broad, phase-shifted viscous solution to the narrow, in-phase elastic solution.}
 \label{fig:ve_De_sweep}
 \end{figure}
 
@@ -1694,6 +1694,15 @@ Figure~\ref{fig:ve_De_sweep} shows the viscoelastic tidal flexure solution for a
 \includegraphics[width=\textwidth]{figures/fig12_viscoelastic_validation_summary.pdf}
 \caption{(a)~FEM solution (circles) versus the analytical Newtonian viscoelastic solution (solid) at peak tide for $\text{De} = 0.30$.  (b)~Amplitude ratio $|W(\ell_f)|/w_0$ (blue) and phase lag $\varphi(\ell_f)$ (red) as continuous functions of De, evaluated from the analytical solution.  Circles mark the FEM simulations from Figure~\ref{fig:ve_De_sweep}.  The dashed line in (b) marks the elastic-limit amplitude.  The transition from viscous to elastic behavior spans roughly $0.1 < \text{De} < 10$.}
 \label{fig:ve_validation}
+\end{figure}
+
+\noindent\textbf{Effect of the flow law exponent.}  The Newtonian analytical results above provide a useful baseline, but glacier ice is a power-law fluid ($n \approx 1.8$--$4$).  Figure~\ref{fig:ve_powerlaw} extends the Deborah number analysis to nonlinear viscosity by running the FEM solver for $n = 1$, $1.8$, and $4$, with the effective viscosity at the background curvature rate matched across all three flow laws at each De.  The power-law nonlinearity has two effects.  First, because the bending curvature rate near the grounding line exceeds the background rate (as in Figures~\ref{fig:tidal_flexure_rheology}--\ref{fig:tidal_flexure_matched}), the effective viscosity there is reduced by strain-rate softening, making the power-law plate more compliant.  This shifts the viscoelastic transition to lower De: the $n = 4$ response approaches the elastic limit at a smaller Deborah number than $n = 1$.  Second, the amplitude and phase at $x = \ell_f$ show that higher $n$ produces a faster transition between the viscous and elastic regimes, because the strain-rate-dependent viscosity amplifies the contrast between bending-dominated (near the grounding line) and far-field regions.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig13_powerlaw_viscoelastic.pdf}
+\caption{Effect of the flow law exponent on viscoelastic tidal flexure ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr, $\dot{\varepsilon}_{\text{bg}} = 10^{-10}$~s$^{-1}$).  Line styles: dotted ($n = 1$), dashed ($n = 1.8$), solid ($n = 4$).  (a)~Deflection at peak tide for $\text{De} = 1$, with the elastic (grey) and pure Newtonian viscous (purple) solutions for reference.  (b)~Amplitude ratio $|W(\ell_f)|/w_0$ (blue) and phase lag $\varphi(\ell_f)$ (red) as functions of De.  Circles are FEM results; the $n = 1$ curves are the analytical Newtonian solution.  The grey horizontal line marks the elastic limit; the purple curve is the pure viscous ($n = 1$, $D_{\mathrm{el}} \to \infty$) solution parameterized by the same equivalent De.}
+\label{fig:ve_powerlaw}
 \end{figure}
 
 %===================================================================

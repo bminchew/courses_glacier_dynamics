@@ -178,10 +178,11 @@ class HermiteFEMBeam:
             for q in range(2)
         ])
         self.F_ref = np.array([gw[q] * he * self.N_phys[q] for q in range(2)])
-        self.M_ref = sum(
+        self.M_ref_gp = np.array([
             gw[q] * he * np.outer(self.N_phys[q], self.N_phys[q])
             for q in range(2)
-        )
+        ])
+        self.M_ref = self.M_ref_gp[0] + self.M_ref_gp[1]
 
         rows = np.zeros((Nel, 4, 4), dtype=int)
         cols = np.zeros((Nel, 4, 4), dtype=int)
@@ -272,13 +273,15 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
 
 def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
                                      D_n, n_nl, kappa_bg, dt,
-                                     rho_w, g, t_relax=0.0,
+                                     rho_w, g, D_el=None, t_relax=0.0,
                                      wdot_prev=None, picard_iters=3):
     """Solve for dw/dt with power-law viscosity and optional elasticity.
 
     For n > 1 the effective viscous rigidity depends on the curvature rate,
-    requiring Picard iteration.  The elastic term (t_relax) is linear and
-    does not participate in the iteration.
+    requiring Picard iteration.  The flexural relaxation time is also
+    curvature-rate dependent: t_relax_eff = D_eff / D_el at each Gauss
+    point.  For n = 1, D_eff = D_v everywhere and t_relax_eff reduces to
+    the constant t_relax = D_v / D_el.
 
     Parameters
     ----------
@@ -296,8 +299,10 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
         Background curvature rate for regularization.
     dt : float
     rho_w, g : float
+    D_el : float or None
+        Elastic flexural rigidity.  Required for n > 1.
     t_relax : float
-        Flexural relaxation time.  0 for pure viscous.
+        Flexural relaxation time (Newtonian fallback).  0 for pure viscous.
     wdot_prev : ndarray or None
     picard_iters : int
 
@@ -307,25 +312,20 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
     """
     Nel = fem.Nel
     ndof = fem.ndof
-    coeff_buoy = (dt + t_relax) * rho_w * g
 
     wdot_vec = wdot_prev.copy() if wdot_prev is not None else np.zeros(ndof)
 
-    # RHS load (same for all Picard iterations)
+    # Interpolate w to Gauss points (constant across Picard iterations)
     gp = fem._gp
     w_gp = (w_curr[:-1, None] * (1 - gp[None, :])
             + w_curr[1:, None] * gp[None, :])
-    load = rho_w * g * ((w_tide - w_gp) + t_relax * dw_tide_dt)
-
-    F_elem = (load[:, 0, None] * fem.F_ref[0]
-              + load[:, 1, None] * fem.F_ref[1])
-    F_global = np.zeros(ndof)
-    np.add.at(F_global, fem.rhs_rows.ravel(), F_elem.ravel())
 
     n_iters = picard_iters if n_nl > 1 else 1
     for iteration in range(n_iters):
-        # Compute effective D at each Gauss point
+        # Compute effective D and local relaxation time at each GP
         D_eff = np.full((Nel, 2), D_n)
+        t_relax_gp = np.full((Nel, 2), t_relax)
+
         if n_nl > 1:
             for e in range(Nel):
                 dv = wdot_vec[2*e:2*e+4]
@@ -333,11 +333,22 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
                     wpp = fem.B_phys[q] @ dv
                     eps_eff = np.sqrt(wpp**2 + kappa_bg**2)
                     D_eff[e, q] = D_n * eps_eff**((1.0/n_nl) - 1)
+                    if D_el is not None and D_el > 0:
+                        t_relax_gp[e, q] = D_eff[e, q] / D_el
 
-        # Assemble element stiffness
+        # RHS load with local t_relax
+        load = rho_w * g * ((w_tide - w_gp) + t_relax_gp * dw_tide_dt)
+        F_elem = (load[:, 0, None] * fem.F_ref[0]
+                  + load[:, 1, None] * fem.F_ref[1])
+        F_global = np.zeros(ndof)
+        np.add.at(F_global, fem.rhs_rows.ravel(), F_elem.ravel())
+
+        # Assemble element stiffness with per-GP buoyancy coefficients
+        buoy_gp = rho_w * g * (dt + t_relax_gp)  # shape (Nel, 2)
         K_elem = (D_eff[:, 0, None, None] * fem.K_ref[0]
                   + D_eff[:, 1, None, None] * fem.K_ref[1]
-                  + coeff_buoy * fem.M_ref)
+                  + buoy_gp[:, 0, None, None] * fem.M_ref_gp[0]
+                  + buoy_gp[:, 1, None, None] * fem.M_ref_gp[1])
 
         K_global = csr_matrix(
             (K_elem.ravel(), (fem.rows_flat, fem.cols_flat)),
@@ -429,6 +440,7 @@ def run_viscoelastic_tidal(fem, D_v, D_el, w0, omega, rho_w, g,
             wdot_vec = solve_wdot_viscoelastic_powerlaw(
                 fem, w, w_tide, dw_tide_dt,
                 D_n, n_nl, kappa_bg, dt, rho_w, g,
+                D_el=D_el if np.isfinite(D_el) else None,
                 t_relax=t_relax, wdot_prev=wdot_prev,
                 picard_iters=picard_iters
             )
