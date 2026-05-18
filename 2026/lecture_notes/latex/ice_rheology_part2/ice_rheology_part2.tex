@@ -1597,6 +1597,106 @@ For $n = 1$, equation~\eqref{eq:z0_powerlaw} is linear in $z_0$ and recovers equ
 \end{figure}
 
 %===================================================================
+% APPENDIX F -- Viscoelastic Beam Bending (Maxwell Model)
+%===================================================================
+\clearpage
+\section{Maxwell Viscoelastic Beam Bending}
+\label{app:viscoelastic_beam}
+
+Appendix~\ref{app:flexure_derivation} derived the elastic flexure equation, in which the bending moment is proportional to the curvature: $M = -D\,\kappa$, where $\kappa = -\partial^2 w/\partial x^2$.  Appendix~\ref{app:viscous_plate} replaced this with a viscous relation, $M = -D_v\,\dot{\kappa}$ (where $\dot{\kappa} = -\partial^2 \dot{w}/\partial x^2$), appropriate for timescales much longer than the Maxwell time.  The resulting viscoelastic flexure equation was stated in Appendix~\ref{app:viscous_plate} (equation~\eqref{eq:viscoelastic_flexure}); here we derive it from the moment--curvature relation and solve it analytically and numerically, valid for arbitrary Deborah number.
+
+\subsection*{Viscoelastic moment--curvature relation}
+
+In a Maxwell material, the elastic and viscous curvature rates add in series.  The bending moment obeys
+\begin{equation}
+  M + t_r\,\dot{M} = -D_v\,\dot{\kappa},
+  \label{eq:ve_moment}
+\end{equation}
+where $t_r \equiv D_v/D$ is the \textbf{flexural relaxation time}.  This is the bending analogue of equation~\eqref{eq:maxwell_constitutive}: the first term gives the viscous response ($M \propto \dot{\kappa}$) and the second gives the elastic response ($\dot{M} \propto \dot{\kappa}$, i.e.\ $M \propto \kappa$ upon integration).
+
+\medskip
+\noindent The flexural relaxation time is related to the Maxwell time by
+\begin{equation}
+  t_r = \frac{D_v}{D} = \frac{4\eta(1-\nu^2)}{E} = \frac{2\eta(1-\nu)}{\mu} = 2(1-\nu)\,t_M \approx 1.35\,t_M,
+  \label{eq:t_relax}
+\end{equation}
+using $E = 2\mu(1+\nu)$, $t_M = \eta/\mu$, and $\nu = 0.325$ for ice (\S\ref{sec:elastic_moduli}).
+
+\subsection*{The viscoelastic flexure equation}
+
+The 1D force balance $M'' + \rho_w\,g\,w = q$ is a statement of equilibrium that holds regardless of the constitutive relation (here primes denote $\partial^2/\partial x^2$).  Differentiating equation~\eqref{eq:ve_moment} twice in $x$ gives $M'' + t_r\,\dot{M}'' = -D_v\,\dot{\kappa}''$.  Substituting $\kappa = -w''$ and using $M'' = q - \rho_w g\,w$ and $\dot{M}'' = \dot{q} - \rho_w g\,\dot{w}$ from the force balance and its time derivative:
+\begin{equation}
+  \boxed{D_v\,\frac{\partial^4 \dot{w}}{\partial x^4} + \rho_w\,g\,w + t_r\,\rho_w\,g\,\dot{w} = q + t_r\,\dot{q}.}
+  \label{eq:ve_flexure}
+\end{equation}
+This is first-order in time and fourth-order in space, with the parameter $t_r$ controlling the elastic--viscous transition.  Recall that the Deborah number is $\text{De} = t_M/t_p$, where $t_p$ is the process timescale (\S\ref{sec:deborah}); since $t_r \approx 1.35\,t_M$, the regime is set by the ratio $\omega\,t_r$:
+\begin{itemize}
+  \item \textbf{Viscous limit} ($\text{De} \ll 1$, $\omega\,t_r \ll 1$): The $t_r$ terms are negligible, recovering the viscous flexure equation~\eqref{eq:viscous_plate_flexure}.
+  \item \textbf{Elastic limit} ($\text{De} \gg 1$, $\omega\,t_r \gg 1$): The $t_r$ terms dominate.  Dividing by $t_r$ and integrating in time recovers $D\,w'''' + \rho_w g\,w = q$, the elastic flexure equation~\eqref{eq:plate_flexure_derived}.
+\end{itemize}
+
+\subsection*{Analytical solution for Newtonian tidal forcing}
+
+For monochromatic tidal forcing $q = \rho_w\,g\,w_0\,\sin(\omega t)$, we seek the steady-state response $w(x,t) = \mathrm{Im}[W(x)\,e^{i\omega t}]$.  Substituting into equation~\eqref{eq:ve_flexure} and dividing by $e^{i\omega t}$:
+\begin{equation}
+  i\omega\,D_v\,W'''' + \rho_w\,g\,(1 + i\omega\,t_r)\,W = \rho_w\,g\,(1 + i\omega\,t_r)\,w_0.
+  \label{eq:ve_complex_ode}
+\end{equation}
+Define $\alpha \equiv 1 + i\omega\,t_r$.  The particular solution is $W_p = w_0$, and the characteristic equation for the homogeneous part is
+\begin{equation}
+  \lambda^4 = -\frac{\rho_w\,g\,\alpha}{i\omega\,D_v}.
+  \label{eq:ve_char}
+\end{equation}
+Retaining the two roots with $\mathrm{Re}(\lambda) < 0$ (decaying as $x \to \infty$) and applying clamped boundary conditions $W(0) = 0$, $W'(0) = 0$ determines the solution.  In the limits:
+\begin{itemize}
+  \item $\omega\,t_r \to 0$ ($\text{De} \to 0$): $\alpha \to 1$ and equation~\eqref{eq:ve_complex_ode} reduces to the viscous harmonic ODE~\eqref{eq:viscous_complex_ode}.
+  \item $\omega\,t_r \to \infty$ ($\text{De} \to \infty$): $\alpha \approx i\omega\,t_r$, so $-\rho_w g\,\alpha/(i\omega D_v) = -\rho_w g\,t_r/D_v = -\rho_w g/D$ and the characteristic equation becomes $\lambda^4 = -\rho_w g/D$, which is real.  The four roots are the elastic flexural wavenumbers $\pm(1 \pm i)/\ell_f$, and the complex amplitude approaches $W(x) = w_0[1 - e^{-x/\ell_f}(\cos(x/\ell_f) + \sin(x/\ell_f))]$, the elastic solution (equation~\eqref{eq:tidal_flexure}).
+\end{itemize}
+
+\subsection*{Finite element discretization}
+
+For numerical solution---particularly when extending to nonlinear viscosity---we discretize equation~\eqref{eq:ve_flexure} using Hermite cubic finite elements, the same basis used for the viscous solver in Appendix~\ref{app:viscous_plate}.  The weak form is: find $\dot{w} \in V_h$ such that for all $v \in V_h$,
+\begin{equation}
+  D_v\!\int_0^L \dot{w}''\,v''\,dx + \rho_w g\!\int_0^L w\,v\,dx + t_r\,\rho_w g\!\int_0^L \dot{w}\,v\,dx = \int_0^L (q + t_r\,\dot{q})\,v\,dx.
+  \label{eq:ve_weak}
+\end{equation}
+With the semi-implicit treatment $w^{n+1} = w^n + \Delta t\,\dot{w}$ in the buoyancy term, this yields the linear system
+\begin{equation}
+  \bigl[D_v\,\mathbf{K} + (\Delta t + t_r)\,\rho_w g\,\mathbf{M}\bigr]\,\dot{\mathbf{w}} = \rho_w g\,\bigl[(w_{\text{tide}} - w^n) + t_r\,\dot{w}_{\text{tide}}\bigr]\,\mathbf{f},
+  \label{eq:ve_fem_system}
+\end{equation}
+where $\mathbf{K}$ is the bending stiffness matrix, $\mathbf{M}$ is the consistent mass matrix, and $\mathbf{f}$ is the load vector---all defined in terms of the Hermite shape functions.
+
+\medskip
+\noindent\textbf{Comparison to the pure viscous solver.}  The only modifications relative to the viscous FEM (Appendix~\ref{app:viscous_plate}) are: (i)~the mass matrix coefficient changes from $\Delta t$ to $\Delta t + t_r$, and (ii)~the right-hand side acquires the extra forcing term $t_r\,\rho_w g\,\dot{w}_{\text{tide}}$.  The stiffness matrix, boundary conditions, and time-stepping structure are unchanged.  For nonlinear (power-law) viscosity, the Picard iteration on the effective viscous rigidity $D_{\mathrm{eff}}(\dot{\kappa})$ carries through exactly as in the viscous case; the elastic term $t_r\,\rho_w g\,\mathbf{M}$ is linear and does not participate in the iteration.
+
+\subsection*{Results: Deborah number sweep}
+
+Figure~\ref{fig:ve_De_sweep} shows the viscoelastic tidal flexure solution for a 500-m-thick ice shelf across Deborah numbers spanning four orders of magnitude, from $\text{De} = 0.01$ (viscous limit) to $\text{De} = 100$ (elastic limit).  As De increases:
+\begin{enumerate}
+  \item The deflection profile sharpens from the broad, phase-shifted viscous response toward the narrow elastic flexure profile (panel a).
+  \item The peak curvature at the grounding line increases and the curvature pattern narrows (panel b).
+  \item The phase lag $\varphi(x)$ decreases monotonically toward zero---the ice responds increasingly in phase with the tide (panel c).
+  \item The time series at $x = \ell_f$ transitions continuously from the lagged, amplitude-reduced viscous response to the in-phase elastic response (panel d).
+\end{enumerate}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig11_viscoelastic_flexure_De_sweep.pdf}
+\caption{Maxwell viscoelastic tidal flexure at a grounding zone ($h = 500$~m, $w_0 = 1$~m, $T_{\text{tide}} = 12$~hr), solved numerically for Deborah numbers from $\text{De} = 0.01$ (viscous limit, warm colors) to $\text{De} = 100$ (elastic limit, cool colors).  (a)~Deflection profiles at peak tide.  (b)~Curvature profiles.  (c)~Phase lag $\varphi(x)$ relative to the tidal forcing (from the analytical Newtonian solution).  (d)~Time series of deflection at $x = \ell_f$.  The black curves show the elastic reference ($\text{De} \to \infty$).  As De increases, the response transitions continuously from the broad, phase-shifted viscous solution to the narrow, in-phase elastic solution.}
+\label{fig:ve_De_sweep}
+\end{figure}
+
+\noindent The Newtonian viscoelastic analytical solution provides a convenient summary of the De-dependent behavior (Figure~\ref{fig:ve_validation}).  At $x = \ell_f$, the amplitude ratio $|W(\ell_f)|/w_0$ decreases monotonically from its viscous-limit value to the elastic value $1 - e^{-1}(\cos 1 + \sin 1) \approx 0.49$, while the phase lag decreases from its viscous-limit value to zero.  The transition occurs over roughly $0.1 < \text{De} < 10$, centered near $\text{De} \approx 1$.  For tidal periods of 12~hours, this corresponds to Maxwell times of $\sim$1--120 hours, or equivalently viscosities of $\sim 10^{13}$--$10^{15}$~Pa\,s---precisely the range encountered in warm grounding zones (Table~\ref{tab:maxwell_times}).
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/fig12_viscoelastic_validation_summary.pdf}
+\caption{(a)~FEM solution (circles) versus the analytical Newtonian viscoelastic solution (solid) at peak tide for $\text{De} = 0.30$.  (b)~Amplitude ratio $|W(\ell_f)|/w_0$ (blue) and phase lag $\varphi(\ell_f)$ (red) as continuous functions of De, evaluated from the analytical solution.  Circles mark the FEM simulations from Figure~\ref{fig:ve_De_sweep}.  The dashed line in (b) marks the elastic-limit amplitude.  The transition from viscous to elastic behavior spans roughly $0.1 < \text{De} < 10$.}
+\label{fig:ve_validation}
+\end{figure}
+
+%===================================================================
 % Bibliography
 %===================================================================
 \bibliographystyle{plainnat}
