@@ -11,6 +11,9 @@ where t_r = D_v / D is the flexural relaxation time (proportional to
 the Maxwell time), D_v is the viscous flexural rigidity, and D is the
 elastic flexural rigidity.
 
+Supports uniform and graded (non-uniform) meshes.  The per-element
+matrix storage enables future extension to variable ice thickness h(x).
+
 Also provides the analytical steady-state solution for the Newtonian
 viscoelastic case under monochromatic tidal forcing.
 """
@@ -57,20 +60,13 @@ def viscoelastic_complex_amplitude(x, w0, D_v, D_el, omega, rho_w, g):
     t_r = D_v / D_el
     alpha = 1 + 1j * omega * t_r
 
-    # Characteristic equation: i omega D_v lam^4 + rho_w g alpha = 0
-    # => lam^4 = -rho_w g alpha / (i omega D_v)
     coeff = -rho_w * g * alpha / (1j * omega * D_v)
-    # Four roots: coeff^{1/4} * exp(i j pi/2), j = 0..3
     base = coeff ** 0.25
     roots = [base * np.exp(1j * j * np.pi / 2) for j in range(4)]
 
-    # Keep the two roots with Re(lam) < 0 (decaying as x -> inf)
     decaying = sorted([r for r in roots if r.real < 0], key=lambda r: r.imag)
     lam1, lam2 = decaying
 
-    # Particular solution: W_p = w0 (constant)
-    # General decaying: W = w0 + C1 exp(lam1 x) + C2 exp(lam2 x)
-    # BCs: W(0) = 0, W'(0) = 0
     C1 = w0 * lam2 / (lam1 - lam2)
     C2 = -w0 * lam1 / (lam1 - lam2)
 
@@ -129,7 +125,69 @@ def viscoelastic_analytical_curvature(x, t, w0, D_v, D_el, omega, rho_w, g):
 
 
 # =====================================================================
-# FEM infrastructure (Hermite cubics on uniform 1D mesh)
+# Graded mesh generation
+# =====================================================================
+
+def generate_graded_mesh(L, ell_f, h_min=25.0, h_max=250.0, Nel_max=160):
+    """Generate a graded mesh with denser spacing near the grounding line.
+
+    Element spacing follows the elastic curvature envelope:
+
+        h(x) = h_min + (h_max - h_min) * (1 - exp(-x/ell_f))^p
+
+    where p is chosen by binary search so that the total element count
+    equals Nel_max.
+
+    Parameters
+    ----------
+    L : float
+        Domain length (m).
+    ell_f : float
+        Elastic flexural wavelength (m).
+    h_min : float
+        Minimum element size near x=0 (m).
+    h_max : float
+        Maximum element size in the far field (m).
+    Nel_max : int
+        Target number of elements.
+
+    Returns
+    -------
+    x_nodes : ndarray
+        Node positions, shape (Nel+1,).
+    """
+    def make_nodes(p):
+        nodes = [0.0]
+        while nodes[-1] < L:
+            x = nodes[-1]
+            s = 1.0 - np.exp(-x / ell_f)
+            spacing = h_min + (h_max - h_min) * s**p
+            nodes.append(min(x + spacing, L))
+            if len(nodes) > 10 * Nel_max:
+                break
+        return np.array(nodes)
+
+    # Binary search for the largest p giving Nel <= Nel_max
+    p_lo, p_hi = 0.01, 50.0
+    for _ in range(100):
+        p_mid = (p_lo + p_hi) / 2
+        n = make_nodes(p_mid)
+        if len(n) - 1 > Nel_max:
+            p_hi = p_mid
+        else:
+            p_lo = p_mid
+
+    nodes = make_nodes(p_lo)
+
+    # If last element is tiny, merge with previous
+    if len(nodes) > 2 and (nodes[-1] - nodes[-2]) < h_min / 2:
+        nodes = np.delete(nodes, -2)
+
+    return nodes
+
+
+# =====================================================================
+# FEM infrastructure (Hermite cubics, uniform or non-uniform mesh)
 # =====================================================================
 
 class HermiteFEMBeam:
@@ -138,52 +196,77 @@ class HermiteFEMBeam:
     Degrees of freedom at each node: (w, dw/dx).  Two-point Gauss
     quadrature per element.  Clamped BC at x = 0 (DOFs 0 and 1 fixed).
 
+    Supports uniform and non-uniform meshes.  All reference matrices
+    are stored per-element to enable future extension to variable
+    ice thickness h(x).
+
     Parameters
     ----------
-    L : float
-        Domain length (m).
-    Nel : int
-        Number of elements.
+    L : float, optional
+        Domain length (m).  Used with Nel for a uniform mesh.
+    Nel : int, optional
+        Number of elements for a uniform mesh.
+    x_nodes : array_like, optional
+        Node positions for a non-uniform mesh.  Overrides L and Nel.
     """
 
-    def __init__(self, L, Nel):
-        self.L = L
-        self.Nel = Nel
-        self.he = L / Nel
-        self.x_nodes = np.linspace(0, L, Nel + 1)
-        self.ndof = 2 * (Nel + 1)
+    def __init__(self, L=None, Nel=None, x_nodes=None):
+        if x_nodes is not None:
+            self.x_nodes = np.asarray(x_nodes, dtype=float)
+            self.Nel = len(self.x_nodes) - 1
+            self.L = self.x_nodes[-1] - self.x_nodes[0]
+        else:
+            self.L = L
+            self.Nel = Nel
+            self.x_nodes = np.linspace(0, L, Nel + 1)
+        self.he = np.diff(self.x_nodes)  # per-element sizes, shape (Nel,)
+        self.ndof = 2 * (self.Nel + 1)
         self._build_reference()
 
     def _build_reference(self):
-        he = self.he
         Nel = self.Nel
+        he = self.he  # (Nel,)
 
         gp = np.array([0.5 - np.sqrt(3) / 6, 0.5 + np.sqrt(3) / 6])
         gw = np.array([0.5, 0.5])
 
-        N_gp = np.zeros((2, 4))
-        d2N_gp = np.zeros((2, 4))
+        # Reference shape functions on [0,1] (element-independent)
+        N_ref = np.zeros((2, 4))
+        d2N_ref = np.zeros((2, 4))
         for q in range(2):
             xi = gp[q]
-            N_gp[q] = [1 - 3*xi**2 + 2*xi**3, xi*(1-xi)**2,
+            N_ref[q] = [1 - 3*xi**2 + 2*xi**3, xi*(1-xi)**2,
                         3*xi**2 - 2*xi**3, xi**2*(xi-1)]
-            d2N_gp[q] = [-6 + 12*xi, -4 + 6*xi, 6 - 12*xi, -2 + 6*xi]
+            d2N_ref[q] = [-6 + 12*xi, -4 + 6*xi, 6 - 12*xi, -2 + 6*xi]
 
-        scale = np.array([1.0, he, 1.0, he])
-        self.N_phys = N_gp * scale[None, :]
-        self.B_phys = d2N_gp / he**2 * scale[None, :]
+        # Per-element scaling: slope DOFs scale with local he
+        # scale[e] = [1, he[e], 1, he[e]]
+        scale = np.column_stack([np.ones(Nel), he, np.ones(Nel), he])
 
-        self.K_ref = np.array([
-            gw[q] * he * np.outer(self.B_phys[q], self.B_phys[q])
-            for q in range(2)
-        ])
-        self.F_ref = np.array([gw[q] * he * self.N_phys[q] for q in range(2)])
-        self.M_ref_gp = np.array([
-            gw[q] * he * np.outer(self.N_phys[q], self.N_phys[q])
-            for q in range(2)
-        ])
-        self.M_ref = self.M_ref_gp[0] + self.M_ref_gp[1]
+        # Physical shape functions and second derivatives per element
+        # N_phys[e, q, i], B_phys[e, q, i]
+        self.N_phys = N_ref[None, :, :] * scale[:, None, :]  # (Nel, 2, 4)
+        self.B_phys = (d2N_ref[None, :, :] / he[:, None, None]**2
+                       * scale[:, None, :])  # (Nel, 2, 4)
 
+        # Per-element reference matrices, shape (Nel, 2, 4, 4) or (Nel, 2, 4)
+        self.K_ref = np.zeros((Nel, 2, 4, 4))
+        self.F_ref = np.zeros((Nel, 2, 4))
+        self.M_ref_gp = np.zeros((Nel, 2, 4, 4))
+
+        for q in range(2):
+            Bq = self.B_phys[:, q, :]   # (Nel, 4)
+            Nq = self.N_phys[:, q, :]   # (Nel, 4)
+            jac = gw[q] * he            # (Nel,)
+            self.K_ref[:, q] = jac[:, None, None] * (
+                Bq[:, :, None] * Bq[:, None, :])
+            self.F_ref[:, q] = jac[:, None] * Nq
+            self.M_ref_gp[:, q] = jac[:, None, None] * (
+                Nq[:, :, None] * Nq[:, None, :])
+
+        self.M_ref = self.M_ref_gp[:, 0] + self.M_ref_gp[:, 1]  # (Nel, 4, 4)
+
+        # Connectivity (unchanged from uniform case)
         rows = np.zeros((Nel, 4, 4), dtype=int)
         cols = np.zeros((Nel, 4, 4), dtype=int)
         rhs_rows = np.zeros((Nel, 4), dtype=int)
@@ -223,11 +306,12 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
     w_curr : ndarray, shape (Nel+1,)
         Current nodal deflections.
     w_tide : float
-        Current tidal elevation (m).
+        Tidal elevation at midpoint (m).
     dw_tide_dt : float
-        Time derivative of tidal elevation (m/s).
-    D_v : float
-        Viscous flexural rigidity.
+        Time derivative of tidal elevation at midpoint (m/s).
+    D_v : float or ndarray
+        Viscous flexural rigidity.  Scalar for uniform thickness;
+        array of shape (Nel,) for variable thickness (future).
     dt : float
         Time step (s).
     rho_w, g : float
@@ -241,10 +325,12 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
     Nel = fem.Nel
     ndof = fem.ndof
 
-    # Crank-Nicolson: buoyancy evaluated at midpoint w^{n+1/2} = w^n + dt/2 * wdot
+    # Crank-Nicolson: buoyancy at midpoint w^{n+1/2} = w^n + dt/2 * wdot
     coeff_buoy = (dt / 2 + t_relax) * rho_w * g
-    K_single = D_v * (fem.K_ref[0] + fem.K_ref[1]) + coeff_buoy * fem.M_ref
-    K_elem = np.tile(K_single, (Nel, 1, 1))
+    # D_v can be scalar or per-element array (for variable thickness)
+    D_v_e = np.broadcast_to(D_v, (Nel,))
+    K_elem = (D_v_e[:, None, None] * (fem.K_ref[:, 0] + fem.K_ref[:, 1])
+              + coeff_buoy * fem.M_ref)
 
     K_global = csr_matrix(
         (K_elem.ravel(), (fem.rows_flat, fem.cols_flat)),
@@ -257,8 +343,8 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
             + w_curr[1:, None] * gp[None, :])
     load = rho_w * g * ((w_tide - w_gp) + t_relax * dw_tide_dt)
 
-    F_elem = (load[:, 0, None] * fem.F_ref[0]
-              + load[:, 1, None] * fem.F_ref[1])
+    F_elem = (load[:, 0, None] * fem.F_ref[:, 0]
+              + load[:, 1, None] * fem.F_ref[:, 1])
     F_global = np.zeros(ndof)
     np.add.at(F_global, fem.rhs_rows.ravel(), F_elem.ravel())
 
@@ -289,19 +375,22 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
     fem : HermiteFEMBeam
     w_curr : ndarray, shape (Nel+1,)
     w_tide : float
-        Current tidal elevation.
+        Tidal elevation at midpoint.
     dw_tide_dt : float
-        Time derivative of tidal elevation.
-    D_n : float
-        Nonlinear flexural rigidity parameter.
+        Time derivative of tidal elevation at midpoint.
+    D_n : float or ndarray
+        Nonlinear flexural rigidity parameter.  Scalar for uniform
+        thickness; array of shape (Nel,) for variable thickness (future).
     n_nl : float
         Power-law exponent (1 = Newtonian).
-    kappa_bg : float
-        Background curvature rate for regularization.
+    kappa_bg : float or ndarray
+        Background curvature rate for regularization.  Scalar for uniform
+        thickness; array of shape (Nel,) for variable thickness (future).
     dt : float
     rho_w, g : float
-    D_el : float or None
-        Elastic flexural rigidity.  Required for n > 1.
+    D_el : float, ndarray, or None
+        Elastic flexural rigidity.  Scalar for uniform thickness;
+        array of shape (Nel,) for variable thickness (future).
     t_relax : float
         Flexural relaxation time (Newtonian fallback).  0 for pure viscous.
     wdot_prev : ndarray or None
@@ -314,6 +403,12 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
     Nel = fem.Nel
     ndof = fem.ndof
 
+    # Broadcast scalar parameters to per-element arrays (enables variable h)
+    D_n_e = np.broadcast_to(D_n, (Nel,))
+    kbg_e = np.broadcast_to(kappa_bg, (Nel,))
+    D_el_e = (np.broadcast_to(D_el, (Nel,))
+              if D_el is not None else None)
+
     wdot_vec = wdot_prev.copy() if wdot_prev is not None else np.zeros(ndof)
 
     # Interpolate w to Gauss points (constant across Picard iterations)
@@ -324,32 +419,32 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
     n_iters = picard_iters if n_nl > 1 else 1
     for iteration in range(n_iters):
         # Compute effective D and local relaxation time at each GP
-        D_eff = np.full((Nel, 2), D_n)
+        D_eff = np.column_stack([D_n_e, D_n_e])  # (Nel, 2)
         t_relax_gp = np.full((Nel, 2), t_relax)
 
         if n_nl > 1:
             for e in range(Nel):
                 dv = wdot_vec[2*e:2*e+4]
                 for q in range(2):
-                    wpp = fem.B_phys[q] @ dv
-                    eps_eff = np.sqrt(wpp**2 + kappa_bg**2)
-                    D_eff[e, q] = D_n * eps_eff**((1.0/n_nl) - 1)
-                    if D_el is not None and D_el > 0:
-                        t_relax_gp[e, q] = D_eff[e, q] / D_el
+                    wpp = fem.B_phys[e, q] @ dv
+                    eps_eff = np.sqrt(wpp**2 + kbg_e[e]**2)
+                    D_eff[e, q] = D_n_e[e] * eps_eff**((1.0/n_nl) - 1)
+                    if D_el_e is not None:
+                        t_relax_gp[e, q] = D_eff[e, q] / D_el_e[e]
 
         # RHS load with local t_relax
         load = rho_w * g * ((w_tide - w_gp) + t_relax_gp * dw_tide_dt)
-        F_elem = (load[:, 0, None] * fem.F_ref[0]
-                  + load[:, 1, None] * fem.F_ref[1])
+        F_elem = (load[:, 0, None] * fem.F_ref[:, 0]
+                  + load[:, 1, None] * fem.F_ref[:, 1])
         F_global = np.zeros(ndof)
         np.add.at(F_global, fem.rhs_rows.ravel(), F_elem.ravel())
 
         # Assemble: Crank-Nicolson buoyancy at midpoint w^{n+1/2}
-        buoy_gp = rho_w * g * (dt / 2 + t_relax_gp)  # shape (Nel, 2)
-        K_elem = (D_eff[:, 0, None, None] * fem.K_ref[0]
-                  + D_eff[:, 1, None, None] * fem.K_ref[1]
-                  + buoy_gp[:, 0, None, None] * fem.M_ref_gp[0]
-                  + buoy_gp[:, 1, None, None] * fem.M_ref_gp[1])
+        buoy_gp = rho_w * g * (dt / 2 + t_relax_gp)  # (Nel, 2)
+        K_elem = (D_eff[:, 0, None, None] * fem.K_ref[:, 0]
+                  + D_eff[:, 1, None, None] * fem.K_ref[:, 1]
+                  + buoy_gp[:, 0, None, None] * fem.M_ref_gp[:, 0]
+                  + buoy_gp[:, 1, None, None] * fem.M_ref_gp[:, 1])
 
         K_global = csr_matrix(
             (K_elem.ravel(), (fem.rows_flat, fem.cols_flat)),
@@ -415,6 +510,7 @@ def run_viscoelastic_tidal(fem, D_v, D_el, w0, omega, rho_w, g,
     t_relax = D_v / D_el if np.isfinite(D_el) else 0.0
 
     # Determine D_n for power-law case
+    # (For variable thickness, h_plate and hence D_n would be per-element.)
     if n_nl > 1:
         B_coeff = 2.0 / A_glen**(1.0 / n_nl)
         D_n = (2 * n_nl / (1 + 2 * n_nl)) * B_coeff \
@@ -538,10 +634,15 @@ def _run_tests():
     ell_f = (4 * D_el / (rho_w * g_val))**0.25
 
     L = 10 * ell_f
+
+    # --- Test with uniform mesh ---
     Nel = 80
     fem = HermiteFEMBeam(L, Nel)
+    assert fem.he.shape == (Nel,), f'he shape: {fem.he.shape}'
+    assert fem.K_ref.shape == (Nel, 2, 4, 4), f'K_ref shape: {fem.K_ref.shape}'
+    print(f'Uniform mesh: {Nel} elements, he = {fem.he[0]:.1f} m')
 
-    # --- Test 1: Pure viscous limit (D_el -> inf => t_relax -> 0) ---
+    # --- Test 1: Pure viscous limit ---
     A_3 = 3.5e-25
     tau_ref = 0.1e6
     eta = 1 / (2 * A_3 * tau_ref**2)
@@ -549,14 +650,12 @@ def _run_tests():
 
     print(f'Test 1: pure viscous (eta = {eta:.2e}, D_v = {D_v:.2e})')
     res_visc = run_viscoelastic_tidal(
-        fem, D_v, np.inf, w0, omega, rho_w, g_val,
-        dt=30.0, n_cycles=5
+        fem, D_v, np.inf, w0, omega, rho_w, g_val, dt=30.0, n_cycles=5
     )
     phase = omega * res_visc['t_hist']
     idx_peak = np.argmax(np.sin(phase))
     t_peak = res_visc['t_hist'][idx_peak]
 
-    # Analytical viscous solution (from existing codebase)
     beta = (rho_w * g_val / (omega * D_v))**0.25
     lam1 = beta * np.exp(1j * 5 * np.pi / 8)
     lam2 = beta * np.exp(1j * 9 * np.pi / 8)
@@ -571,15 +670,14 @@ def _run_tests():
     assert err_visc < 0.05, f'Pure viscous limit failed: {err_visc}'
 
     # --- Test 2: Viscoelastic analytical vs FEM ---
-    eta_ve = 1e14  # gives De ~ 0.66
+    eta_ve = 1e14
     D_v_ve = eta_ve * h**3 / 3
     t_M = eta_ve / mu_ice
     De = t_M / T_tide
     print(f'Test 2: viscoelastic (eta = {eta_ve:.1e}, De = {De:.2f})')
 
     res_ve = run_viscoelastic_tidal(
-        fem, D_v_ve, D_el, w0, omega, rho_w, g_val,
-        dt=30.0, n_cycles=6
+        fem, D_v_ve, D_el, w0, omega, rho_w, g_val, dt=30.0, n_cycles=6
     )
     phase = omega * res_ve['t_hist']
     idx_peak = np.argmax(np.sin(phase))
@@ -592,15 +690,14 @@ def _run_tests():
     print(f'  max error = {err_ve:.4f} m (should be < 0.05)')
     assert err_ve < 0.05, f'VE analytical test failed: {err_ve}'
 
-    # --- Test 3: High-De limit should approach elastic ---
+    # --- Test 3: High-De elastic limit ---
     eta_high = 1e17
     D_v_high = eta_high * h**3 / 3
     De_high = (eta_high / mu_ice) / T_tide
     print(f'Test 3: high De (eta = {eta_high:.1e}, De = {De_high:.1f})')
 
     res_hi = run_viscoelastic_tidal(
-        fem, D_v_high, D_el, w0, omega, rho_w, g_val,
-        dt=30.0, n_cycles=8
+        fem, D_v_high, D_el, w0, omega, rho_w, g_val, dt=30.0, n_cycles=8
     )
     phase = omega * res_hi['t_hist']
     idx_peak = np.argmax(np.sin(phase))
@@ -613,6 +710,27 @@ def _run_tests():
     err_el = np.max(np.abs(res_hi['w_hist'][idx_peak] - w_elastic))
     print(f'  max error = {err_el:.4f} m (should be < 0.15)')
     assert err_el < 0.15, f'Elastic limit test failed: {err_el}'
+
+    # --- Test 4: Graded mesh ---
+    x_graded = generate_graded_mesh(L, ell_f, h_min=25.0, h_max=250.0,
+                                     Nel_max=100)
+    fem_g = HermiteFEMBeam(x_nodes=x_graded)
+    print(f'Test 4: graded mesh ({fem_g.Nel} elements, '
+          f'he = {fem_g.he[0]:.1f}--{fem_g.he[-1]:.1f} m)')
+
+    res_g = run_viscoelastic_tidal(
+        fem_g, D_v_ve, D_el, w0, omega, rho_w, g_val, dt=30.0, n_cycles=6
+    )
+    phase = omega * res_g['t_hist']
+    idx_peak = np.argmax(np.sin(phase))
+    t_peak = res_g['t_hist'][idx_peak]
+
+    w_ana_g = viscoelastic_analytical(
+        fem_g.x_nodes, t_peak, w0, D_v_ve, D_el, omega, rho_w, g_val
+    )
+    err_g = np.max(np.abs(res_g['w_hist'][idx_peak] - w_ana_g))
+    print(f'  max error = {err_g:.4f} m (should be < 0.05)')
+    assert err_g < 0.05, f'Graded mesh test failed: {err_g}'
 
     print('\nAll tests passed.')
 
