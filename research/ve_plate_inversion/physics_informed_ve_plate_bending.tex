@@ -1,0 +1,387 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{natbib}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\newcommand{\dd}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\DDt}[1]{\frac{\partial #1}{\partial t}}
+\newcommand{\De}{\text{De}}
+
+\title{Physics-Informed Viscoelastic Plate Bending for Ice-Shelf Inversion:\\
+  Inferring Thickness, Rheology, and Sub-Shelf Melt Rates\\
+  from Remote Sensing Time Series}
+\author{B.\ Minchew}
+\date{Working Document --- \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We develop a framework for inverting remotely sensed time series of ice-shelf tidal flexure --- from satellite altimetry (ICESat-2) and synthetic aperture radar interferometry (InSAR) --- for ice-shelf thickness $h(x,y)$, effective rheological parameters, and sub-ice-shelf basal melt rates.  The forward model is a 2D viscoelastic thin plate on an elastic (buoyancy) foundation, driven by multi-constituent tidal forcing.  We argue that a Newtonian viscosity linearized at the observable background strain rate, combined with a Burgers (or Andrade) transient creep model, is more physically appropriate than a steady-state power-law viscosity for the tidal bending problem, where the Deborah number $\De \sim 1$ and the microstructure cannot reach steady state within a tidal cycle.  The frequency-dependent amplitude and phase response of the viscoelastic plate to multiple tidal constituents provides independent constraints that break the thickness--viscosity degeneracy inherent in single-frequency observations.  Melt rates are recovered from the continuity equation using the inferred thickness field and accumulation from regional climate models.  We outline a synthetic validation strategy using both custom FEM solvers and COMSOL, and a real-data application using the Rutford Ice Stream / Filchner--Ronne Ice Shelf system observed by COSMO-SkyMed SAR \citep{Minchew2017}.
+\end{abstract}
+
+\tableofcontents
+
+%===================================================================
+\section{Introduction}
+\label{sec:intro}
+%===================================================================
+
+Ice shelves modulate the discharge of grounded ice into the ocean by providing resistive back-stresses through lateral drag at their margins and basal drag at pinning points \citep{Thomas1979,Gudmundsson2013}.  The rate at which ice shelves thin --- and thus weaken --- depends critically on sub-shelf basal melt rates, which remain among the most poorly constrained parameters in ice-sheet models.  Current estimates of basal melt rely on the mass continuity equation, which requires knowledge of ice-shelf thickness $h(x,y,t)$, surface velocity, and surface mass balance.  Thickness is typically derived from surface elevation under the hydrostatic assumption, which introduces errors from spatial variations in firn density, marine ice accretion, and the breakdown of hydrostaticity near grounding zones \citep{Rignot2013}.
+
+Tidal flexure of ice shelves offers an independent, physics-based route to thickness and rheology.  The vertical deflection of an ice shelf under tidal forcing is governed by the flexure equation, whose solution depends on the flexural rigidity $D \propto h^3$ and the rheological properties of the ice.  Observations of tidal flexure --- from repeat-track satellite altimetry, GPS, and InSAR --- thus encode information about $h$ and the constitutive behavior.  The challenge is to extract this information through a well-posed inverse problem.
+
+This document outlines a framework for doing so.  The key ideas are:
+\begin{enumerate}
+  \item A 2D viscoelastic plate model with Newtonian viscosity (linearized at the background strain rate) and Burgers transient rheology, rather than a steady-state power-law.
+  \item Multi-frequency tidal forcing that provides independent spectral constraints on thickness and rheology.
+  \item Rheological constraints from the free-floating shelf (where the stress state is known) propagated downstream into the grounding zone.
+  \item Recovery of basal melt rates from the continuity equation using the inferred thickness field.
+\end{enumerate}
+
+%===================================================================
+\section{Forward Model: Viscoelastic Plate Flexure}
+\label{sec:forward}
+%===================================================================
+
+\subsection{The Maxwell Viscoelastic Flexure Equation}
+\label{sec:maxwell_plate}
+
+For an incompressible Newtonian viscous material ($\nu_v = 1/2$), the plane-stress and plane-strain formulations are identical, so the 1D beam and 2D plate flexure equations share the same structure.  The Maxwell viscoelastic flexure equation for a thin plate floating on water of density $\rho_w$ is
+\begin{equation}
+  D_v\,\nabla^4 \dot{w} + \rho_w g\,w + t_r\,\rho_w g\,\dot{w} = q + t_r\,\dot{q},
+  \label{eq:ve_plate}
+\end{equation}
+where $w(x,y,t)$ is the vertical deflection, $D_v = \eta h^3/3$ is the viscous flexural rigidity, $D = Eh^3/[12(1-\nu^2)]$ is the elastic flexural rigidity, and $t_r = D_v/D \approx 1.35\,t_M$ is the flexural relaxation time \citep[see][Appendix F]{IceRheologyPart2}.
+
+For spatially varying thickness, $D_v$ and $D$ depend on $(x,y)$ and must remain inside the differential operators.  The biharmonic operator $\nabla^4$ is replaced by the full variable-coefficient plate operator:
+\begin{equation}
+  \dd{^2}{x^2}\!\left[D_v\!\left(\dd{^2\dot{w}}{x^2} + \frac{1}{2}\dd{^2\dot{w}}{y^2}\right)\right]
+  + 2\dd{^2}{x\partial y}\!\left[\frac{D_v}{2}\dd{^2\dot{w}}{x\partial y}\right]
+  + \dd{^2}{y^2}\!\left[D_v\!\left(\dd{^2\dot{w}}{y^2} + \frac{1}{2}\dd{^2\dot{w}}{x^2}\right)\right]
+  + \rho_w g\,w + t_r\,\rho_w g\,\dot{w} = q + t_r\,\dot{q}.
+\end{equation}
+
+\subsection{Why Not Steady-State Power-Law Viscosity?}
+\label{sec:why_newtonian}
+
+The standard Glen flow law $\dot{\varepsilon}_{ij} = A\,\tau_e^{n-1}\,\tau_{ij}$ describes the steady-state creep rate after the dislocation structure (or grain-boundary-sliding mechanism) has equilibrated to the current stress.  During tidal bending, the stress at any material point oscillates through zero twice per tidal cycle.  The microstructure cannot reorganize on this timescale: the Deborah number $\De = t_M / T_{\text{tide}} \sim 0.1$--$1$ for warm ice near grounding zones, meaning the relaxation time and the forcing period are comparable.
+
+In this regime, the instantaneous viscosity during bending is not the steady-state power-law viscosity at the instantaneous stress.  It is closer to the viscosity set by the time-averaged (background) stress, with the tidal perturbation experiencing a linearized (Newtonian) response around that background state.  This is consistent with the critical tidal amplitude analysis: when the tidal bending strain rate exceeds the background strain rate, the power-law nonlinearity is formally active, but this is precisely the regime where the steady-state assumption is most questionable.
+
+A Newtonian viscosity $\eta = 1/(2A\,\tau_{\text{bg}}^{n-1})$, evaluated at the observable background effective stress $\tau_{\text{bg}}$, combined with a transient creep model, provides a more physically grounded description.
+
+\subsection{Burgers Transient Rheology}
+\label{sec:burgers}
+
+The Burgers model places a Maxwell element (spring $\mu_1$ + dashpot $\eta_1$) in series with a Kelvin--Voigt element (spring $\mu_2$ + dashpot $\eta_2$).  The total strain rate is
+\begin{equation}
+  \dot{\varepsilon}_{ij} = \frac{\dot{\tau}_{ij}}{2\mu_1} + \frac{\tau_{ij}}{2\eta_1} + \frac{\tau_{ij} - 2\mu_2\,\varepsilon_{ij}^{(KV)}}{2\eta_2},
+\end{equation}
+where $\varepsilon_{ij}^{(KV)}$ is the strain in the Kelvin--Voigt element, governed by $\dot{\varepsilon}_{ij}^{(KV)} = (\tau_{ij} - 2\mu_2\,\varepsilon_{ij}^{(KV)}) / (2\eta_2)$.  The Burgers model has two characteristic timescales:
+\begin{itemize}
+  \item $t_M = \eta_1/\mu_1$: the Maxwell relaxation time (long-term viscous flow).
+  \item $t_K = \eta_2/\mu_2$: the Kelvin--Voigt retardation time (transient creep).
+\end{itemize}
+When $t_K \ll T_{\text{tide}} \ll t_M$, the Kelvin--Voigt element has fully relaxed and the response is Maxwell viscoelastic.  When $t_K \sim T_{\text{tide}}$, the transient element stiffens the response relative to the Maxwell prediction --- the material is ``stiffer than it looks'' at tidal frequencies.
+
+Under harmonic forcing at frequency $\omega$, the Burgers model has a complex compliance
+\begin{equation}
+  J^*(\omega) = \frac{1}{\mu_1}\!\left(\frac{1}{1 + i\omega t_M}\right) + \frac{1}{\mu_2}\!\left(\frac{1}{1 + i\omega t_K}\right),
+\end{equation}
+which produces a frequency-dependent flexural response.  Multi-constituent tidal forcing (M$_2$, S$_2$, O$_1$, K$_1$, M$_{\text{sf}}$) probes this compliance at multiple frequencies, providing independent constraints on $t_M$ and $t_K$ (and hence $\eta_1$, $\mu_2$, $\eta_2$, given that $\mu_1$ is well-constrained from seismic measurements).
+
+\subsection{Harmonic Response of the Viscoelastic Plate}
+\label{sec:harmonic}
+
+For monochromatic tidal forcing $q = \rho_w g\,w_0\,\sin(\omega t)$, the steady-state deflection $w(x,y,t) = \text{Im}[W(x,y)\,e^{i\omega t}]$ satisfies
+\begin{equation}
+  i\omega\,D_v\,\nabla^4 W + \rho_w g\,(1 + i\omega\,t_r)\,W = \rho_w g\,(1 + i\omega\,t_r)\,w_0.
+  \label{eq:harmonic_plate}
+\end{equation}
+The complex amplitude $W(x,y)$ encodes both the spatial amplitude $|W|$ and phase lag $\varphi = -\arg W$ of the tidal response.
+
+For the Burgers model, $t_r$ is replaced by a frequency-dependent complex relaxation time derived from the complex compliance $J^*(\omega)$.  The key point is that at each tidal frequency $\omega_i$, the plate has a different effective relaxation time, producing a different amplitude and phase pattern.  Observing $|W|$ and $\varphi$ at multiple frequencies overconstains the system relative to a single-frequency observation.
+
+%===================================================================
+\section{Inverse Problem}
+\label{sec:inverse}
+%===================================================================
+
+\subsection{Observables}
+\label{sec:observables}
+
+The primary observables are:
+\begin{itemize}
+  \item \textbf{Vertical tidal displacement} $w(x,y,t)$ from ICESat-2 repeat-track altimetry or InSAR.  Amplitudes and phases at each tidal constituent are extracted by least-squares fitting to the displacement time series \citep{Minchew2017}.
+  \item \textbf{Secular horizontal velocity} $\bm{v}(x,y)$ from InSAR or feature tracking, providing the background strain-rate field $\dot{\varepsilon}_{\text{bg}}(x,y)$.
+  \item \textbf{Horizontal tidal velocity variations} at the M$_{\text{sf}}$ and other periods, which constrain the upstream propagation of tidal stresses and the basal mechanics \citep{Minchew2017,Gudmundsson2006,Rosier2014}.
+\end{itemize}
+
+\subsection{Parameters to Invert For}
+\label{sec:parameters}
+
+\begin{enumerate}
+  \item \textbf{Ice thickness} $h(x,y)$.  Enters through $D \propto h^3$ (elastic) and $D_v \propto h^3$ (viscous), so the flexure pattern is highly sensitive to thickness.
+  \item \textbf{Effective Newtonian viscosity} $\eta(x,y)$.  Constrained independently on the free-floating shelf from the secular velocity field (where the stress state is known from the membrane stress balance), then propagated downstream into the grounding zone.
+  \item \textbf{Transient rheological parameters} $t_K$ (and $\mu_2/\mu_1$).  Constrained by the frequency dependence of the tidal response.
+  \item \textbf{Basal melt rate} $\dot{m}(x,y)$.  Not a parameter of the flexure model, but recovered from the mass continuity equation once $h(x,y)$ is known:
+  \begin{equation}
+    \DDt{h} + \nabla \cdot (h\,\bm{v}) = \dot{a}_s - \dot{m},
+  \end{equation}
+  where $\dot{a}_s$ is the surface accumulation rate from regional climate models.
+\end{enumerate}
+
+\subsection{Breaking the Thickness--Viscosity Degeneracy}
+\label{sec:degeneracy}
+
+The flexural rigidity $D_v = \eta h^3 / 3$ means that thickness and viscosity trade off in the amplitude of the tidal response.  Three strategies break this degeneracy:
+
+\begin{enumerate}
+  \item \textbf{Phase information.}  The phase lag $\varphi$ depends on the ratio $\omega\,t_r = \omega\,D_v/D$.  Since $D_v/D = 4\eta(1-\nu^2)/E$ is independent of $h$ (the $h^3$ factors cancel), the phase constrains $\eta$ independently of $h$.  The amplitude then determines $h$.
+
+  \item \textbf{Multi-frequency observations.}  The frequency dependence of $|W(\omega)|$ and $\varphi(\omega)$ has a different functional form for thickness changes versus viscosity changes.  The M$_2$ (12.4~h), O$_1$ (25.8~h), and M$_{\text{sf}}$ (14.77~d) constituents probe the rheology at three very different frequencies, providing strong leverage.
+
+  \item \textbf{Upstream rheological constraints.}  On the free-floating shelf far from the grounding zone, the ice is in membrane stress balance with known boundary conditions (ocean pressure at the calving front).  The secular velocity field and the Glen flow law determine $\eta(x,y)$ on the shelf.  This viscosity, advected downstream, constrains the viscosity in the grounding zone and reduces the inversion to primarily a thickness problem there.
+\end{enumerate}
+
+\subsection{Inversion Methodology}
+\label{sec:inversion_method}
+
+Following the Bayesian framework of \citet{Tarantola2005} as applied in \citet{Minchew2017}, we write the posterior estimate of the model parameters $\bm{m} = [h, \eta, t_K, \ldots]$ given observations $\bm{d}$ as
+\begin{equation}
+  \tilde{\bm{m}} = \left(\bm{G}^T \bm{C}_d^{-1} \bm{G} + \bm{C}_m^{-1}\right)^{-1}\!\left(\bm{G}^T \bm{C}_d^{-1} \bm{d} + \bm{C}_m^{-1} \bm{m}_0\right),
+  \label{eq:posterior}
+\end{equation}
+where $\bm{G}$ is the linearized forward operator (sensitivity of tidal amplitudes and phases to the parameters), $\bm{C}_d$ is the data covariance, $\bm{C}_m$ is the prior model covariance, and $\bm{m}_0$ is the prior model.
+
+For the nonlinear viscoelastic plate, $\bm{G}$ is computed by linearizing the forward model around the current parameter estimate, and the inversion is iterated (Gauss--Newton or similar).  The prior $\bm{m}_0$ for thickness comes from the hydrostatic estimate; the prior for viscosity comes from the shelf-interior estimate; the prior for $t_K$ is informed by laboratory experiments.
+
+%===================================================================
+\section{Controlled Experiments: Synthetic Validation}
+\label{sec:synthetics}
+%===================================================================
+
+Before applying the inversion to real data, we validate it on synthetic observations generated from a known ``true'' model.
+
+\subsection{Synthetic Model Design}
+\label{sec:synth_design}
+
+The synthetic ice shelf is designed to resemble the Rutford Ice Stream / FRIS grounding zone:
+\begin{itemize}
+  \item Domain: $\sim$200~km along-flow $\times$ $\sim$30~km cross-flow, with a U-shaped grounding line.
+  \item Thickness: $h$ varies from $\sim$2~km at the grounding line to $\sim$500~m at the shelf front, with cross-flow variations reflecting the channel geometry.
+  \item Rheology: Newtonian viscosity $\eta(x,y)$ set by the Glen flow law at the background strain rate, with spatial variations from temperature (cold interior, warm margins due to shear heating) and grain size.
+  \item Tidal forcing: M$_2$, S$_2$, O$_1$, K$_1$ constituents with realistic amplitudes (combined amplitude up to $\sim$3~m near the Ronne Ice Shelf front).
+  \item Burgers transient parameters: $t_K$ chosen to produce measurable frequency dependence in the tidal response.
+\end{itemize}
+
+\subsection{Forward Solvers}
+\label{sec:forward_solvers}
+
+Two independent forward solvers generate the synthetic observations:
+
+\begin{enumerate}
+  \item \textbf{Custom FEM solver.}  Extension of the 1D Hermite-cubic FEM from the teaching code (\texttt{viscoelastic\_beam\_solvers.py}) to 2D using Bogner--Fox--Schmit rectangular elements (bicubic Hermite, tensor product of the 1D basis).  This solver handles Newtonian viscoelasticity with variable thickness on a structured rectangular grid.  It is fast enough for iterative inversion.
+
+  \item \textbf{COMSOL Multiphysics.}  Full 3D viscoelastic simulation on the same geometry, using COMSOL's Structural Mechanics module with a Burgers material model.  This provides a ``ground truth'' that includes 3D stress effects near the grounding line that the thin-plate model cannot capture.  Comparison of the plate-model and COMSOL solutions quantifies the plate-model bias and identifies regions where the thin-plate assumption breaks down.
+\end{enumerate}
+
+\subsection{Synthetic Observation Generation}
+\label{sec:synth_obs}
+
+From the forward solution $w(x,y,t)$, synthetic observations are generated following the methodology of \citet{Minchew2017}:
+\begin{enumerate}
+  \item Compute the 3D displacement field $\bm{u}(\bm{r}, t) = \bm{v}' t + \sum_i [c_i \sin(\omega_i t + \phi_i)]$ at each tidal frequency (eq.~1 of \citealt{Minchew2017}).
+  \item Project onto SAR line-of-sight (LOS) vectors for realistic viewing geometries matching the COSMO-SkyMed 4-satellite constellation.
+  \item Form displacement pairs $d_{ab}$ for all image pairs with $\Delta t < 10$~days.
+  \item Add Gaussian noise with variance estimated from InSAR coherence (eq.~18 of \citealt{Minchew2017}).
+  \item Invert the noisy synthetic displacements for amplitude and phase at each tidal constituent using the Bayesian method (eq.~22 of \citealt{Minchew2017}).
+\end{enumerate}
+
+The recovered amplitude and phase maps are the inputs to the physics-informed plate inversion.
+
+\subsection{Inversion Tests}
+\label{sec:synth_tests}
+
+Key tests:
+\begin{enumerate}
+  \item \textbf{Single-frequency recovery}: invert M$_2$ alone for $h$ and $\eta$.  Expect the thickness--viscosity degeneracy to limit accuracy.
+  \item \textbf{Multi-frequency recovery}: jointly invert M$_2$ + O$_1$ + M$_{\text{sf}}$.  Expect substantially improved separation of $h$ and $\eta$.
+  \item \textbf{Transient rheology detection}: test whether the Burgers $t_K$ is recoverable from the frequency dependence.
+  \item \textbf{Upstream rheological constraint}: fix $\eta$ on the free-floating shelf from the secular velocity field and invert only for $h$ in the grounding zone.  Quantify the improvement.
+  \item \textbf{Melt rate recovery}: compute melt rates from the inferred $h$ via continuity and compare to the true melt rates.
+  \item \textbf{Plate-model bias}: compare plate-model inversions of COMSOL synthetics to the true parameters.  Quantify the 3D-stress bias near the grounding line.
+\end{enumerate}
+
+%===================================================================
+\section{Application: Rutford Ice Stream}
+\label{sec:rutford}
+%===================================================================
+
+Rutford Ice Stream (RIS) is a natural laboratory for this problem.  It has:
+\begin{itemize}
+  \item Strong, well-characterized tidal forcing with combined amplitudes exceeding 3~m \citep{Padman2002,Han2005}.
+  \item Dense spatiotemporal SAR observations from the COSMO-SkyMed (CSK) 4-satellite constellation, providing $\sim$9 months of data with 1--8 day revisit times \citep{Minchew2017}.
+  \item Well-constrained tidal constituents: vertical motion dominated by M$_2$ and O$_1$ at semidiurnal and diurnal periods; horizontal flow dominated by M$_{\text{sf}}$ at the fortnightly period \citep{Gudmundsson2006,Murray2007,Minchew2017}.
+  \item Known ice thickness and bed topography from radar sounding \citep{Fretwell2013,King2016}.
+  \item Relatively stable flow over the observational period, allowing the displacement to be decomposed into secular velocity plus sinusoidal tidal components \citep{Minchew2017}.
+\end{itemize}
+
+\subsection{Available Data}
+\label{sec:rutford_data}
+
+\citet{Minchew2017} inferred time-dependent 3D velocity fields from 1644 coherent CSK displacement fields along 32 unique satellite tracks.  The posterior model at each grid point consists of:
+\begin{itemize}
+  \item A 3D secular velocity vector.
+  \item Amplitude and phase of 3D sinusoidal velocity variations at M$_2$ (12.4~h), O$_1$ (25.8~h), and M$_{\text{sf}}$ (14.77~d) periods.
+\end{itemize}
+
+Key observations relevant to the inversion:
+\begin{enumerate}
+  \item \textbf{Vertical M$_2$ and O$_1$}: spatially homogeneous amplitude and phase over the central ice shelf trunk, with rapid amplitude decrease and phase lag increase in the grounding zone (Figures~7a--d of \citealt{Minchew2017}).  The phase lag within the grounding zone ($< 20$~min for M$_2$) directly constrains the viscoelastic rheology.
+  \item \textbf{Along-flow M$_{\text{sf}}$}: amplitude highest near the grounding zone, propagating upstream at $\sim$24--34~km/day and damping at $\sim$2.6~mm/km (Figure~9 of \citealt{Minchew2017}).  Sensitive to ice thickness and basal mechanics.
+  \item \textbf{Lateral shear strain rates}: reveal margin structure and periodic grounding effects (Figure~10 of \citealt{Minchew2017}).
+\end{enumerate}
+
+\subsection{Rheological Constraints from the Shelf Interior}
+\label{sec:shelf_rheology}
+
+On the free-floating shelf, the depth-averaged longitudinal and lateral stress balance is
+\begin{equation}
+  \dd{}{x}\!\left[h\,(2\tau_{xx} + \tau_{yy})\right] + \dd{}{y}(h\,\tau_{xy}) = \tau_d,
+\end{equation}
+where $\tau_d = -\rho_i g h\,\partial h/\partial x$ is the gravitational driving stress.  The deviatoric stresses are related to the observed strain rates through the viscosity: $\tau_{ij} = 2\eta\,\dot{\varepsilon}_{ij}$.  With the velocity field from InSAR and the thickness from hydrostatic inversion (or from the flexure inversion itself, iteratively), the effective viscosity $\eta(x,y)$ on the shelf is determined.
+
+This shelf-interior viscosity serves as a strong prior for the grounding-zone inversion.  The viscosity in the grounding zone is inherited from upstream, modified by:
+\begin{itemize}
+  \item Temperature changes (slow, constrained by the advection timescale).
+  \item Shear heating in the margins \citep{Perol2015,Suckale2014}.
+  \item Grain-size evolution (slow).
+\end{itemize}
+These variations are smooth and can be parameterized with a small number of degrees of freedom.
+
+\subsection{Inversion Strategy for RIS}
+\label{sec:rutford_inversion}
+
+\begin{enumerate}
+  \item Estimate $\eta(x,y)$ on the shelf from the secular velocity field and the membrane stress balance.
+  \item Use the M$_2$ and O$_1$ phase lag maps in the grounding zone to refine $\eta$ (or equivalently $t_M$) locally, breaking the thickness--viscosity degeneracy.
+  \item Invert the M$_2$ and O$_1$ amplitude maps for $h(x,y)$ in the grounding zone, using $\eta$ from step 2 as a fixed (or weakly varying) parameter.
+  \item Use the M$_{\text{sf}}$ along-flow amplitudes and phases to constrain basal mechanics upstream of the grounding zone (complementary to, but distinct from, the flexure inversion).
+  \item Compute melt rates from the continuity equation using the inferred $h(x,y,t)$, the observed velocity field, and accumulation from RACMO or similar.
+  \item Validate against independent thickness estimates from radar sounding \citep{Fretwell2013,King2016}.
+\end{enumerate}
+
+%===================================================================
+\section{Summary and Next Steps}
+\label{sec:summary}
+%===================================================================
+
+The key contributions of this framework are:
+\begin{enumerate}
+  \item A physically motivated constitutive model (Newtonian + Burgers transient) for tidal bending, replacing the steady-state power-law which is not justified at $\De \sim 1$.
+  \item Multi-frequency tidal constraints that break the thickness--viscosity degeneracy.
+  \item Upstream rheological constraints from the free-floating shelf that reduce the dimensionality of the grounding-zone inversion.
+  \item A clear path from flexure-derived thickness to basal melt rates via continuity.
+\end{enumerate}
+
+Immediate next steps:
+\begin{itemize}
+  \item Implement the 2D Bogner--Fox--Schmit FEM plate solver with Newtonian + Burgers rheology.
+  \item Build the RIS-like synthetic geometry and generate COMSOL ``ground truth'' solutions.
+  \item Implement the linearized inversion and test on synthetics.
+  \item Apply to the \citet{Minchew2017} CSK data.
+\end{itemize}
+
+%===================================================================
+\bibliographystyle{plainnat}
+\begin{thebibliography}{99}
+
+\bibitem[Fretwell et~al.(2013)]{Fretwell2013}
+Fretwell, P., et~al. (2013),
+Bedmap2: Improved ice bed, surface and thickness datasets for Antarctica,
+\textit{Cryosphere}, 7(1), 375--393, doi:10.5194/tc-7-375-2013.
+
+\bibitem[Gudmundsson(2006)]{Gudmundsson2006}
+Gudmundsson, G.~H. (2006),
+Fortnightly variations in the flow velocity of {R}utford {I}ce {S}tream, {W}est {A}ntarctica,
+\textit{Nature}, 444(7122), 1063--1064, doi:10.1038/nature05430.
+
+\bibitem[Gudmundsson(2013)]{Gudmundsson2013}
+Gudmundsson, G.~H., J.~Krug, G.~Durand, L.~Favier, and O.~Gagliardini (2012),
+The stability of grounding lines on retrograde slopes,
+\textit{Cryosphere}, 6(6), 1497--1505, doi:10.5194/tc-6-1497-2012.
+
+\bibitem[Han et~al.(2005)]{Han2005}
+Han, S.~C., C.~K.~Shum, and K.~Matsumoto (2005),
+{GRACE} observations of {M2} and {S2} ocean tides underneath the {F}ilchner--{R}onne and {L}arsen ice shelves, {A}ntarctica,
+\textit{Geophys.\ Res.\ Lett.}, 32, L20311, doi:10.1029/2005GL024296.
+
+\bibitem[{IceRheologyPart2}()]{IceRheologyPart2}
+Minchew, B. (2026),
+Ice Rheology Part 2: Elasticity and Viscoelasticity,
+Lecture notes, Ge~193 --- Glacier Dynamics, MIT.
+
+\bibitem[King et~al.(2016)]{King2016}
+King, E.~C., H.~D.~Pritchard, and A.~M.~Smith (2016),
+Subglacial landforms beneath {R}utford {I}ce {S}tream, {A}ntarctica: Detailed bed topography from ice-penetrating radar,
+\textit{Earth Syst.\ Sci.\ Data}, 8(1), 151--158, doi:10.5194/essd-8-151-2016.
+
+\bibitem[Minchew et~al.(2017)]{Minchew2017}
+Minchew, B.~M., M.~Simons, B.~Riel, and P.~Milillo (2017),
+Tidally induced variations in vertical and horizontal motion on {R}utford {I}ce {S}tream, {W}est {A}ntarctica, inferred from remotely sensed observations,
+\textit{J.\ Geophys.\ Res.\ Earth Surf.}, 122, 167--190, doi:10.1002/2016JF003971.
+
+\bibitem[Murray et~al.(2007)]{Murray2007}
+Murray, T., A.~M.~Smith, M.~A.~King, and G.~P.~Weedon (2007),
+Ice flow modulated by tides at up to annual periods at {R}utford {I}ce {S}tream, {W}est {A}ntarctica,
+\textit{Geophys.\ Res.\ Lett.}, 34, L18503, doi:10.1029/2007GL031207.
+
+\bibitem[Padman et~al.(2002)]{Padman2002}
+Padman, L., H.~A.~Fricker, R.~Coleman, S.~Howard, and L.~Erofeeva (2002),
+A new tide model for the {A}ntarctic ice shelves and seas,
+\textit{Ann.\ Glaciol.}, 34(1), 247--254, doi:10.3189/172756402781817752.
+
+\bibitem[Perol and Rice(2015)]{Perol2015}
+Perol, T., and J.~R.~Rice (2015),
+Shear heating and weakening of the margins of {W}est {A}ntarctic ice streams,
+\textit{Geophys.\ Res.\ Lett.}, 42, 3406--3413, doi:10.1002/2015GL063638.
+
+\bibitem[Rignot et~al.(2013)]{Rignot2013}
+Rignot, E., S.~Jacobs, J.~Mouginot, and B.~Scheuchl (2013),
+Ice-shelf melting around {A}ntarctica,
+\textit{Science}, 341(6143), 266--270, doi:10.1126/science.1235798.
+
+\bibitem[Rosier et~al.(2014)]{Rosier2014}
+Rosier, S.~H.~R., G.~H.~Gudmundsson, and J.~A.~M.~Green (2014),
+Insights into ice stream dynamics through modelling their response to tidal forcing,
+\textit{Cryosphere}, 8(5), 1763--1775, doi:10.5194/tc-8-1763-2014.
+
+\bibitem[Suckale et~al.(2014)]{Suckale2014}
+Suckale, J., J.~D.~Platt, T.~Perol, and J.~R.~Rice (2014),
+Deformation-induced melting in the margins of the {W}est {A}ntarctic ice streams,
+\textit{J.\ Geophys.\ Res.\ Earth Surf.}, 119, 1004--1025, doi:10.1002/2013JF003008.
+
+\bibitem[Tarantola(2005)]{Tarantola2005}
+Tarantola, A. (2005),
+\textit{Inverse Problem Theory and Methods for Model Parameter Estimation},
+Soc.\ for Ind.\ and Appl.\ Math., Philadelphia, Pa.
+
+\bibitem[Thomas(1979)]{Thomas1979}
+Thomas, R. (1979),
+The dynamics of marine ice sheets,
+\textit{J.\ Glaciol.}, 24(90), 167--177.
+
+\bibitem[Thompson et~al.(2014)]{Thompson2014}
+Thompson, J., M.~Simons, and V.~C.~Tsai (2014),
+Modeling the elastic transmission of tidal stresses to great distances inland in channelized ice streams,
+\textit{Cryosphere}, 8(6), 2007--2029, doi:10.5194/tc-8-2007-2014.
+
+\end{thebibliography}
+
+\end{document}
