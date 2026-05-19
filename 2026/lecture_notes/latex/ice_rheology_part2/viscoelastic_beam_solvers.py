@@ -207,15 +207,15 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
                             rho_w, g, t_relax=0.0):
     """Solve for dw/dt at the current time step (Newtonian viscoelastic).
 
-    Semi-implicit discretization of:
+    Crank-Nicolson discretization of:
 
         D_v w''''_dot + rho_w g w + t_r rho_w g w_dot = q + t_r q_dot
 
-    Treating w = w^n + dt * w_dot in the buoyancy term gives the linear
-    system:
+    Evaluating the buoyancy at the midpoint w^{n+1/2} = w^n + dt/2 * wdot
+    and the forcing at t + dt/2 gives the second-order system:
 
-        [D_v K + (dt + t_r) rho_w g M] wdot
-            = rho_w g [(w_tide - w^n) + t_r dw_tide/dt] F
+        [D_v K + (dt/2 + t_r) rho_w g M] wdot
+            = rho_w g [(w_tide^{n+1/2} - w^n) + t_r dw_tide/dt^{n+1/2}] F
 
     Parameters
     ----------
@@ -241,7 +241,8 @@ def solve_wdot_viscoelastic(fem, w_curr, w_tide, dw_tide_dt, D_v, dt,
     Nel = fem.Nel
     ndof = fem.ndof
 
-    coeff_buoy = (dt + t_relax) * rho_w * g
+    # Crank-Nicolson: buoyancy evaluated at midpoint w^{n+1/2} = w^n + dt/2 * wdot
+    coeff_buoy = (dt / 2 + t_relax) * rho_w * g
     K_single = D_v * (fem.K_ref[0] + fem.K_ref[1]) + coeff_buoy * fem.M_ref
     K_elem = np.tile(K_single, (Nel, 1, 1))
 
@@ -343,8 +344,8 @@ def solve_wdot_viscoelastic_powerlaw(fem, w_curr, w_tide, dw_tide_dt,
         F_global = np.zeros(ndof)
         np.add.at(F_global, fem.rhs_rows.ravel(), F_elem.ravel())
 
-        # Assemble element stiffness with per-GP buoyancy coefficients
-        buoy_gp = rho_w * g * (dt + t_relax_gp)  # shape (Nel, 2)
+        # Assemble: Crank-Nicolson buoyancy at midpoint w^{n+1/2}
+        buoy_gp = rho_w * g * (dt / 2 + t_relax_gp)  # shape (Nel, 2)
         K_elem = (D_eff[:, 0, None, None] * fem.K_ref[0]
                   + D_eff[:, 1, None, None] * fem.K_ref[1]
                   + buoy_gp[:, 0, None, None] * fem.M_ref_gp[0]
@@ -433,8 +434,10 @@ def run_viscoelastic_tidal(fem, D_v, D_el, w0, omega, rho_w, g,
 
     for step in range(n_steps):
         t_curr = step * dt
-        w_tide = w0 * np.sin(omega * t_curr)
-        dw_tide_dt = w0 * omega * np.cos(omega * t_curr)
+        # Crank-Nicolson: evaluate forcing at midpoint t + dt/2
+        t_mid = t_curr + dt / 2
+        w_tide = w0 * np.sin(omega * t_mid)
+        dw_tide_dt = w0 * omega * np.cos(omega * t_mid)
 
         if n_nl > 1:
             wdot_vec = solve_wdot_viscoelastic_powerlaw(
