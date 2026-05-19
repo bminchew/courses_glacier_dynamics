@@ -48,7 +48,7 @@ Glaciers move by three mechanisms: plastic deformation of the ice, sliding of ic
 \noindent The difficulty is that the glacier bed is hidden.  Direct observations are rare and come mostly from boreholes, subglacial tunnels, and cavities---none of which are necessarily representative of typical conditions.  As a result, complex mathematical theories of sliding have been developed, but they have limited predictive value.  They do, however, contain important physical insights that guide the formulation of phenomenological relations used in glacier models.
 
 \medskip
-\noindent Beds are classified as \textbf{hard} (rigid bedrock) or \textbf{soft} (deformable sediment, called ``till'').  The physics differs fundamentally between the two cases.  On a hard bed, the resistance to sliding depends on the roughness of the bedrock and the processes of regelation and ice creep.  On a soft bed, the resistance depends on the strength of the sediment, which is controlled by the effective pressure.  In both cases, water pressure plays a central role.
+\noindent Beds are classified as \textbf{hard} (rigid, impermeable bedrock) or \textbf{soft} (deformable, permeable sediment, called till).  The physics differs fundamentally between the two cases.  On a hard bed, the resistance to sliding depends on the roughness of the bedrock and the processes of regelation and ice creep.  On a soft bed, the resistance depends on the strength of the sediment, which is controlled by the effective pressure.  In both cases, water pressure plays a central role.
 
 \medskip
 \noindent\textbf{Plan for this lecture.}  We begin with the distinction between local and global control of basal velocity (\S\ref{sec:local_global}).  We then develop the classical theory of hard-bed sliding (\S\ref{sec:hard_bed}), including Weertman's analysis and the critical role of water pressure and cavities.  Next, we discuss deformable beds and the Mohr--Coulomb description of till (\S\ref{sec:soft_bed}).  Finally, we discuss the phenomenological sliding relations used in glacier dynamics models (\S\ref{sec:sliding_laws}).
@@ -67,10 +67,10 @@ In the first end member, the bed provides all or most of the resistance to the g
 
 \subsection{Global Control}
 
-In the second end member, the bed provides only a small fraction of the resistance.  The basal shear stress $\tau_b$ is small compared to the gravitational force per unit area, and the flow is instead controlled by forces produced by deformation of the ice in a large surrounding region: shearing at the glacier's sides, stretching along flow, and flow over resistant patches elsewhere on the bed.  This is called \textbf{global control} (or kinematic control).  A floating ice shelf is the extreme example---the bed provides zero resistance.  West Antarctic ice streams, with basal shear stresses of only a few kPa, lie close to this limit.
+In the second end member, the bed provides only fractional resistance and deformation of the ice in a large surrounding region is important, including shearing at the lateral margins, stretching along flow, and flow over resistant patches elsewhere on the bed.  This is called \textbf{global control} (or nonlocal control, or kinematic control).  A floating ice shelf is the extreme limit---the bed provides negligible resistance.  West Antarctic ice streams, with basal shear stresses of only a few kPa, lie close to this limit.
 
 \medskip
-\noindent Most glaciers lie somewhere between these end members.  The key implication is that on a weak or well-lubricated bed, the sliding rate cannot generally be predicted from local bed properties alone.  This is why no single ``sliding law'' relating $u_b$ to $\tau_b$ can be universally valid.
+\noindent Most glaciers lie somewhere between these end members.  The key implication is that on a weak or well-lubricated bed, the sliding rate cannot generally be predicted from local bed properties alone.  This is why no single ``sliding law'' relating $u_b$ to $\tau_b$ can be universally valid and is also why can't trade space for time when it comes to inferring sliding laws.
 
 %===================================================================
 % SECTION 3 -- Hard-Bed Sliding
@@ -86,10 +86,10 @@ Modern study of hard-bed sliding dates from the analysis of \cite{Weertman1957sl
 \begin{enumerate}
   \item \textbf{Regelation.}  The pressure is elevated on the upstream side of a bump and reduced on the downstream side.  Because the melting point of ice decreases with increasing pressure, ice melts on the upstream side and the meltwater flows around to the downstream side, where it refreezes.  The latent heat released by refreezing is conducted back through the bump to sustain the melting.  This mechanism is most effective for \textit{small} bumps, because the heat must be conducted through the obstacle.
 
-  \item \textbf{Enhanced creep.}  A bump in the bed produces a stress anomaly of order $\tau_b/R^2$ (where $R = a/\lambda$ is the roughness, with $a$ the bump size and $\lambda$ the bump spacing), which drives viscous deformation of the ice around the bump.  This mechanism is most effective for \textit{large} bumps, because the volume of ice affected---and hence the distance over which enhanced straining occurs---scales with the bump size.
+  \item \textbf{Enhanced creep.}  A bump in the bed produces a stress concentration that drives viscous deformation of the ice around the bump.  This mechanism is most effective for \textit{large} bumps, because the volume of ice affected---and hence the distance over which enhanced straining occurs---scales with the bump size.
 \end{enumerate}
 
-\noindent Weertman idealized the bed as an inclined plane studded with cubical bumps of side length $a$, spaced a distance $\lambda$ apart.  Figure~\ref{fig:regelation_schematic} illustrates both mechanisms.
+\noindent Weertman idealized the bed as an inclined plane studded with cubical bumps of side length $a$, spaced a distance $\lambda$ apart (Figure~\ref{fig:regelation_schematic}).  Define the \textbf{roughness} $R = a/\lambda$.  We now derive the sliding velocity due to each mechanism.
 
 \begin{figure}[ht]
   \centering
@@ -98,38 +98,121 @@ Modern study of hard-bed sliding dates from the analysis of \cite{Weertman1957sl
   \label{fig:regelation_schematic}
 \end{figure}
 
-\medskip
-\noindent\textbf{Regelation velocity.}  A force balance and heat conduction calculation give the regelation sliding speed as
+\subsubsection{Step 1: Force balance and the stress anomaly}
+
+Consider one bump with upstream and downstream faces each of area $a^2$.  Each bump is isolated within a broader patch of bed of area $\lambda^2$.  The applied driving stress $\tau_d$ acts uniformly over this patch, so the total horizontal force on the bump is
 \begin{equation}
-  u_1 = \frac{k_r\,\mathcal{B}}{\rho\,L\,a}\;\frac{\tau_b}{R^2},
+  F = \tau_d\,\lambda^2.
+  \label{eq:bump_force}
+\end{equation}
+We assume a thin layer of water separating the ice and the bed (i.e., zero shear stresses at the ice-bed interface), meaning this force must be supported by a pressure difference between the upstream and downstream faces.  Let $\Delta p$ be the pressure anomaly so that the upstream face experiences a pressure $\bar{p} + \Delta p$ and the downstream face a pressure $\bar{p} - \Delta p$, where $\bar{p}$ is the ambient pressure.  The net horizontal force from this pressure difference is $2\,\Delta p\,a^2$.  Equating this to $F$:
+\begin{equation}
+  2\,\Delta p\,a^2 = \tau_d\,\lambda^2
+  \qquad\Longrightarrow\qquad
+  \Delta p = \frac{\tau_d}{2}\left(\frac{\lambda}{a}\right)^2 = \frac{\tau_d}{2\,R^2}.
+  \label{eq:pressure_anomaly}
+\end{equation}
+Because $R \ll 1$ in practice (typical values $R \sim 0.01$--$0.1$), the stress anomaly $\Delta p$ is much larger than the applied shear stress $\tau_b$.  For example, $R = 0.05$ gives $\Delta p = 200\,\tau_b$.  This stress concentration is what makes both regelation and enhanced creep effective.
+
+\subsubsection{Step 2: Regelation velocity}
+
+The Clausius--Clapeyron relation states that the melting point of ice decreases with pressure:
+\begin{equation}
+  T_m = T_0 - \mathcal{B}\,p,
+  \label{eq:clausius_clapeyron}
+\end{equation}
+where $T_0 = 273.15$~K is the melting point at zero pressure and $\mathcal{B} \approx 7.4 \times 10^{-5}$~K\,(kPa)$^{-1}$ is the Clausius--Clapeyron slope.  The pressure difference $2\,\Delta p$ between the upstream and downstream faces therefore produces a difference in the pressure melting point:
+\begin{equation}
+  \Delta T = \mathcal{B}\,\cdot\,2\,\Delta p = \frac{\mathcal{B}\,\tau_d}{R^2}.
+  \label{eq:temp_difference}
+\end{equation}
+The ice is everywhere at the pressure melting point.  On the upstream face, the elevated pressure depresses the melting point below the temperature of the arriving ice, so ice melts.  On the downstream face, the reduced pressure raises the melting point above the temperature of the arriving meltwater, so it refreezes.  Because the ice is at the melting point on both faces, $\Delta T$ is also the temperature difference across the rock bump: the upstream face of the rock is in contact with ice at $T_m(\bar{p} + \Delta p)$ and the downstream face with ice at $T_m(\bar{p} - \Delta p)$.  This temperature difference drives heat conduction through the rock from the downstream side (where refreezing releases latent heat) to the upstream side (where melting absorbs it).
+
+Treating the bump as a slab of bedrock with thermal conductivity $k_r$, the heat flux per unit area driven by $\Delta T$ across the bump width $a$ is
+\begin{equation}
+  q = k_r\,\frac{\Delta T}{a} = \frac{k_r\,\mathcal{B}\,\tau_d}{a\,R^2}.
+  \label{eq:heat_flux}
+\end{equation}
+This heat flux melts a thickness of ice per unit time on the upstream face.  The mass of ice melted per unit area per unit time is $q / L$, where $L$ is the specific latent heat of fusion.  The regelation velocity---the rate at which ice moves past the bump by the melt--refreeze cycle---is the volume melted per unit time divided by the face area:
+\begin{equation}
+  \boxed{u_1 = \frac{k_r\,\mathcal{B}}{\rho\,L\,a}\;\frac{\tau_d}{R^2}.}
   \label{eq:regelation}
 \end{equation}
-where $k_r$ is the thermal conductivity of the bedrock, $\mathcal{B} \approx 7.4 \times 10^{-5}$~K\,(kPa)$^{-1}$ is the Clausius--Clapeyron constant, $\rho$ is the density of ice, and $L$ is the specific latent heat of fusion.  The velocity $u_1 \propto 1/a$: regelation is fast for small bumps and slow for large ones.
+The critical feature is that $u_1 \propto 1/a$: the regelation velocity is inversely proportional to the bump size.  Heat must be conducted through the entire width of the bump, so smaller bumps offer less resistance to regelation.  For large bumps, the conduction path is long and regelation becomes negligibly slow.
 
 \medskip
-\noindent\textbf{Enhanced creep velocity.}  The excess stress $\sim \tau_b / R^2$ drives creep over a distance $\sim a$, giving
+\noindent Numerically, for $k_r = 3$~W\,m$^{-1}$\,K$^{-1}$ (granite), $\rho = 917$~kg\,m$^{-3}$, $L = 3.34 \times 10^5$~J\,kg$^{-1}$, $\tau_b = 100$~kPa, $R = 0.05$, and $a = 1$~mm:
+\begin{equation*}
+  u_1 = \frac{3 \times 7.4 \times 10^{-8}}{917 \times 3.34 \times 10^5 \times 10^{-3}} \times \frac{10^5}{0.05^2} \approx 2.9\;\text{mm\,s}^{-1} \approx 90\;\text{km\,yr}^{-1}.
+\end{equation*}
+For $a = 1$~m, the same calculation gives $u_1 \approx 0.09$~m\,yr$^{-1}$---negligible.  Regelation is rapid, and thus not rate-controlling, for millimeter-scale bumps and negligibly slow for meter-scale bumps.
+
+\subsubsection{Step 3: Enhanced creep velocity}
+
+The stress anomaly $\Delta p = \tau_d / (2R^2)$ also drives viscous deformation of the ice around the bump.  The ice must flow over and around the obstacle, and in the classical example, the rate at which it does so is determined by Glen's flow law.  The effective strain rate in the vicinity of the bump is
 \begin{equation}
-  u_2 = 2\,[3]^{-(n+1)/2}\;a\,A\left[\frac{\tau_b}{2\,R^2}\right]^n,
+  \dot{\varepsilon} \sim A\,(\Delta p)^n = A\left(\frac{\tau_d}{2\,R^2}\right)^n,
+  \label{eq:creep_strain_rate}
+\end{equation}
+where $A$ is the creep parameter and $n$ is the creep exponent.  The ice must deform over a distance comparable to the bump size $a$ to flow past the obstacle, so the enhanced creep velocity scales as
+\begin{equation}
+  \boxed{u_2 \sim a\,A\left(\frac{\tau_d}{2\,R^2}\right)^n.}
   \label{eq:enhanced_creep}
 \end{equation}
-where $A$ and $n$ are the creep parameters.  The velocity $u_2 \propto a$: creep is fast for large bumps.
+(The exact numerical prefactor depends on the bump geometry and the solution of the full Stokes problem; Weertman obtained $u_2 = 2\cdot 3^{-(n+1)/2}\,a\,A\,[\tau_d/(2R^2)]^n$.)
+
+The essential feature is that $u_2 \propto a$: the creep velocity is directly proportional to the bump size.  Larger bumps produce the same stress anomaly (for fixed $R$), but the ice must deform over a greater distance, so the velocity contribution is larger.  For small bumps, the deformation distance is short and enhanced creep is negligible.
 
 \subsection{The Controlling Obstacle Size}
 
-Because regelation is effective for small bumps and enhanced creep for large bumps, there exists an intermediate bump size $a_c$ at which the total sliding speed $u_b = u_1 + u_2$ is minimized.  This is the \textbf{controlling obstacle size}, found by setting $u_1 = u_2$.  Bumps of this size provide the greatest resistance to sliding and largely determine the overall sliding velocity.
+Regelation gives $u_1 \propto 1/a$ and enhanced creep gives $u_2 \propto a$.  For any bump size, the total velocity past that bump is $u = u_1 + u_2$.  As a function of $a$, this sum has a minimum at an intermediate bump size $a_c$ called the \textbf{controlling obstacle size} (Figure~\ref{fig:regelation_creep}).  Bumps of this size provide the greatest resistance to sliding, because both mechanisms are relatively slow.  Bumps smaller than $a_c$ are easily passed by regelation; bumps larger than $a_c$ are easily passed by enhanced creep.  The controlling obstacles determine the overall sliding velocity.
 
 \medskip
-\noindent Substituting the controlling obstacle size into the velocity expression gives Weertman's sliding law:
+\noindent The controlling obstacle size is found by setting $u_1 = u_2$:
 \begin{equation}
-  \boxed{u_b = \text{const} \cdot \left[\frac{\tau_b^{1/2}}{R}\right]^{n+1}.}
+  \frac{k_r\,\mathcal{B}\,\tau_d}{\rho\,L\,a_c\,R^2} = a_c\,A\left(\frac{\tau_d}{2\,R^2}\right)^n.
+  \label{eq:ac_balance}
+\end{equation}
+Solving for $a_c^2$:
+\begin{equation}
+  a_c^2 = \frac{k_r\,\mathcal{B}}{\rho\,L\,A}\;\frac{\tau_d^{1-n}}{R^{2-2n}}\,(2R^2)^n
+  = \frac{2^n\,k_r\,\mathcal{B}}{\rho\,L\,A}\;\tau_d^{1-n}\,R^{2n-2},
+\end{equation}
+so
+\begin{equation}
+  a_c = \left(\frac{2^n\,k_r\,\mathcal{B}}{\rho\,L\,A}\right)^{1/2}\tau_d^{(1-n)/2}\,R^{n-1}.
+  \label{eq:controlling_size}
+\end{equation}
+For $n = 3$ and typical parameter values, $a_c$ is in the range 10--100~mm.
+
+\subsection{Weertman's Sliding Law}
+\label{sec:weertman_law_derivation}
+
+The total sliding velocity at the controlling obstacle size is $u_b = u_1(a_c) + u_2(a_c) = 2\,u_1(a_c)$, since $u_1 = u_2$ at $a = a_c$.  Substituting equation~\eqref{eq:controlling_size} into equation~\eqref{eq:regelation}:
+\begin{align}
+  u_b &= 2\,\frac{k_r\,\mathcal{B}\,\tau_d}{\rho\,L\,a_c\,R^2}
+  = 2\,\frac{k_r\,\mathcal{B}\,\tau_d}{\rho\,L\,R^2}\left(\frac{\rho\,L\,A}{2^n\,k_r\,\mathcal{B}}\right)^{1/2}\tau_d^{(n-1)/2}\,R^{-(n-1)} \notag \\[6pt]
+  &= 2\left(\frac{k_r\,\mathcal{B}\,A}{2^n\,\rho\,L}\right)^{1/2}\tau_d^{(n+1)/2}\,R^{-(n+1)}.
+  \label{eq:weertman_derived}
+\end{align}
+This can be written compactly as
+\begin{equation}
+  \boxed{u_b = \text{const}\cdot\left[\frac{\tau_d^{1/2}}{R}\right]^{n+1},}
   \label{eq:weertman_sliding}
 \end{equation}
-For $n = 3$, the sliding velocity varies as the square of the basal shear stress ($u_b \propto \tau_b^2$) and inversely as the fourth power of the roughness ($u_b \propto R^{-4}$).
+where the constant absorbs all of the material parameters ($k_r$, $\mathcal{B}$, $A$, $\rho$, $L$).  For $n = 3$, the sliding velocity varies as the \textbf{square} of the driving stress ($u_b \propto \tau_d^2$) and inversely as the \textbf{fourth power} of the roughness ($u_b \propto R^{-4}$).
 
 \medskip
-\noindent \cite{Nye1969,Nye1970} and \cite{Kamb1970} improved this analysis by treating the bed as a continuous rough surface described statistically, rather than as isolated cubical bumps.  They assumed Newtonian ice ($n = 1$) and derived essentially the same form: $u_b \propto \tau_b / R^2$ (equation~\eqref{eq:weertman_sliding} with $n = 1$), with the roughness now defined as a spectral property of the bed topography.  \cite{Fowler1979,Fowler1981} extended the analysis to nonlinear ice and a sinusoidal bed of wavelength $\lambda$ and amplitude $a$:
+\noindent The strong dependence on roughness---much stronger than on stress---is a fundamental prediction of the theory.  It means that bed geometry is more important than applied stress in determining the sliding rate.
+
+\subsection{Nye--Kamb Theory and Extensions}
+
+\cite{Nye1969,Nye1970} and \cite{Kamb1970} improved Weertman's analysis by treating the bed as a continuous rough surface described by a Fourier spectrum, rather than as isolated cubical bumps.  They assumed Newtonian ice ($n = 1$) and solved the full Stokes equations for flow over a wavy bed with regelation at the ice--bed interface.  Their result has the same form as Weertman's: $u_b \propto \tau_d / R^2$ (equation~\eqref{eq:weertman_sliding} with $n = 1$), with the roughness now defined as a spectral property of the bed topography.
+
+\medskip
+\noindent \cite{Fowler1979,Fowler1981} extended the analysis to nonlinear ice and a sinusoidal bed of wavelength $\lambda$ and amplitude $a$:
 \begin{equation}
-  u_b = c\,\frac{\lambda}{R^{n+1}}\,A\,\tau_b^n,
+  u_b = c\,\frac{\lambda}{R^{n+1}}\,A\,\tau_d^n,
   \label{eq:fowler_sliding}
 \end{equation}
 where $c$ is a coefficient that depends on $n$ and the ratio $\lambda / H$ (ice thickness).
@@ -137,7 +220,7 @@ where $c$ is a coefficient that depends on $n$ and the ratio $\lambda / H$ (ice 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{figures/fig01_regelation_creep_vs_bump_size.pdf}
-  \caption{Sliding velocity contributions from regelation ($u_1 \propto 1/a$) and enhanced creep ($u_2 \propto a^n$) as functions of bump size $a$ for $\tau_b = 100$~kPa and roughness $R = 0.1$.  The controlling obstacle size $a_c$ (orange circle) is the bump size at which the total velocity $u_1 + u_2$ is minimized; bumps of this size provide the greatest resistance to sliding.}
+  \caption{Sliding velocity contributions from regelation ($u_1 \propto 1/a$) and enhanced creep ($u_2 \propto a^n$) as functions of bump size $a$ for $\tau_d = 100$~kPa and roughness $R = 0.1$.  The controlling obstacle size $a_c$ (orange circle) is the bump size at which the total velocity $u_1 + u_2$ is minimized; bumps of this size provide the greatest resistance to sliding.}
   \label{fig:regelation_creep}
 \end{figure}
 
@@ -185,7 +268,7 @@ where $P_i = \rho_i g H$ is the ice-overburden pressure and $P_w$ is the subglac
 For a sinusoidal bed with wavelength $\lambda$ and amplitude $a$, the normal stress exerted by the ice on the bed fluctuates about the overburden value $P_i$.  The minimum normal stress---and hence the water pressure at which ice first separates from the bed---is the \textbf{separation pressure}:
 \begin{equation}
   P_s = P_i - \frac{\lambda\,\tau_b}{a\,\pi}.
-  \label{eq:separatio\phi_pressure}
+  \label{eq:separation_pressure}
 \end{equation}
 Cavities begin to form when $P_w$ reaches $P_s$.  The rougher the bed (larger $a/\lambda$), the higher the water pressure required to initiate cavitation.
 
@@ -205,7 +288,7 @@ This result establishes a fundamental constraint: the drag that a hard bed can e
 
 \begin{figure}[ht]
   \centering
-  \includegraphics[width=0.85\textwidth]{figures/fig07_cavity_formation.pdf}
+  \includegraphics[width=0.5\textwidth]{figures/fig07_cavity_formation.pdf}
   \caption{Progressive cavity formation on a sinusoidal bed as water pressure increases.  \textbf{(a)} Full ice--bed contact when $P_w < P_s$.  \textbf{(b)} Small water-filled cavities form in the lee of bumps once $P_w$ exceeds the separation pressure $P_s$.  Red arrows indicate stress concentrations on the remaining upstream contact areas.  \textbf{(c)} Extensive cavitation as $P_w \to P_c$; ice contacts only the upstream faces of bumps, and the effective roughness is greatly reduced.}
   \label{fig:cavity_formation}
 \end{figure}
@@ -287,7 +370,7 @@ The essential features of hard-bed sliding are:
 \section{Deformable Beds}
 \label{sec:soft_bed}
 
-Many glacier beds are not rigid bedrock but consist of unconsolidated sediment---``till'' in glaciological usage.  Deformable beds underlie vast areas of the Pleistocene ice sheets in North America and Europe and are common beneath modern glaciers.  The West Antarctic ice streams, which account for the majority of ice discharge from the West Antarctic Ice Sheet, rest on layers of weak, water-saturated till only a few meters thick.
+Many glacier beds are not rigid bedrock but consist of unconsolidated sediment---till in glaciological usage.  Deformable beds underlie vast areas of the Pleistocene ice sheets in North America and Europe and are common beneath modern glaciers.  The West Antarctic ice streams, which account for the majority of ice discharge from the West Antarctic Ice Sheet, rest on layers of weak, water-saturated till only a few meters thick.
 
 \subsection{Key Observations}
 
@@ -663,7 +746,7 @@ For $n = 3$, ice streaming requires $\tau_f < 0.25\,\tau_d$.  With typical drivi
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.7\textwidth]{figures/fig09_upb_stability.pdf}
-  \caption{Stability of the undrained plastic bed (UPB) model, computed for Ice Stream B parameters ($\tau_d = 13$~kPa, $G = 0.06$~W\,m$^{-2}$, $\Theta_b = 0.04$~K\,m$^{-1}$).  \textbf{(a)} Basal melt rate as a function of bed strength.  The maximum shear heating occurs at $\tau_b = \tau_d / (n+1) = 0.25\,\tau_d$.  Two equilibria exist where $m_r = 0$: the ice stream mode (stable, filled circle) at low $\tau_b$ and the ice sheet mode (linearly unstable, open circle) at high $\tau_b$.  Arrows show the direction of evolution: melting weakens the bed (leftward) and freezing strengthens it (rightward).  \textbf{(b)} Corresponding ice stream velocity.  After \cite{Tulaczyketal2000b}, Figure~6.}
+  \caption{Stability of the undrained plastic bed (UPB) model, computed for Ice Stream B parameters ($\tau_d = 13$~kPa, $\Theta_b = 0.04$~K\,m$^{-1}$).  \textbf{(a)} Basal melt rate as a function of bed strength for three geothermal heat flux values.  The maximum shear heating occurs at $\tau_b = \tau_d / (n+1) = 0.25\,\tau_d$.  At $G = 65$~mW\,m$^{-2}$ (black), two equilibria exist where $m_r = 0$: the ice stream mode (stable, filled circle) at low $\tau_b$ and the ice sheet mode (unstable, open circle) at high $\tau_b$.  At $G = 30$~mW\,m$^{-2}$ (blue), the melt rate is negative for all bed strengths---the base freezes everywhere and no ice-stream equilibrium exists.  At $G = 100$~mW\,m$^{-2}$ (red), the melt rate is positive everywhere and the bed weakens toward the ice-shelf limit.  Arrows show the direction of evolution for the reference case: melting weakens the bed (leftward) and freezing strengthens it (rightward).  \textbf{(b)} Corresponding ice stream velocity, calibrated to Whillans Ice Stream observations ($U_b \approx 400$~m\,yr$^{-1}$ at $\tau_b \approx 2$~kPa).  After \cite{Tulaczyketal2000b}.}
   \label{fig:upb_stability}
 \end{figure}
 
