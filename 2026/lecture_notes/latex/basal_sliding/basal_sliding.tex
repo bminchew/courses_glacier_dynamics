@@ -141,11 +141,11 @@ This heat flux melts a thickness of ice per unit time on the upstream face.  The
 The critical feature is that $u_1 \propto 1/a$: the regelation velocity is inversely proportional to the bump size.  Heat must be conducted through the entire width of the bump, so smaller bumps offer less resistance to regelation.  For large bumps, the conduction path is long and regelation becomes negligibly slow.
 
 \medskip
-\noindent Numerically, for $k_r = 3$~W\,m$^{-1}$\,K$^{-1}$ (granite), $\rho = 917$~kg\,m$^{-3}$, $L = 3.34 \times 10^5$~J\,kg$^{-1}$, $\tau_b = 100$~kPa, $R = 0.05$, and $a = 1$~mm:
+\noindent Numerically, for $k_r = 3$~W\,m$^{-1}$\,K$^{-1}$ (granite), $\rho = 917$~kg\,m$^{-3}$, $L = 3.34 \times 10^5$~J\,kg$^{-1}$, $\tau_d = 100$~kPa, $R = 0.05$, and $a = 1$~mm:
 \begin{equation*}
-  u_1 = \frac{3 \times 7.4 \times 10^{-8}}{917 \times 3.34 \times 10^5 \times 10^{-3}} \times \frac{10^5}{0.05^2} \approx 2.9\;\text{mm\,s}^{-1} \approx 90\;\text{km\,yr}^{-1}.
+  u_1 = \frac{3 \times 7.4 \times 10^{-8}}{917 \times 3.34 \times 10^5 \times 10^{-3}} \times \frac{10^5}{0.05^2} \approx 29\;\mu\text{m\,s}^{-1} \approx 910\;\text{m\,yr}^{-1}.
 \end{equation*}
-For $a = 1$~m, the same calculation gives $u_1 \approx 0.09$~m\,yr$^{-1}$---negligible.  Regelation is rapid, and thus not rate-controlling, for millimeter-scale bumps and negligibly slow for meter-scale bumps.
+For $a = 1$~m, the same calculation gives $u_1 \approx 0.9$~m\,yr$^{-1}$---negligible.  Regelation is rapid, and thus not rate-controlling, for millimeter-scale bumps and negligibly slow for meter-scale bumps.
 
 \subsubsection{Step 3: Enhanced creep velocity}
 
@@ -175,7 +175,7 @@ Regelation gives $u_1 \propto 1/a$ and enhanced creep gives $u_2 \propto a$.  Fo
 \end{equation}
 Solving for $a_c^2$:
 \begin{equation}
-  a_c^2 = \frac{k_r\,\mathcal{B}}{\rho\,L\,A}\;\frac{\tau_d^{1-n}}{R^{2-2n}}\,(2R^2)^n
+  a_c^2 = \frac{k_r\,\mathcal{B}}{\rho\,L\,A}\;\frac{\tau_d}{R^2}\left(\frac{2\,R^2}{\tau_d}\right)^n
   = \frac{2^n\,k_r\,\mathcal{B}}{\rho\,L\,A}\;\tau_d^{1-n}\,R^{2n-2},
 \end{equation}
 so
@@ -220,7 +220,7 @@ where $c$ is a coefficient that depends on $n$ and the ratio $\lambda / H$ (ice 
 \begin{figure}[ht]
   \centering
   \includegraphics[width=0.75\textwidth]{figures/fig01_regelation_creep_vs_bump_size.pdf}
-  \caption{Sliding velocity contributions from regelation ($u_1 \propto 1/a$) and enhanced creep ($u_2 \propto a^n$) as functions of bump size $a$ for $\tau_d = 100$~kPa and roughness $R = 0.1$.  The controlling obstacle size $a_c$ (orange circle) is the bump size at which the total velocity $u_1 + u_2$ is minimized; bumps of this size provide the greatest resistance to sliding.}
+  \caption{Sliding velocity contributions from regelation ($u_1 \propto 1/a$) and enhanced creep ($u_2 \propto a$, at fixed roughness $R$) as functions of bump size $a$ for $\tau_d = 100$~kPa and $R = 0.1$.  The controlling obstacle size $a_c$ (orange circle) is the bump size at which the total velocity $u_1 + u_2$ is minimized; bumps of this size provide the greatest resistance to sliding.}
   \label{fig:regelation_creep}
 \end{figure}
 
@@ -733,7 +733,7 @@ Substituting $\tau_b = \tau_f$ into equation~\eqref{eq:upb_melt} and using equat
 \begin{enumerate}
   \item \textbf{Ice stream mode} (stable): $\tau_b < 0.25\,\tau_d$.  The bed is weak, the ice stream is fast, and shear heating is substantial.  If a perturbation weakens the bed slightly ($\tau_b$ decreases), the shear heating $\tau_b\,U_b$ also decreases (because we are on the left side of the maximum), reducing the melt rate.  This causes freeze-on, which strengthens the till, restoring the system toward equilibrium.  This is a negative feedback.
 
-  \item \textbf{Ice sheet mode} (stable): $\tau_b > 0.25\,\tau_d$.  The bed is strong, the ice stream is slow or stagnant, and the base is frozen.  If a perturbation weakens the bed, shear heating increases (because we are on the right side of the maximum, where $\partial(\tau_b U_b)/\partial \tau_b > 0$), which increases melting, further weakening the bed---a positive feedback that would push the system toward the ice stream mode.  However, if the geothermal flux is insufficient to maintain melting at any bed strength in this range, the bed remains frozen and stable.
+  \item \textbf{Unstable equilibrium}: $\tau_b > 0.25\,\tau_d$.  The second zero crossing of $m_r$ (open circle in Figure~\ref{fig:upb_stability}) is unstable.  If a perturbation weakens the bed, shear heating increases (because we are on the right side of the maximum, where $\partial(\tau_b U_b)/\partial \tau_b > 0$), which increases melting, further weakening the bed---a positive feedback that pushes the system toward the ice stream mode.  If instead the bed strengthens, shear heating decreases, leading to freeze-on that further strengthens the bed, pushing the system toward the \textbf{ice sheet mode}---a stagnant state in which the base is frozen and $\tau_b \approx \tau_d$.
 \end{enumerate}
 
 \noindent The boundary between the two modes is the saddle-node bifurcation at $\tau_f = (n+1)^{-1}\,\tau_d$:
