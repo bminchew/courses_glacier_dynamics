@@ -11,16 +11,9 @@ where t_r = D_v / D is the flexural relaxation time (proportional to
 the Maxwell time), D_v is the viscous flexural rigidity, and D is the
 elastic flexural rigidity.
 
-The 1D equation assumes cylindrical bending (eps_yy = 0), appropriate
-for ice shelves wider than the flexural wavelength.  This is the
-correct 1D reduction of the full plate equation: for Newtonian viscous
-flow the Poisson coupling terms cancel in the biharmonic operator
-(nu_v = 1/2), so D_v = eta h^3 / 3 is the same for beam and plate.
-The elastic rigidity D = E h^3 / [12(1-nu^2)] already includes the
-plate plane-stress factor.  For power-law viscosity, the cylindrical
-bending constraint (eps_yy = 0) keeps the stress state uniaxial,
-avoiding the nonlinear biaxial coupling that makes the general 2D
-plate intractable (see Appendix E of the lecture notes).
+For an incompressible viscous material (nu_v = 1/2), the plane-stress
+and plane-strain (i.e., plate and beam) formulations are identical,
+so the 1D beam equation is also the correct 1D plate equation.
 
 Supports uniform and graded (non-uniform) meshes.  The per-element
 matrix storage enables future extension to variable ice thickness h(x).
