@@ -270,7 +270,7 @@ For a sinusoidal bed with wavelength $\lambda$ and amplitude $a$, the normal str
   P_s = P_i - \frac{\lambda\,\tau_b}{a\,\pi}.
   \label{eq:separation_pressure}
 \end{equation}
-Cavities begin to form when $P_w$ reaches $P_s$.  The rougher the bed (larger $a/\lambda$), the higher the water pressure required to initiate cavitation.
+Cavities begin to form when $P_w$ reaches $P_s$.  The rougher the bed (larger $a/\lambda$), the higher the water pressure required to initiate cavitation.  Figure~\ref{fig:cavity_formation} illustrates the progressive stages of cavity growth.
 
 \subsubsection{Iken's Bound on Basal Drag}
 
@@ -311,7 +311,7 @@ This result establishes a fundamental constraint: the drag that a hard bed can e
   \frac{\tau_b}{N} = C\left(\frac{\Lambda}{\Lambda + \Lambda_0}\right)^{1/n}, \quad \Lambda = \frac{u_b}{N^n},
   \label{eq:schoof_sliding}
 \end{equation}
-where $C < m_{\max}$ is a constant related to the bed geometry, $\Lambda_0 \sim \lambda_{\max}\,A / m_{\max}$ is a reference velocity scale set by the dominant obstacle wavelength $\lambda_{\max}$ and slope $m_{\max}$, and $n$ is the exponent in Glen's flow law.  At low velocities ($\Lambda \ll \Lambda_0$), equation~\eqref{eq:schoof_sliding} gives $\tau_b \propto u_b^{1/n}$ (rate-strengthening).  At high velocities ($\Lambda \gg \Lambda_0$), $\tau_b \to C\,N$ (rate-independent).
+where $C < m_{\max}$ is a constant related to the bed geometry, $\Lambda_0 \sim \lambda_{\max}\,A / m_{\max}$ is a reference velocity scale set by the dominant obstacle wavelength $\lambda_{\max}$ and slope $m_{\max}$, and $n$ is the exponent in Glen's flow law.  At low velocities ($\Lambda \ll \Lambda_0$), equation~\eqref{eq:schoof_sliding} gives $\tau_b \propto u_b^{1/n}$ (rate-strengthening).  At high velocities ($\Lambda \gg \Lambda_0$), $\tau_b \to C\,N$ (rate-independent).  Figure~\ref{fig:drag_velocity} shows this relationship for three values of $N$.
 
 \begin{figure}[ht]
   \centering
@@ -404,7 +404,7 @@ Laboratory experiments on subglacial tills consistently show that, after an init
 where $c_o$ is the apparent cohesion (small for deforming tills), $f = \tan\varphi$ is the friction factor, and $N = \sigma_n - P_w$ is the effective normal stress on the failure plane.  Measured values of $\varphi$ range from about $10^\circ$ to $40^\circ$, giving $f$ in the range 0.17--0.84.  The cohesion is typically small enough to neglect.
 
 \medskip
-\noindent The critical implication of equation~\eqref{eq:mohr_coulomb} is that \textbf{the strength of till is controlled by water pressure}.  At effective stresses of order 100~kPa, a till with $\varphi = 30^\circ$ has a yield stress of about 60~kPa.  But if water pressure rises to within a few percent of overburden ($N \to 0$), the till strength drops to near zero and the bed becomes extremely weak.
+\noindent The critical implication of equation~\eqref{eq:mohr_coulomb} is that \textbf{the strength of till is controlled by water pressure}.  Figure~\ref{fig:mohr_coulomb} and Table~\ref{tab:till_strength} show measured values for several subglacial tills.  At effective stresses of order 100~kPa, a till with $\varphi = 30^\circ$ has a yield stress of about 60~kPa.  But if water pressure rises to within a few percent of overburden ($N \to 0$), the till strength drops to near zero and the bed becomes extremely weak.
 
 \begin{table}[ht]
 \centering
@@ -501,7 +501,7 @@ Before presenting specific sliding laws, it is useful to distinguish the two fun
   \label{fig:form_skin}
 \end{figure}
 
-\noindent The total basal drag is the sum of form drag and skin friction.  Cavity formation mediates the transition between the two regimes: at low slip rates, the ice is in full contact with the bed and form drag dominates; at high slip rates, extensive cavitation reduces the ice--bed contact area, diminishing form drag and leaving skin friction as the primary resistance mechanism.  In the Coulomb limit ($u_b \to \infty$ or $N \to 0$), only skin friction remains and $\tau_b \to f\,N$.
+\noindent The total basal drag is the sum of form drag and skin friction (Figure~\ref{fig:form_skin}).  Cavity formation mediates the transition between the two regimes: at low slip rates, the ice is in full contact with the bed and form drag dominates; at high slip rates, extensive cavitation reduces the ice--bed contact area, diminishing form drag and leaving skin friction as the primary resistance mechanism.  In the Coulomb limit ($u_b \to \infty$ or $N \to 0$), only skin friction remains and $\tau_b \to f\,N$.
 
 \subsection{The Regularized Coulomb Sliding Law}
 \label{sec:coulomb_sliding}
@@ -579,7 +579,7 @@ regularized to produce a smooth transition.  The regularized Coulomb law (equati
 
 \subsection{Which Law to Use?}
 
-The Weertman law ($u_b = C\,\tau_b^m$) remains the most common choice in ice-sheet models because of its simplicity and because $C$ can be tuned spatially.  However, it allows unphysically large drag at high velocities and lacks effective-pressure dependence.  The Budd law ($u_b = k\,\tau_b^p / N^q$) adds $N$-dependence but still permits unbounded drag.
+The Weertman law ($u_b = C\,\tau_b^m$) remains the most common choice in ice-sheet models because of its simplicity and because $C$ can be tuned spatially.  However, it allows unphysically large drag at high velocities and lacks effective-pressure dependence.  The Budd law ($u_b = k\,\tau_b^p / N^q$) adds $N$-dependence but still permits unbounded drag.  Figure~\ref{fig:sliding_laws} compares the three laws at fixed $N$.
 
 \medskip
 \noindent The regularized Coulomb law (equations~\ref{eq:coulomb_sliding} and~\ref{eq:zoet_iverson}) is the physically preferred form for three reasons:
@@ -640,7 +640,7 @@ $P_w$ (MPa) & $P_w / P_i$ & $N$ (MPa) & $u_b$ (m\,yr$^{-1}$) \\
   \label{fig:velocity_vs_N}
 \end{figure}
 
-\noindent Increasing the water pressure from 80\% to 98\% of overburden increases the sliding speed by an order of magnitude.  This extreme sensitivity to water pressure is why the subglacial hydrological system---which controls the distribution and magnitude of $P_w$---is a first-order control on glacier dynamics.
+\noindent Increasing the water pressure from 80\% to 98\% of overburden increases the sliding speed by an order of magnitude (Figure~\ref{fig:velocity_vs_N}).  This extreme sensitivity to water pressure is why the subglacial hydrological system---which controls the distribution and magnitude of $P_w$---is a first-order control on glacier dynamics.
 
 \clearpage
 %===================================================================
